@@ -1,0 +1,364 @@
+@font-face {
+  font-family: "Atkinson Hyperlegible Next";
+  src: url("fonts/atkinson-hyperlegible-next.woff2") format("woff2");
+  font-weight: 200 800;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Yellowtail";
+  src: url("fonts/yellowtail.woff2") format("woff2");
+  font-display: swap;
+}
+
+:root {
+  --paper: #ffffff;
+  --sur
+
+1. Go to the Coast folder
+
+Set-LocParr\Downloads\Coast"
+
+2. Create style.css. Paste the whole block:
+
+$css = @'
+@font-face {
+  font-family: "Atkinson Hyperlegible Next";
+  src: url("fonts/atkinson-hyperlegible-next.woff2") format("woff2");
+  font-
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Yellowtail";
+  src: url("fonts/yellowtail.woff2") format("woff2");
+  font-display: swap;
+}
+
+:root {
+  --pap
+  --sur
+  --ink: #14212b;
+  --muted: #4d5b66;
+  --line: #d5dde3;
+  --bra
+  --on-brand: #ffffff;
+  --accent: #b3261e;
+
+  --font: "Atkinson Hyperlegible Next", system-ui, sans-serif;
+  --script: "Yellowtail", cursive;
+
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.5rem;
+  --space-4: 2rem;
+  --space-5: 3rem;
+
+  --measure: 60ch;
+  --page: 64rem;
+  --gutter: clamp(1rem, 5vw, 2.5rem);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #0f1a22;
+    --surface: #16242f;
+    --ink: #eef3f6;
+    --muted: #a9b6c0;
+    --line: #2b3a46;
+    --brand: #8cc3e8;
+    --on-brand: #0f1a22;
+    --a
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  backg
+  color
+  font-family: var(--font);
+  font-size: 1.25rem;
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0 0 var(--space-2);
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: clamp(2.25rem, 7vw, 3.5rem);
+}
+
+h2 {
+  font-
+}
+
+h3 {
+  font-
+}
+
+p,
+dl,
+ol,
+ul {
+  margin: 0 0 var(--space-2);
+  max-width: var(--measure);
+}
+
+a {
+  color: var(--brand);
+  text-decoration-thickness: 2px;
+  text-
+}
+
+a:hover {
+  color: var(--accent);
+}
+
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outli
+}
+
+/* Layout */
+
+.skip-link {
+  position: absolute;
+  top: -10rem;
+  left: var(--gutter);
+  padding: var(--space-1) var(--space-2);
+  background: var(--brand);
+  color: var(--on-brand);
+}
+
+.skip-link:focus {
+  top:
+}
+
+header,
+main,
+footer {
+  max-width: var(--page);
+  margin-inline: auto;
+  paddi
+}
+
+header
+  displ
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: ;
+  padding-block: var(--space-3);
+}
+
+main > section {
+  padding-block: var(--space-4);
+  border-top: 1px solid var(--line);
+}
+
+main > section:first-child {
+  border-top: 0;
+}
+
+/* Wordmark */
+
+.site-name {
+  display: inline-flex;
+  flex-direction: column;
+  color
+  text-decoration: none;
+}
+
+.site-name-word {
+  font-family: var(--script);
+  font-size: 3rem;
+  line-height: 1;
+  transform: rotate(-4deg);
+}
+
+.site-name-word::after {
+  content: "";
+  displ
+  height: 3px;
+  margin: 0.15rem 0 0 0.3rem;
+  border-radius: 3px;
+  background: var(--accent);
+}
+
+.site-n
+  margin: 0.4rem 0 0 0.6rem;
+  color: var(--ink);
+  font-
+  font-weight: 700;
+  lette
+  text-transform: uppercase;
+}
+
+/* Navi
+
+nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+nav a {
+  display: inline-block;
+  padding-block: 0.6rem;
+  color: var(--ink);
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+/* Listen */
+
+.listen {
+  display: grid;
+  gap: 0 var(--space-4);
+}
+
+.tagline {
+  color: var(--muted);
+  font-
+}
+
+.mascot
+  width: min(9rem, 45%);
+  height: auto;
+  margin: var(--space-2) auto;
+}
+
+.player
+  padding: var(--space-3);
+  border-radius: 12px;
+  backg
+}
+
+.player audio {
+  width: 100%;
+}
+
+.play-button {
+  min-width: 6rem;
+  min-height: 6rem;
+  border: 0;
+  border-radius: 50%;
+  background: var(--brand);
+  color: var(--on-brand);
+  font: 700 1.4rem var(--font);
+  cursor: pointer;
+}
+
+.player-status {
+  margi
+  color: var(--muted);
+}
+
+.tracks
+  padding-top: var(--space-3);
+}
+
+.now-playing {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.previously-played {
+  padding-left: 1.4rem;
+  color
+}
+
+@media
+  .listen {
+    grid-template-columns: 15rem 1fr;
+    grid-template-areas:
+      "title title"
+      "tagline tagline"
+      "
+      "tracks tracks";
+    align-items: center;
+  }
+
+  .listen h1 { grid-area: title; }
+  .tagline { grid-area: tagline; }
+  .masc: 100%;margin: 0; }
+  .player { grid-area: player; }
+  .tracks { grid-area: tracks; }
+}
+
+/* Information lists */
+
+.show-times,
+.listen-options {
+  displ
+  gap: var(--space-1) var(--space-3);
+}
+
+dt {
+  font-weight: 700;
+}
+
+dd {
+  margi
+}
+
+@media
+  .show
+  .listen-options {
+    grid-template-columns: max-content 1fr;
+  }
+
+  dd {
+    margin: 0;
+  }
+}
+
+/* Footer */
+
+footer {
+  padding-block: var(--space-4) var(--space-5);
+  color: var(--muted);
+  font-size: 1rem;
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap:
+  padding: 0;
+  list-style: none;
+}
+
+.footer-links a {
+  display: inline-block;
+  padding-block: 0.6rem;
+}
+
+/* Moti
+
+@media (prefers-reduced-motion:
+no-pref
+  .mascot {
+    transform-origin: 50% 90%;
+    animation: hello 1.4s ease-in-out 0.4s 1;
+  }
+
+  @keyf
+    0%, 100% { transform: rotate(0); }
+    25% { transform: rotate(-4deg); }
+    55%
+    80% { transform: rotate(-1.5deg); }
+  }                                         }
