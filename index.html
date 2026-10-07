@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Coast Internet Radio – Live country and classic hits from Newry</title>
+  <meta name="description" content="Listen live to Coast Internet Radio with Jim Parr from Newry, Northern Ireland. Country, Irish country, American country, classic hits and golden oldies, broadcasting 24 hours a day.">
+  <meta name="color-scheme" content="light dark">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header>
+    <p class="site-name"><a href="/">Coast Internet Radio</a></p>
+    <nav aria-label="Main">
+      <ul>
+        <li><a href="#listen">Listen</a></li>
+        <li><a href="#shows">Show times</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#how-to-listen">How to listen</a></li>
+        <li><a href="#requests">Requests</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section id="listen" class="listen">
+      <h1>Coast Internet Radio</h1>
+      <p class="tagline">Country, Irish country and classic hits, live from Newry, Northern Ireland, 24 hours a day.</p>
+
+      <div class="player">
+        <audio id="stream" controls preload="none" src="https://coast-stream.jamieparr05.workers.dev/stream">
+          Your browser can't play the stream here. <a href="https://coast-stream.jamieparr05.workers.dev/stream">Open the live stream</a> instead.
+        </audio>
+
+        <div class="player-controls" hidden>
+          <button type="button" id="play-button" class="play-button">Play</button>
+          <label for="volume">Volume</label>
+          <input type="range" id="volume" min="0" max="100" value="80">
+        </div>
+
+        <p id="player-status" class="player-status" role="status">Press play to start listening.</p>
+      </div>
+
+      <section class="tracks" aria-labelledby="now-playing-heading">
+        <h2 id="now-playing-heading">Now playing</h2>
+        <p id="now-playing" class="now-playing">Live on Coast Internet Radio</p>
+
+        <h3>Coming up next</h3>
+        <p id="coming-up">Track information appears here while the station is playing.</p>
+
+        <h3>Previously played</h3>
+        <ol id="previously-played" class="previously-played"></ol>
+      </section>
+    </section>
+
+    <section id="shows">
+      <h2>Jim's live show times</h2>
+      <p>These are Jim's own live presenter shows. Coast Internet Radio keeps broadcasting 24 hours a day.</p>
+      <dl class="show-times">
+        <dt>Monday, Tuesday, Thursday and Friday</dt>
+        <dd>10am to 12 noon</dd>
+        <dt>Sunday</dt>
+        <dd>10am to 1pm</dd>
+      </dl>
+    </section>
+
+    <section id="about">
+      <h2>About Jim and the station</h2>
+      <p>Welcome to Coast Internet Radio. I'm Jim Parr and I'm honoured to bring you the best in country, Irish country, American country, classic hits and the oldies you love.</p>
+      <p>Thank you for being part of our growing Coast community here in Newry, across Northern Ireland and around the world.</p>
+      <p>Thanks for listening, Jim</p>
+    </section>
+
+    <section id="how-to-listen">
+      <h2>How to listen</h2>
+      <dl class="listen-options">
+        <dt>On this website</dt>
+        <dd>Press the play button at the top of the page.</dd>
+        <dt>On your phone or tablet</dt>
+        <dd>Use your browser or your favourite radio app.</dd>
+        <dt>On a smart speaker</dt>
+        <dd>Ask your device to "Play Coast Internet Radio".</dd>
+        <dt>In your car</dt>
+        <dd>Stream on your phone, or play it through Bluetooth.</dd>
+      </dl>
+    </section>
+
+    <section id="requests">
+      <h2>Request a song</h2>
+      <p>Text your request to Jim on <a href="sms:+447935889228">07935 889228</a>, or email <a href="mailto:coastradio@hotmail.com?subject=Song%20request%20for%20Coast%20Internet%20Radio">coastradio@hotmail.com</a>.</p>
+    </section>
+  </main>
+
+  <footer>
+    <ul class="footer-links">
+      <li><a href="https://www.facebook.com/share/1aN1Jtus5Y/">Facebook</a></li>
+      <li><a href="mailto:coastradio@hotmail.com">Email</a></li>
+      <li><a href="https://x.com/coast_radio">X</a></li>
+    </ul>
+    <p>Licensed for music broadcast by <a href="https://www.prsformusic.com/">PRS for Music</a> and <a href="https://www.ppluk.com/">PPL</a>.</p>
+    <p>&copy; 2026 Coast Internet Radio</p>
+  </footer>
+</body>
+</html>
