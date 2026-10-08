@@ -1,0 +1,4 @@
+# The website lives in public/. Everything else (the functions, tests and
+# scripts) stays private and is never served to visitors.
+[build]
+  publish = "public"
