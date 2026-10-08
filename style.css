@@ -952,3 +952,43 @@ textarea {
   border-top: 1px solid rgb(255 255 255 / 0.25);
   font-size: 0.95rem;
 }
+
+/* Thin volume sliders that fill up to the volume, like Spotify's. */
+
+input.slim {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 1.5rem;
+  background: transparent;
+  cursor: pointer;
+}
+
+input.slim::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(to right, #fff var(--fill, 80%), rgb(255 255 255 / 0.3) var(--fill, 80%));
+}
+
+input.slim::-moz-range-track {
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(to right, #fff var(--fill, 80%), rgb(255 255 255 / 0.3) var(--fill, 80%));
+}
+
+input.slim::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  margin-top: -5px;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+}
+
+input.slim::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+}
