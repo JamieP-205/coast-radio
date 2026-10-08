@@ -4,106 +4,401 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Coast Internet Radio – Live country and classic hits from Newry</title>
-  <meta name="description" content="Listen live to Coast Internet Radio with Jim Parr from Newry, Northern Ireland. Country, Irish country, American country, classic hits and golden oldies, broadcasting 24 hours a day.">
-  <meta name="color-scheme" content="light dark">
+  <meta name="description" content="Listen live to Coast Internet Radio with Jim Parr from Newry, Northern Ireland. Country, Irish country, American country, classic hits and golden oldies, 24 hours a day.">
+  <meta name="theme-color" content="#14466b">
+  <link rel="canonical" href="https://coastinternetradio.com/">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://coastinternetradio.com/">
+  <meta property="og:title" content="Coast Internet Radio with Jim Parr">
+  <meta property="og:description" content="Live country, Irish country, classic hits and oldies from Newry, Northern Ireland, 24 hours a day.">
+  <meta property="og:image" content="https://coastinternetradio.com/images/share.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="The Coast Internet Radio logo beside Jim Parr at the microphone.">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
 
-  <header>
-    <a class="site-name" href="/"><span class="site-name-word">Coast</span> <span class="site-name-sub">Internet Radio</span></a>
-    <nav aria-label="Main">
-      <ul>
-        <li><a href="#listen">Listen</a></li>
-        <li><a href="#shows">Show times</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#how-to-listen">How to listen</a></li>
-        <li><a href="#requests">Requests</a></li>
-      </ul>
-    </nav>
+  <header class="band site-header">
+    <div class="utility">
+      <div class="wrap utility-inner">
+        <p class="utility-contact">Requests: text Jim on <a href="sms:+447935889228">07935 889228</a></p>
+        <div class="reading-tools" hidden>
+          <div class="text-size" role="group" aria-label="Text size">
+            <span class="tool-label" aria-hidden="true">Text size</span>
+            <button type="button" data-size="standard">A<span class="visually-hidden"> standard text</span></button>
+            <button type="button" data-size="large">A+<span class="visually-hidden"> large text</span></button>
+            <button type="button" data-size="largest">A++<span class="visually-hidden"> largest text</span></button>
+          </div>
+          <button type="button" class="dark-toggle" aria-pressed="false">Dark mode</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="wrap masthead">
+      <a class="logo" href="#home"><img src="images/logo.svg" width="298" height="100" alt="Coast Internet Radio, home"></a>
+      <button type="button" class="menu-button" aria-expanded="false" aria-controls="main-nav" hidden>Menu</button>
+      <nav class="main-nav" id="main-nav" aria-label="Main">
+        <ul class="nav">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#shows">Shows</a></li>
+          <li><a href="#about">About Jim</a></li>
+          <li><a href="#requests">Requests</a></li>
+          <li><a href="#help">Help</a></li>
+        </ul>
+      </nav>
+    </div>
   </header>
 
   <main id="main">
-    <section id="listen" class="listen">
-      <h1>Coast Internet Radio</h1>
-      <p class="tagline">Country, Irish country and classic hits, live from Newry, Northern Ireland, 24 hours a day.</p>
+    <!-- Home -->
+    <div class="page" data-page="home" data-title="Coast Internet Radio – Live country and classic hits from Newry">
+      <section class="band hero-band" aria-labelledby="hero-title">
+        <div class="wrap hero">
+          <div class="presenter">
+            <img class="presenter-photo" src="images/jim-studio.webp" width="600" height="600" alt="Jim Parr at the microphone in the studio, under an On Air sign.">
+            <div class="player-controls" hidden>
+              <button type="button" class="listen-button" data-play>
+                <span class="listen-icon" aria-hidden="true">
+                  <svg class="play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                  <svg class="pause-icon" viewBox="0 0 24 24"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>
+                </span>
+                <span data-play-label>Listen live</span>
+              </button>
+            </div>
+          </div>
 
-      <img class="mascot" src="images/jim-mascot.webp" width="480" height="480" alt="Cartoon of Jim Parr wearing headphones, waving and holding his small white dog.">
+          <div class="on-air">
+            <p class="on-air-tag" data-on-air>On air</p>
+            <h1 id="hero-title" tabindex="-1">Country, Irish country and classic hits from Newry</h1>
 
-      <div class="player">
-        <audio id="stream" controls preload="none" src="https://coast-stream.jamieparr05.workers.dev/stream">
-          Your browser can't play the stream here. <a href="https://coast-stream.jamieparr05.workers.dev/stream">Open the live stream</a> instead.
-        </audio>
+            <div class="now">
+              <img id="now-art" class="art now-art" src="images/no-cover.svg" width="300" height="300" alt="">
+              <div>
+                <p class="now-label">
+                  <span class="bars" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+                  Now playing
+                </p>
+                <p class="now-song" id="now-song">Coast Internet Radio</p>
+                <p class="now-artist" id="now-artist">Live from Newry</p>
+              </div>
+            </div>
 
-        <div class="player-controls" hidden>
-          <button type="button" id="play-button" class="play-button">Play</button>
-          <label for="volume">Volume</label>
-          <input type="range" id="volume" min="0" max="100" value="80">
+            <audio id="stream" controls preload="none" src="https://coast-stream.jamieparr05.workers.dev/stream">
+              <a href="https://coast-stream.jamieparr05.workers.dev/stream">Open the live stream</a>
+            </audio>
+
+            <div class="volume" data-volume-control hidden>
+              <label for="volume">Volume</label>
+              <input type="range" class="slim" id="volume" min="0" max="100" value="80" data-volume>
+            </div>
+            <p id="player-status" class="player-status" role="status"></p>
+          </div>
+
+          <div class="hero-side">
+            <div class="side-panel">
+              <p class="side-label">Up next</p>
+              <div class="up-next">
+                <img id="next-art" class="art" src="images/no-cover.svg" width="200" height="200" alt="">
+                <p class="next-song" data-coming-up>Checking what's next…</p>
+              </div>
+            </div>
+            <div class="side-panel">
+              <p class="side-label">Jim live on air</p>
+              <p class="side-text" data-next-show>See the show times.</p>
+              <p><a href="#shows">Show times</a></p>
+            </div>
+          </div>
         </div>
+      </section>
 
-        <p id="player-status" class="player-status" role="status">Press play to start listening.</p>
+      <section class="wrap block" aria-labelledby="played-heading">
+        <h2 id="played-heading">Just played</h2>
+        <ol class="played" id="previously-played">
+          <li class="played-empty">The last five songs will appear here.</li>
+        </ol>
+      </section>
+
+      <section class="wrap block welcome" aria-labelledby="welcome-heading">
+        <h2 id="welcome-heading">Welcome to Coast</h2>
+        <p class="lead">I'm Jim Parr, and I'm honoured to bring you the best in country, Irish country, American country, classic hits and the oldies you love.</p>
+        <p class="sign-off">Thanks for listening, Jim</p>
+        <p class="button-row">
+          <a class="button" href="#requests">Request a song</a>
+          <a class="button button-plain" href="#about">More about Jim</a>
+        </p>
+      </section>
+    </div>
+
+    <!-- Shows -->
+    <div class="page" data-page="shows" data-title="Show times – Coast Internet Radio">
+      <div class="wrap block narrow">
+        <h1 tabindex="-1">Show times</h1>
+        <p class="lead">Jim presents these shows live. The rest of the time, Coast plays music around the clock. All times are UK time.</p>
+        <p class="live-show" data-next-show>See when Jim is next live below.</p>
+        <table class="schedule">
+          <caption class="visually-hidden">Jim's live shows, UK time</caption>
+          <thead>
+            <tr><th scope="col">Day</th><th scope="col">Time</th></tr>
+          </thead>
+          <tbody>
+            <tr data-day="1" data-start="10" data-end="12"><th scope="row">Monday</th><td>10am to 12 noon</td></tr>
+            <tr data-day="2" data-start="10" data-end="12"><th scope="row">Tuesday</th><td>10am to 12 noon</td></tr>
+            <tr data-day="4" data-start="10" data-end="12"><th scope="row">Thursday</th><td>10am to 12 noon</td></tr>
+            <tr data-day="5" data-start="10" data-end="12"><th scope="row">Friday</th><td>10am to 12 noon</td></tr>
+            <tr data-day="0" data-start="10" data-end="13"><th scope="row">Sunday</th><td>10am to 1pm</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- About Jim -->
+    <div class="page" data-page="about" data-title="About Jim – Coast Internet Radio">
+      <div class="wrap block about">
+        <div class="about-text">
+          <h1 tabindex="-1">About Jim</h1>
+          <p class="lead">Welcome to Coast Internet Radio. I'm Jim Parr, and I'm honoured to bring you the best in country, Irish country, American country, classic hits and the oldies you love.</p>
+          <p>Thank you for being part of our growing Coast community here in Newry, across Northern Ireland and around the world.</p>
+          <p class="sign-off">Thanks for listening, Jim</p>
+        </div>
+        <img class="about-photo" src="images/jim-and-dog.webp" width="420" height="500" alt="Jim at home, holding his small white dog.">
       </div>
 
-      <section class="tracks" aria-labelledby="now-playing-heading">
-        <h2 id="now-playing-heading">Now playing</h2>
-        <p id="now-playing" class="now-playing">Live on Coast Internet Radio</p>
-
-        <h3>Coming up next</h3>
-        <p id="coming-up">Track information appears here while the station is playing.</p>
-
-        <h3>Previously played</h3>
-        <ol id="previously-played" class="previously-played"></ol>
+      <section class="wrap block support" aria-labelledby="support-heading">
+        <h2 id="support-heading">Support Coast</h2>
+        <p class="lead">Your support keeps the music playing and helps us keep broadcasting.</p>
+        <p>Real people. Real radio. Real support.</p>
+        <p class="button-row">
+          <a class="button" href="https://www.paypal.com/donate/?hosted_button_id=QYFZXU895WSE8" target="_blank" rel="noopener">Donate with PayPal<span class="visually-hidden"> (opens in a new tab)</span></a>
+          <a class="button button-plain" href="https://www.facebook.com/share/1aN1Jtus5Y/">Follow Jim on Facebook</a>
+        </p>
       </section>
-    </section>
+    </div>
 
-    <section id="shows">
-      <h2>Jim's live show times</h2>
-      <p>These are Jim's own live presenter shows. Coast Internet Radio keeps broadcasting 24 hours a day.</p>
-      <dl class="show-times">
-        <dt>Monday, Tuesday, Thursday and Friday</dt>
-        <dd>10am to 12 noon</dd>
-        <dt>Sunday</dt>
-        <dd>10am to 1pm</dd>
-      </dl>
-    </section>
+    <!-- Requests -->
+    <div class="page" data-page="requests" data-title="Request a song – Coast Internet Radio">
+      <div class="wrap block requests">
+        <div>
+          <h1 tabindex="-1">Request a song</h1>
+          <p class="lead">Tell Jim the song, the artist and who it's for. Your request goes straight to his inbox.</p>
+          <p>You can also text Jim on <a href="sms:+447935889228">07935 889228</a> or email <a href="mailto:coastradio@hotmail.com?subject=Song%20request%20for%20Coast%20Internet%20Radio">coastradio@hotmail.com</a>.</p>
+        </div>
 
-    <section id="about">
-      <h2>About Jim and the station</h2>
-      <p>Welcome to Coast Internet Radio. I'm Jim Parr and I'm honoured to bring you the best in country, Irish country, American country, classic hits and the oldies you love.</p>
-      <p>Thank you for being part of our growing Coast community here in Newry, across Northern Ireland and around the world.</p>
-      <p>Thanks for listening, Jim</p>
-    </section>
+        <form class="form" name="song-request" method="POST" data-netlify="true" netlify-honeypot="bot-field" data-form data-success="Thanks! Your request is on its way to Jim.">
+          <input type="hidden" name="form-name" value="song-request">
+          <p class="bot-field"><label>Leave this empty <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+          <div class="field">
+            <label for="request-song">Song</label>
+            <input id="request-song" name="song" required>
+          </div>
+          <div class="field">
+            <label for="request-artist">Artist</label>
+            <input id="request-artist" name="artist" required>
+          </div>
+          <div class="field">
+            <label for="request-name">Your name <span class="optional">(optional)</span></label>
+            <input id="request-name" name="name" autocomplete="name">
+          </div>
+          <div class="field">
+            <label for="request-message">Dedication or message <span class="optional">(optional)</span></label>
+            <textarea id="request-message" name="message" rows="3"></textarea>
+          </div>
+          <button type="submit" class="button">Send request</button>
+          <p class="form-status" role="status" data-form-status></p>
+        </form>
+      </div>
+    </div>
 
-    <section id="how-to-listen">
-      <h2>How to listen</h2>
-      <dl class="listen-options">
-        <dt>On this website</dt>
-        <dd>Press the play button at the top of the page.</dd>
-        <dt>On your phone or tablet</dt>
-        <dd>Use your browser or your favourite radio app.</dd>
-        <dt>On a smart speaker</dt>
-        <dd>Ask your device to "Play Coast Internet Radio".</dd>
-        <dt>In your car</dt>
-        <dd>Stream on your phone, or play it through Bluetooth.</dd>
-      </dl>
-    </section>
+    <!-- Help -->
+    <div class="page" data-page="help" data-title="Help – Coast Internet Radio">
+      <div class="wrap block narrow">
+        <h1 tabindex="-1">Help</h1>
 
-    <section id="requests">
-      <h2>Request a song</h2>
-      <p>Text your request to Jim on <a href="sms:+447935889228">07935 889228</a>, or email <a href="mailto:coastradio@hotmail.com?subject=Song%20request%20for%20Coast%20Internet%20Radio">coastradio@hotmail.com</a>.</p>
-    </section>
+        <section aria-labelledby="how-heading">
+          <h2 id="how-heading">How to listen</h2>
+          <dl class="ways">
+            <div>
+              <dt>On this website</dt>
+              <dd>Press Listen live on the home page, or the button in the bar at the bottom of the screen.</dd>
+            </div>
+            <div>
+              <dt>On a phone or tablet</dt>
+              <dd>Open this website, or search for Coast Internet Radio in your radio app.</dd>
+            </div>
+            <div>
+              <dt>On a smart speaker</dt>
+              <dd>Ask it to "Play Coast Internet Radio".</dd>
+            </div>
+            <div>
+              <dt>In the car</dt>
+              <dd>Start Coast on your phone and connect your phone to the car over Bluetooth.</dd>
+            </div>
+          </dl>
+          <p>If the player won't work on your device, try the <a href="https://coast-stream.jamieparr05.workers.dev/stream">direct stream</a> or <a href="https://onlineradiobox.com/uk/coastinternet/">Coast on Online Radio Box</a>.</p>
+        </section>
+
+        <section aria-labelledby="questions-heading">
+          <h2 id="questions-heading">Questions</h2>
+          <div class="faq">
+            <details>
+              <summary>I pressed Listen live and nothing happened</summary>
+              <p>Check your volume is turned up, then press Listen live again. If it still won't play, try the <a href="https://coast-stream.jamieparr05.workers.dev/stream">direct stream</a> or <a href="https://onlineradiobox.com/uk/coastinternet/">Coast on Online Radio Box</a>.</p>
+            </details>
+            <details>
+              <summary>When is Jim on air?</summary>
+              <p>Jim is live on Monday, Tuesday, Thursday and Friday from 10am to 12 noon, and on Sunday from 10am to 1pm, UK time. Music plays the rest of the time. See the <a href="#shows">show times</a>.</p>
+            </details>
+            <details>
+              <summary>How do I request a song?</summary>
+              <p>Fill in the <a href="#requests">request form</a>, text Jim on <a href="sms:+447935889228">07935 889228</a>, or email <a href="mailto:coastradio@hotmail.com">coastradio@hotmail.com</a>.</p>
+            </details>
+            <details>
+              <summary>Can I make the text bigger?</summary>
+              <p>Yes. Use the A, A+ and A++ buttons at the very top of the page.</p>
+            </details>
+          </div>
+        </section>
+
+        <section aria-labelledby="privacy-heading">
+          <h2 id="privacy-heading">Privacy</h2>
+          <p>This website doesn't use cookies, adverts or tracking. Your text size and dark mode choices are saved on your own device.</p>
+          <p>To show album covers, your browser asks Apple's iTunes search for each song's cover, so Apple receives those requests from your device. Requests and feedback you send are emailed to the station through Netlify, which hosts this website.</p>
+        </section>
+
+        <section aria-labelledby="feedback-heading">
+          <h2 id="feedback-heading">Send feedback</h2>
+          <p>Tell us anything that would make the website or the station better.</p>
+          <form class="form" name="feedback" method="POST" data-netlify="true" netlify-honeypot="bot-field" data-form data-success="Thanks for your feedback. It's been sent.">
+            <input type="hidden" name="form-name" value="feedback">
+            <p class="bot-field"><label>Leave this empty <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+            <div class="field">
+              <label for="feedback-type">What is it about?</label>
+              <select id="feedback-type" name="type">
+                <option>General feedback</option>
+                <option>A problem with the website</option>
+                <option>A problem listening</option>
+                <option>A song or show suggestion</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="feedback-message">Your feedback</label>
+              <textarea id="feedback-message" name="message" rows="4" required></textarea>
+            </div>
+            <div class="field">
+              <label for="feedback-name">Your name <span class="optional">(optional)</span></label>
+              <input id="feedback-name" name="name" autocomplete="name">
+            </div>
+            <div class="field">
+              <label for="feedback-contact">Email or phone, if you'd like a reply <span class="optional">(optional)</span></label>
+              <input id="feedback-contact" name="contact">
+            </div>
+            <button type="submit" class="button">Send feedback</button>
+            <p class="form-status" role="status" data-form-status></p>
+          </form>
+        </section>
+      </div>
+    </div>
   </main>
 
-  <footer>
-    <ul class="footer-links">
-      <li><a href="https://www.facebook.com/share/1aN1Jtus5Y/">Facebook</a></li>
-      <li><a href="mailto:coastradio@hotmail.com">Email</a></li>
-      <li><a href="https://x.com/coast_radio">X</a></li>
-    </ul>
-    <p>Licensed for music broadcast by <a href="https://www.prsformusic.com/">PRS for Music</a> and <a href="https://www.ppluk.com/">PPL</a>.</p>
-    <p>&copy; 2026 Coast Internet Radio</p>
+  <footer class="band footer">
+    <div class="wrap footer-inner">
+      <img class="footer-logo" src="images/logo.svg" width="298" height="100" alt="Coast Internet Radio">
+      <p>Country, Irish country and classic hits from Newry, Northern Ireland, 24 hours a day.</p>
+      <ul class="footer-links">
+        <li><a href="https://www.facebook.com/share/1aN1Jtus5Y/">Facebook</a></li>
+        <li><a href="https://x.com/coast_radio">X</a></li>
+        <li><a href="mailto:coastradio@hotmail.com">coastradio@hotmail.com</a></li>
+        <li><a href="https://www.paypal.com/donate/?hosted_button_id=QYFZXU895WSE8" target="_blank" rel="noopener">Donate<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+      </ul>
+      <p class="footer-small">Licensed for music broadcast by <a href="https://www.prsformusic.com/">PRS for Music</a> and <a href="https://www.ppluk.com/">PPL</a>. &copy; 2026 Coast Internet Radio, Newry. Formerly coastinternetradio.co.uk.</p>
+    </div>
   </footer>
+
+  <!-- The bar at the bottom, laid out like Spotify's: song, controls, volume. -->
+  <section class="player-bar" aria-label="Player" hidden>
+    <div class="wrap player-bar-inner">
+      <button type="button" class="bar-open" data-open-player>
+        <img id="bar-art" class="art" src="images/no-cover.svg" width="100" height="100" alt="">
+        <span class="bar-text">
+          <span class="bar-song" id="bar-song">Coast Internet Radio</span>
+          <span class="bar-artist" id="bar-artist">Live from Newry</span>
+        </span>
+        <span class="visually-hidden">Open the full player</span>
+      </button>
+
+      <div class="bar-controls">
+        <button type="button" class="round-play" data-play>
+          <svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+          <svg class="pause-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>
+          <span class="visually-hidden" data-play-label>Listen live</span>
+        </button>
+        <span class="live-pill" aria-hidden="true">Live</span>
+      </div>
+
+      <div class="bar-right">
+        <div class="bar-volume" data-volume-control hidden>
+          <button type="button" class="mute-button" data-mute aria-pressed="false">
+            <svg class="speaker-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4zm12.5 3A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4z"/></svg>
+            <svg class="speaker-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4zm11.6.2 1.4-1.4 2.2 2.2 2.2-2.2 1.4 1.4-2.2 2.2 2.2 2.2-1.4 1.4-2.2-2.2-2.2 2.2-1.4-1.4 2.2-2.2z"/></svg>
+            <span class="visually-hidden">Mute</span>
+          </button>
+          <label for="bar-volume" class="visually-hidden">Volume</label>
+          <input type="range" class="slim" id="bar-volume" min="0" max="100" value="80" data-volume>
+        </div>
+        <button type="button" class="bar-expand" data-open-player>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg>
+          <span class="visually-hidden">Open the full player</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- The full-screen player, opened from the bar at the bottom. -->
+  <dialog class="player-view" id="player-view" aria-labelledby="full-song">
+    <div class="player-view-inner">
+      <div class="player-view-top">
+        <p class="on-air-tag" data-on-air>On air</p>
+        <button type="button" class="close-player" data-close-player>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          Close
+        </button>
+      </div>
+      <div class="full-now">
+        <img id="full-art" class="full-art" src="images/no-cover.svg" width="600" height="600" alt="">
+        <div>
+          <h2 class="full-song" id="full-song">Coast Internet Radio</h2>
+          <p class="full-artist" id="full-artist">Live from Newry</p>
+        </div>
+      </div>
+
+      <!-- Live radio has no progress to show, so the line is full and marked Live. -->
+      <div class="live-line" aria-hidden="true">
+        <span class="live-line-track"></span>
+        <span class="live-line-label">Live</span>
+      </div>
+
+      <button type="button" class="round-play round-play-large" data-play>
+        <svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+        <svg class="pause-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>
+        <span class="visually-hidden" data-play-label>Listen live</span>
+      </button>
+
+      <div class="full-volume" data-volume-control hidden>
+        <button type="button" class="mute-button" data-mute aria-pressed="false">
+          <svg class="speaker-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4zm12.5 3A4.5 4.5 0 0 0 14 8v8a4.5 4.5 0 0 0 2.5-4z"/></svg>
+          <svg class="speaker-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4zm11.6.2 1.4-1.4 2.2 2.2 2.2-2.2 1.4 1.4-2.2 2.2 2.2 2.2-1.4 1.4-2.2-2.2-2.2 2.2-1.4-1.4 2.2-2.2z"/></svg>
+          <span class="visually-hidden">Mute</span>
+        </button>
+        <label for="full-volume" class="visually-hidden">Volume</label>
+        <input type="range" class="slim" id="full-volume" min="0" max="100" value="80" data-volume>
+      </div>
+      <p class="volume-note" data-volume-note hidden>Use your phone's volume buttons to turn it up or down.</p>
+      <p class="full-next">Up next: <span data-coming-up>Checking what's next…</span></p>
+    </div>
+  </dialog>
 </body>
 </html>
