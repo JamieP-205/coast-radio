@@ -405,3 +405,70 @@ async function updateTracks() {
 
 updateTracks();
 setInterval(updateTracks, TRACK_REFRESH_MS);
+
+// Jim live, or the 24-hour playlist. Worked out from the show times table so
+// the times are only written down once. Times are UK time, wherever the
+// listener is.
+
+const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const onAirTags = document.querySelectorAll('[data-on-air]');
+const nextShowTexts = document.querySelectorAll('[data-next-show]');
+const shows = [...document.querySelectorAll('[data-day]')].map((row) => ({
+  row,
+  day: Number(row.dataset.day),
+  start: Number(row.dataset.start),
+  end: Number(row.dataset.end),
+}));
+
+function formatHour(hour) {
+  if (hour === 12) return '12 noon';
+  return hour > 12 ? `${hour - 12}pm` : `${hour}am`;
+}
+
+function ukNow() {
+  const parts = new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Europe/London',
+    weekday: 'long',
+    hour: 'numeric',
+    minute: 'numeric',
+    hourCycle: 'h23',
+  }).formatToParts(new Date());
+  const value = (type) => parts.find((part) => part.type === type).value;
+  return { day: DAYS.indexOf(value('weekday')), minutes: Number(value('hour')) * 60 + Number(value('minute')) };
+}
+
+function nextShowMessage(now) {
+  for (let ahead = 0; ahead < 7; ahead += 1) {
+    const day = (now.day + ahead) % 7;
+    const next = shows.find((show) => show.day === day && (ahead > 0 || show.start * 60 > now.minutes));
+    if (next) {
+      const when = ahead === 0 ? 'Today' : ahead === 1 ? 'Tomorrow' : DAYS[day];
+      return `Next live show: ${when} at ${formatHour(next.start)}.`;
+    }
+  }
+  return 'See the show times.';
+}
+
+function updateLiveShow() {
+  const now = ukNow();
+  const live = shows.find((show) => show.day === now.day
+    && now.minutes >= show.start * 60 && now.minutes < show.end * 60);
+
+  shows.forEach((show) => {
+    show.row.classList.toggle('is-today', show.day === now.day && show !== live);
+    show.row.classList.toggle('is-live', show === live);
+  });
+
+  onAirTags.forEach((tag) => {
+    tag.textContent = live ? 'Jim is live' : '24-hour playlist';
+    tag.classList.toggle('is-live', Boolean(live));
+  });
+
+  const message = live ? `Jim is live now, until ${formatHour(live.end)}.` : nextShowMessage(now);
+  nextShowTexts.forEach((text) => {
+    text.textContent = message;
+  });
+}
+
+updateLiveShow();
+setInterval(updateLiveShow, 60000);

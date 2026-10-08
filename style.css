@@ -1019,3 +1019,38 @@ input.slim::-moz-range-thumb {
     transform: translateY(0.6rem);
   }
 }
+
+/* Jim live, or the 24-hour playlist */
+
+.on-air-tag.is-live {
+  border-color: #ff6b5e;
+  background: var(--accent);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .on-air-tag.is-live::before {
+    animation: pulse 1.6s ease-in-out infinite;
+  }
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+.schedule .is-today {
+  background: var(--surface);
+}
+
+.schedule .is-today th::after {
+  content: " (today)";
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.schedule .is-live th::after {
+  content: " (live now)";
+  color: var(--accent);
+  font-weight: 800;
+}
