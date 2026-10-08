@@ -1,0 +1,5 @@
+/*
+  Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' https://*.mzstatic.com; media-src https://coast-stream.jamieparr05.workers.dev; connect-src 'self' https://coast-metadata.jamieparr05.workers.dev https://itunes.apple.com; form-action 'self'; base-uri 'none'; frame-ancestors 'none'
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
