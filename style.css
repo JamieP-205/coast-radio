@@ -992,3 +992,30 @@ input.slim::-moz-range-thumb {
   border-radius: 50%;
   background: #fff;
 }
+
+/* When the song changes, the old one slides up and out and the new one
+   rises into place. */
+
+@media (prefers-reduced-motion: no-preference) {
+  .is-leaving {
+    animation: slide-out 0.28s ease-in forwards;
+  }
+
+  .is-entering {
+    animation: slide-in 0.34s ease-out;
+  }
+}
+
+@keyframes slide-out {
+  to {
+    opacity: 0;
+    transform: translateY(-0.6rem);
+  }
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.6rem);
+  }
+}
