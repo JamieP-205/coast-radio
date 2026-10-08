@@ -553,3 +553,402 @@ a:hover {
 .side-text + p {
   margin-top: 0.4rem;
 }
+
+/* Page content */
+
+.block {
+  padding-top: 3rem;
+}
+
+.narrow {
+  max-width: 50rem;
+}
+
+.page h1:not(#hero-title) {
+  margin-bottom: 1rem;
+  color: var(--link);
+  font-size: clamp(2rem, 4vw, 2.6rem);
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.block h2 {
+  margin-bottom: 1rem;
+  font-size: 1.6rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.narrow h1 + section {
+  margin-top: 2rem;
+}
+
+.narrow section + section {
+  margin-top: 3rem;
+}
+
+.lead {
+  font-size: 1.3rem;
+  line-height: 1.5;
+}
+
+.lead + p {
+  margin-top: 1rem;
+}
+
+.sign-off {
+  font-weight: 800;
+}
+
+/* Just played: a list on phones, a row of covers on bigger screens. */
+
+.played {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0;
+  list-style: none;
+}
+
+.played li {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.played .art {
+  width: 4rem;
+  height: 4rem;
+}
+
+.played-song {
+  display: block;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.played-artist {
+  display: block;
+  color: var(--muted);
+}
+
+.played-empty {
+  color: var(--muted);
+}
+
+@media (min-width: 48rem) {
+  .played {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1.5rem;
+  }
+
+  .played li {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.6rem;
+    padding: 0;
+    border: 0;
+  }
+
+  .played .art {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+  }
+
+  .played .played-empty {
+    grid-column: 1 / -1;
+  }
+}
+
+.welcome {
+  padding-top: 4rem;
+}
+
+.welcome .lead {
+  max-width: 40rem;
+}
+
+.welcome .sign-off {
+  margin-top: 1rem;
+}
+
+/* Shows */
+
+.live-show {
+  margin-top: 1.5rem;
+  padding: 1rem 1.25rem;
+  border-left: 5px solid var(--accent);
+  background: var(--surface);
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+
+.schedule {
+  width: 100%;
+  margin-top: 1.5rem;
+  border-collapse: collapse;
+}
+
+.schedule th,
+.schedule td {
+  padding: 0.8rem 0.75rem;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+}
+
+.schedule thead th {
+  color: var(--muted);
+  font-size: 1rem;
+}
+
+/* About Jim */
+
+.about {
+  display: grid;
+  gap: 2rem;
+  align-items: start;
+}
+
+@media (min-width: 48rem) {
+  .about {
+    grid-template-columns: 1fr 18rem;
+    gap: 3rem;
+  }
+}
+
+.about-text {
+  max-width: 40rem;
+}
+
+.about-text p + p {
+  margin-top: 1rem;
+}
+
+.about-photo {
+  width: 100%;
+  max-width: 14rem;
+  height: auto;
+  border-radius: 8px;
+}
+
+@media (min-width: 48rem) {
+  .about-photo {
+    max-width: 18rem;
+  }
+}
+
+.support {
+  padding-top: 4rem;
+}
+
+/* Buttons */
+
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3.25rem;
+  padding: 0.5rem 1.4rem;
+  border: 2px solid var(--accent);
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  font: 800 1.125rem var(--font);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.button:hover {
+  border-color: var(--accent-hover);
+  background: var(--accent-hover);
+  color: #fff;
+}
+
+.button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.button-plain {
+  border-color: var(--link);
+  background: transparent;
+  color: var(--link);
+}
+
+.button-plain:hover {
+  border-color: var(--link);
+  background: var(--link);
+  color: var(--bg);
+}
+
+/* Requests and feedback forms */
+
+.requests {
+  display: grid;
+  gap: 2rem;
+}
+
+@media (min-width: 52rem) {
+  .requests {
+    grid-template-columns: 1fr 1.2fr;
+    gap: 3rem;
+  }
+}
+
+.form {
+  display: grid;
+  gap: 1.1rem;
+  justify-items: start;
+}
+
+.narrow .form {
+  margin-top: 1.5rem;
+}
+
+.field {
+  display: grid;
+  gap: 0.35rem;
+  width: 100%;
+}
+
+.field label {
+  font-weight: 700;
+}
+
+.optional {
+  color: var(--muted);
+  font-weight: 400;
+}
+
+input:not([type]),
+select,
+textarea {
+  width: 100%;
+  min-height: 3rem;
+  padding: 0.6rem 0.8rem;
+  border: 2px solid var(--field);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.bot-field {
+  display: none;
+}
+
+/* Help */
+
+.ways {
+  display: grid;
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (min-width: 40rem) {
+  .ways {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.ways div {
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--line);
+}
+
+.ways dt {
+  font-weight: 800;
+}
+
+.faq {
+  border-top: 1px solid var(--line);
+}
+
+.faq details {
+  border-bottom: 1px solid var(--line);
+}
+
+.faq summary {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 0.25rem;
+  font-weight: 800;
+  cursor: pointer;
+  list-style: none;
+}
+
+.faq summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq summary::after {
+  content: "+";
+  flex: none;
+  color: var(--link);
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.faq details[open] summary::after {
+  content: "−";
+}
+
+.faq details p {
+  padding: 0 0.25rem 1.25rem;
+}
+
+/* Footer */
+
+.footer {
+  margin-top: 4rem;
+  padding-block: 2.5rem;
+  font-size: 1rem;
+}
+
+.footer-inner > * + * {
+  margin-top: 0.75rem;
+}
+
+.footer-logo {
+  display: block;
+  width: auto;
+  height: 3rem;
+}
+
+.footer p {
+  color: var(--on-brand-soft);
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.5rem;
+  padding: 0;
+  list-style: none;
+  font-weight: 700;
+}
+
+.footer-links a {
+  display: inline-block;
+  padding-block: 0.4rem;
+}
+
+.footer-small {
+  padding-top: 1rem;
+  border-top: 1px solid rgb(255 255 255 / 0.25);
+  font-size: 0.95rem;
+}
