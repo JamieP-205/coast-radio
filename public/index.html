@@ -26,7 +26,7 @@
   <header class="band site-header">
     <div class="utility">
       <div class="wrap utility-inner">
-        <p class="utility-contact">Requests: text Jim on <a href="sms:+447935889228">07935 889228</a></p>
+        <p class="utility-contact">Requests: text Jim on <a href="sms:+447935889228" data-contact="phone">07935 889228</a></p>
         <div class="reading-tools" hidden>
           <div class="text-size" role="group" aria-label="Text size">
             <span class="tool-label" aria-hidden="true">Text size</span>
@@ -55,12 +55,20 @@
   </header>
 
   <main id="main">
+    <!-- Jim's announcement, written in the editor. Shown on every page. -->
+    <section class="announcement" aria-label="Announcement" data-announcement hidden>
+      <div class="wrap announcement-inner">
+        <p data-announcement-text></p>
+        <a data-announcement-link target="_blank" rel="noopener" hidden>Find out more<span class="visually-hidden"> (opens in a new tab)</span></a>
+      </div>
+    </section>
+
     <!-- Home -->
     <div class="page" data-page="home" data-title="Coast Internet Radio – Live country and classic hits from Newry">
       <section class="band hero-band" aria-labelledby="hero-title">
         <div class="wrap hero">
           <div class="presenter">
-            <img class="presenter-photo" src="images/jim-studio.webp" width="600" height="600" alt="Jim Parr at the microphone in the studio, under an On Air sign.">
+            <img class="presenter-photo" data-edit-photo="studio" src="images/jim-studio.webp" width="600" height="600" alt="Jim Parr at the microphone in the studio, under an On Air sign.">
             <div class="player-controls" hidden>
               <button type="button" class="listen-button" data-play>
                 <span class="listen-icon" aria-hidden="true">
@@ -74,7 +82,7 @@
 
           <div class="on-air">
             <p class="on-air-tag" data-on-air>On air</p>
-            <h1 id="hero-title" tabindex="-1">Country, Irish country and classic hits from Newry</h1>
+            <h1 id="hero-title" tabindex="-1" data-edit="heroTitle">Country, Irish country and classic hits from Newry</h1>
 
             <div class="now">
               <img id="now-art" class="art now-art" src="images/no-cover.svg" width="300" height="300" alt="">
@@ -116,17 +124,26 @@
         </div>
       </section>
 
-      <section class="wrap block" aria-labelledby="played-heading">
+      <section class="wrap block" aria-labelledby="played-heading" data-section="played">
         <h2 id="played-heading">Just played</h2>
         <ol class="played" id="previously-played">
           <li class="played-empty">The last five songs will appear here.</li>
         </ol>
       </section>
 
-      <section class="wrap block welcome" aria-labelledby="welcome-heading">
-        <h2 id="welcome-heading">Welcome to Coast</h2>
-        <p class="lead">I'm Jim Parr, and I'm honoured to bring you the best in country, Irish country, American country, classic hits and the oldies you love.</p>
-        <p class="sign-off">Thanks for listening, Jim</p>
+      <section class="wrap block news" aria-labelledby="news-heading" data-section="news" hidden>
+        <h2 id="news-heading">News from Coast</h2>
+        <article class="news-item">
+          <h3 data-news-title></h3>
+          <p class="news-date" data-news-date></p>
+          <p data-news-text></p>
+        </article>
+      </section>
+
+      <section class="wrap block welcome" aria-labelledby="welcome-heading" data-section="welcome">
+        <h2 id="welcome-heading" data-edit="welcomeTitle">Welcome to Coast</h2>
+        <p class="lead" data-edit="welcomeText">I'm Jim Parr, and I'm honoured to bring you the best in country, Irish country, American country, classic hits and the oldies you love.</p>
+        <p class="sign-off" data-edit="signOff">Thanks for listening, Jim</p>
         <p class="button-row">
           <a class="button" href="#requests">Request a song</a>
           <a class="button button-plain" href="#about">More about Jim</a>
@@ -138,14 +155,14 @@
     <div class="page" data-page="shows" data-title="Show times – Coast Internet Radio">
       <div class="wrap block narrow">
         <h1 tabindex="-1">Show times</h1>
-        <p class="lead">Jim presents these shows live. The rest of the time, Coast plays music around the clock. All times are UK time.</p>
+        <p class="lead" data-edit="showsLead">Jim presents these shows live. The rest of the time, Coast plays music around the clock. All times are UK time.</p>
         <p class="live-show" data-next-show>See when Jim is next live below.</p>
         <table class="schedule">
           <caption class="visually-hidden">Jim's live shows, UK time</caption>
           <thead>
             <tr><th scope="col">Day</th><th scope="col">Time</th></tr>
           </thead>
-          <tbody>
+          <tbody data-shows>
             <tr data-day="1" data-start="10" data-end="12"><th scope="row">Monday</th><td>10am to 12 noon</td></tr>
             <tr data-day="2" data-start="10" data-end="12"><th scope="row">Tuesday</th><td>10am to 12 noon</td></tr>
             <tr data-day="4" data-start="10" data-end="12"><th scope="row">Thursday</th><td>10am to 12 noon</td></tr>
@@ -161,20 +178,20 @@
       <div class="wrap block about">
         <div class="about-text">
           <h1 tabindex="-1">About Jim</h1>
-          <p class="lead">Welcome to Coast Internet Radio. I'm Jim Parr, and I'm honoured to bring you the best in country, Irish country, American country, classic hits and the oldies you love.</p>
-          <p>Thank you for being part of our growing Coast community here in Newry, across Northern Ireland and around the world.</p>
-          <p class="sign-off">Thanks for listening, Jim</p>
+          <p class="lead" data-edit="aboutLead">Welcome to Coast Internet Radio. I'm Jim Parr, and I'm honoured to bring you the best in country, Irish country, American country, classic hits and the oldies you love.</p>
+          <p data-edit="aboutText">Thank you for being part of our growing Coast community here in Newry, across Northern Ireland and around the world.</p>
+          <p class="sign-off" data-edit="signOff">Thanks for listening, Jim</p>
         </div>
-        <img class="about-photo" src="images/jim-and-dog.webp" width="420" height="500" alt="Jim at home, holding his small white dog.">
+        <img class="about-photo" data-edit-photo="about" src="images/jim-and-dog.webp" width="420" height="500" alt="Jim at home, holding his small white dog.">
       </div>
 
       <section class="wrap block support" aria-labelledby="support-heading">
         <h2 id="support-heading">Support Coast</h2>
-        <p class="lead">Your support keeps the music playing and helps us keep broadcasting.</p>
-        <p>Real people. Real radio. Real support.</p>
+        <p class="lead" data-edit="supportLead">Your support keeps the music playing and helps us keep broadcasting.</p>
+        <p data-edit="supportNote">Real people. Real radio. Real support.</p>
         <p class="button-row">
-          <a class="button" href="https://www.paypal.com/donate/?hosted_button_id=QYFZXU895WSE8" target="_blank" rel="noopener">Donate with PayPal<span class="visually-hidden"> (opens in a new tab)</span></a>
-          <a class="button button-plain" href="https://www.facebook.com/share/1aN1Jtus5Y/">Follow Jim on Facebook</a>
+          <a class="button" href="https://www.paypal.com/donate/?hosted_button_id=QYFZXU895WSE8" data-contact="donate" target="_blank" rel="noopener">Donate with PayPal<span class="visually-hidden"> (opens in a new tab)</span></a>
+          <a class="button button-plain" href="https://www.facebook.com/share/1aN1Jtus5Y/" data-contact="facebook">Follow Jim on Facebook</a>
         </p>
       </section>
     </div>
@@ -184,8 +201,8 @@
       <div class="wrap block requests">
         <div>
           <h1 tabindex="-1">Request a song</h1>
-          <p class="lead">Tell Jim the song, the artist and who it's for. Your request goes straight to his inbox.</p>
-          <p>You can also text Jim on <a href="sms:+447935889228">07935 889228</a> or email <a href="mailto:coastradio@hotmail.com?subject=Song%20request%20for%20Coast%20Internet%20Radio">coastradio@hotmail.com</a>.</p>
+          <p class="lead" data-edit="requestsLead">Tell Jim the song, the artist and who it's for. Your request goes straight to his inbox.</p>
+          <p>You can also text Jim on <a href="sms:+447935889228" data-contact="phone">07935 889228</a> or email <a href="mailto:coastradio@hotmail.com?subject=Song%20request%20for%20Coast%20Internet%20Radio" data-contact="email">coastradio@hotmail.com</a>.</p>
         </div>
 
         <form class="form" name="song-request" method="POST" data-netlify="true" netlify-honeypot="bot-field" data-form data-success="Thanks! Your request is on its way to Jim.">
@@ -250,11 +267,11 @@
             </details>
             <details>
               <summary>When is Jim on air?</summary>
-              <p>Jim is live on Monday, Tuesday, Thursday and Friday from 10am to 12 noon, and on Sunday from 10am to 1pm, UK time. Music plays the rest of the time. See the <a href="#shows">show times</a>.</p>
+              <p>Jim's live shows are listed on the <a href="#shows">show times</a> page, in UK time. Music plays the rest of the time.</p>
             </details>
             <details>
               <summary>How do I request a song?</summary>
-              <p>Fill in the <a href="#requests">request form</a>, text Jim on <a href="sms:+447935889228">07935 889228</a>, or email <a href="mailto:coastradio@hotmail.com">coastradio@hotmail.com</a>.</p>
+              <p>Fill in the <a href="#requests">request form</a>, text Jim on <a href="sms:+447935889228" data-contact="phone">07935 889228</a>, or email <a href="mailto:coastradio@hotmail.com" data-contact="email">coastradio@hotmail.com</a>.</p>
             </details>
             <details>
               <summary>Can I make the text bigger?</summary>
@@ -307,12 +324,12 @@
   <footer class="band footer">
     <div class="wrap footer-inner">
       <img class="footer-logo" src="images/logo.svg" width="298" height="100" alt="Coast Internet Radio">
-      <p>Country, Irish country and classic hits from Newry, Northern Ireland, 24 hours a day.</p>
+      <p data-edit="footerTagline">Country, Irish country and classic hits from Newry, Northern Ireland, 24 hours a day.</p>
       <ul class="footer-links">
-        <li><a href="https://www.facebook.com/share/1aN1Jtus5Y/">Facebook</a></li>
-        <li><a href="https://x.com/coast_radio">X</a></li>
-        <li><a href="mailto:coastradio@hotmail.com">coastradio@hotmail.com</a></li>
-        <li><a href="https://www.paypal.com/donate/?hosted_button_id=QYFZXU895WSE8" target="_blank" rel="noopener">Donate<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+        <li><a href="https://www.facebook.com/share/1aN1Jtus5Y/" data-contact="facebook">Facebook</a></li>
+        <li><a href="https://x.com/coast_radio" data-contact="x">X</a></li>
+        <li><a href="mailto:coastradio@hotmail.com" data-contact="email">coastradio@hotmail.com</a></li>
+        <li><a href="https://www.paypal.com/donate/?hosted_button_id=QYFZXU895WSE8" data-contact="donate" target="_blank" rel="noopener">Donate<span class="visually-hidden"> (opens in a new tab)</span></a></li>
       </ul>
       <p class="footer-small">Licensed for music broadcast by <a href="https://www.prsformusic.com/">PRS for Music</a> and <a href="https://www.ppluk.com/">PPL</a>. &copy; 2026 Coast Internet Radio, Newry. Formerly coastinternetradio.co.uk.</p>
     </div>
