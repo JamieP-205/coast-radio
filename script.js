@@ -472,3 +472,47 @@ function updateLiveShow() {
 
 updateLiveShow();
 setInterval(updateLiveShow, 60000);
+
+// The player bar and the full-screen player
+
+const playerBar = document.querySelector('.player-bar');
+const playerView = document.getElementById('player-view');
+const muteButtons = document.querySelectorAll('[data-mute]');
+
+playerBar.hidden = false;
+
+// The bar shows whenever the main Listen button isn't on screen: on every
+// other page, and on the home page once it scrolls away.
+const mainButtonWatcher = new IntersectionObserver(([entry]) => {
+  playerBar.classList.toggle('is-shown', !entry.isIntersecting);
+});
+mainButtonWatcher.observe(controls);
+
+document.querySelectorAll('[data-open-player]').forEach((button) => {
+  button.addEventListener('click', () => playerView.showModal());
+});
+playerView.querySelector('[data-close-player]').addEventListener('click', () => playerView.close());
+
+function showMuted() {
+  document.body.classList.toggle('is-muted', audio.muted);
+  muteButtons.forEach((button) => {
+    button.setAttribute('aria-pressed', String(audio.muted));
+  });
+}
+
+muteButtons.forEach((button) => {
+  button.addEventListener('click', () => {
+    audio.muted = !audio.muted;
+    showMuted();
+  });
+});
+
+// Moving a volume slider unmutes, like Spotify.
+volumeSliders.forEach((slider) => {
+  slider.addEventListener('input', () => {
+    if (audio.muted && slider.value > 0) {
+      audio.muted = false;
+      showMuted();
+    }
+  });
+});
