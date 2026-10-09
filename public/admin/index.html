@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Coast editor</title>
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="admin.css">
+  <script src="admin.js" defer></script>
+</head>
+<body>
+  <p class="loading" data-screen="loading">Opening the editor…</p>
+
+  <!-- Sign in -->
+  <main class="sign-in" data-screen="sign-in" hidden>
+    <form class="sign-in-card" id="sign-in-form" novalidate>
+      <img class="sign-in-logo" src="../images/logo.svg" width="298" height="100" alt="Coast Internet Radio">
+      <h1>Sign in to change the website</h1>
+      <p class="sign-in-message" id="sign-in-message" role="alert"></p>
+      <div class="field">
+        <label for="username">Username</label>
+        <input id="username" name="username" autocomplete="username" autocapitalize="none" spellcheck="false" required>
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <div class="password-row">
+          <input id="password" name="password" type="password" autocomplete="current-password" required>
+          <button type="button" class="quiet-button" id="show-password" aria-pressed="false">Show</button>
+        </div>
+      </div>
+      <button type="submit" class="big-button">Sign in</button>
+    </form>
+  </main>
+
+  <!-- The editor: changes on the left, the website on the right. -->
+  <div class="editor" data-screen="editor" hidden>
+    <header class="top-bar">
+      <img class="top-logo" src="../images/logo.svg" width="149" height="50" alt="Coast Internet Radio">
+      <p class="save-status" id="save-status" role="status"></p>
+      <div class="top-actions">
+        <button type="button" class="quiet-button" id="undo-button">Undo last publish</button>
+        <button type="button" class="publish-button" id="publish-button" disabled>Publish changes</button>
+        <button type="button" class="quiet-button" id="sign-out-button">Sign out</button>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <aside class="side" aria-label="Changes">
+
+        <!-- The list of things Jim can change -->
+        <section class="panel" data-panel="menu" aria-labelledby="menu-heading">
+          <h1 id="menu-heading" tabindex="-1">What would you like to change?</h1>
+          <p class="hint">Choose from the list, or click anything on the website with an <span class="dashed">orange dashed line</span> around it.</p>
+          <ul class="menu">
+            <li><button type="button" data-open="words"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span><strong>Words</strong> Headings, your welcome and the About Jim page</span></button></li>
+            <li><button type="button" data-open="photos"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-8 8"/></svg><span><strong>Photos</strong> The photos of you on the website</span></button></li>
+            <li><button type="button" data-open="colours"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h9"/></svg><span><strong>Colours</strong> The main colour of the website</span></button></li>
+            <li><button type="button" data-open="home"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="4" rx="1"/><rect x="4" y="10" width="16" height="4" rx="1"/><rect x="4" y="16" width="16" height="4" rx="1"/></svg><span><strong>Home page layout</strong> Move or hide parts of the home page</span></button></li>
+            <li><button type="button" data-open="announcement"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4h3l7 4V6L7 10H4zM17 9a4 4 0 0 1 0 6"/></svg><span><strong>Announcement</strong> A message across the top of every page</span></button></li>
+            <li><button type="button" data-open="news"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 9h8M8 13h8M8 17h5"/></svg><span><strong>News</strong> A short news story on the home page</span></button></li>
+            <li><button type="button" data-open="shows"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span><strong>Show times and going live</strong> When you're on air</span></button></li>
+            <li><button type="button" data-open="contacts"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg><span><strong>Contact details</strong> Phone, email, Facebook, X and donations</span></button></li>
+          </ul>
+
+          <div class="publish-state" id="publish-state">
+            <p id="publish-state-text"></p>
+            <button type="button" class="link-button" id="discard-button" hidden>Throw away the changes I haven't published</button>
+          </div>
+        </section>
+
+        <!-- Words -->
+        <section class="panel" data-panel="words" aria-labelledby="words-heading" hidden>
+          <button type="button" class="back-button" data-back>Back to the list</button>
+          <h1 id="words-heading" tabindex="-1">Words</h1>
+          <p class="hint">Type your changes and watch them appear on the right.</p>
+          <div id="word-fields"></div>
+        </section>
+
+        <!-- Photos -->
+        <section class="panel" data-panel="photos" aria-labelledby="photos-heading" hidden>
+          <button type="button" class="back-button" data-back>Back to the list</button>
+          <h1 id="photos-heading" tabindex="-1">Photos</h1>
+          <p class="hint">Photos are trimmed to fit their frame. Check the preview to see how it looks.</p>
+
+          <div class="photo-card" data-photo="studio">
+            <h2>Home page photo</h2>
+            <img class="photo-thumb photo-thumb-square" src="../images/no-cover.svg" width="160" height="160" alt="">
+            <div class="photo-actions">
+              <label class="file-button">Choose a new photo<input type="file" accept="image/jpeg,image/png,image/webp" class="visually-hidden"></label>
+              <button type="button" class="link-button" data-photo-reset>Put the original photo back</button>
+            </div>
+            <p class="photo-status" role="status"></p>
+            <div class="field">
+              <label for="photo-alt-studio">Describe the photo for people who can't see it</label>
+              <input id="photo-alt-studio" data-photo-alt maxlength="200">
+            </div>
+          </div>
+
+          <div class="photo-card" data-photo="about">
+            <h2>About Jim photo</h2>
+            <img class="photo-thumb photo-thumb-tall" src="../images/no-cover.svg" width="134" height="160" alt="">
+            <div class="photo-actions">
+              <label class="file-button">Choose a new photo<input type="file" accept="image/jpeg,image/png,image/webp" class="visually-hidden"></label>
+              <button type="button" class="link-button" data-photo-reset>Put the original photo back</button>
+            </div>
+            <p class="photo-status" role="status"></p>
+            <div class="field">
+              <label for="photo-alt-about">Describe the photo for people who can't see it</label>
+              <input id="photo-alt-about" data-photo-alt maxlength="200">
+            </div>
+          </div>
+        </section>
+
+        <!-- Colours -->
+        <section class="panel" data-panel="colours" aria-labelledby="colours-heading" hidden>
+          <button type="button" class="back-button" data-back>Back to the list</button>
+          <h1 id="colours-heading" tabindex="-1">Colours</h1>
+          <p class="hint">The red buttons stay red in every colour, to match the Coast logo.</p>
+          <fieldset class="swatches">
+            <legend class="visually-hidden">Main colour</legend>
+            <label class="swatch"><input type="radio" name="colours" value="navy"><span class="swatch-sample swatch-navy"><span></span></span><span>Coast navy <small>The original</small></span></label>
+            <label class="swatch"><input type="radio" name="colours" value="sea"><span class="swatch-sample swatch-sea"><span></span></span>Sea green</label>
+            <label class="swatch"><input type="radio" name="colours" value="heather"><span class="swatch-sample swatch-heather"><span></span></span>Heather</label>
+            <label class="swatch"><input type="radio" name="colours" value="charcoal"><span class="swatch-sample swatch-charcoal"><span></span></span>Charcoal</label>
+          </fieldset>
+        </section>
+
+        <!-- Home page layout -->
+        <section class="panel" data-panel="home" aria-labelledby="home-heading" hidden>
+          <button type="button" class="back-button" data-back>Back to the list</button>
+          <h1 id="home-heading" tabindex="-1">Home page layout</h1>
+          <p class="hint">The player and your photo always stay at the top. Use the arrows to move the parts below it.</p>
+          <ol class="arrange" id="arrange-list"></ol>
+        </section>
+
+        <!-- Announcement -->
+        <section class="panel" data-panel="announcement" aria-labelledby="announcement-heading" hidden>
+          <button type="button" class="back-button" data-back>Back to the list</button>
+          <h1 id="announcement-heading" tabindex="-1">Announcement</h1>
+          <p class="hint">For things listeners need to know now, like a change to a show.</p>
+          <label class="switch"><input type="checkbox" id="announcement-show"> Show the announcement</label>
+          <div class="field">
+            <label for="announcement-text">Announcement</label>
+            <textarea id="announcement-text" rows="3" maxlength="200" aria-describedby="announcement-text-help"></textarea>
+            <p class="help" id="announcement-text-help">For example: No live show this Friday. Back on Sunday at 10am.</p>
+          </div>
+          <div class="field">
+            <label for="announcement-link">Link for "Find out more" <span class="optional">(optional)</span></label>
+            <input id="announcement-link" type="url" inputmode="url" maxlength="300" placeholder="https://" aria-describedby="announcement-link-help">
+            <p class="help" id="announcement-link-help">Paste a web address, such as a Facebook post. Leave it empty for no link.</p>
+          </div>
+        </section>
+
+        <!-- News -->
+        <section class="panel" data-panel="news" aria-labelledby="news-heading" hidden>
+          <button type="button" class="back-button" data-back>Back to the list</button>
+          <h1 id="news-heading" tabindex="-1">News</h1>
+          <p class="hint">Your news shows on the home page, under "News from Coast".</p>
+          <label class="switch"><input type="checkbox" id="news-show"> Show the news on the home page</label>
+          <div class="field">
+            <label for="news-title">Headline</label>
+            <input id="news-title" maxlength="100">
+          </div>
+          <div class="field">
+            <label for="news-date">Date <span class="optional">(optional)</span></label>
+            <div class="date-row">
+              <input id="news-date" maxlength="40">
+              <button type="button" class="quiet-button" id="news-today">Today</button>
+            </div>
+          </div>
+          <div class="field">
+            <label for="news-text">Story</label>
+            <textarea id="news-text" rows="6" maxlength="1000"></textarea>
+          </div>
+        </section>
+
+        <!-- Show times and going live -->
+        <section class="panel" data-panel="shows" aria-labelledby="shows-heading" hidden>
+          <button type="button" class="back-button" data-back>Back to the list</button>
+          <h1 id="shows-heading" tabindex="-1">Show times and going live</h1>
+
+          <h2>Going live</h2>
+          <fieldset class="choices">
+            <legend class="visually-hidden">Going live</legend>
+            <label class="choice"><input type="radio" name="live" value="auto"><span><strong>Follow the show times</strong> The website says you're live during the shows listed below.</span></label>
+            <label class="choice"><input type="radio" name="live" value="on"><span><strong>I'm live now</strong> For an extra show. Lasts 3 hours, then goes back to the show times.</span></label>
+            <label class="choice"><input type="radio" name="live" value="off"><span><strong>No live show today</strong> If you can't do today's show. Goes back to normal tomorrow.</span></label>
+          </fieldset>
+          <p class="help" id="live-until"></p>
+          <p class="note">Press Publish changes for this to show on the website.</p>
+
+          <h2>Your weekly shows</h2>
+          <p class="hint">All times are UK time.</p>
+          <ul class="show-list" id="show-list"></ul>
+          <button type="button" class="quiet-button" id="add-show">Add a show</button>
+        </section>
+
+        <!-- Contact details -->
+        <section class="panel" data-panel="contacts" aria-labelledby="contacts-heading" hidden>
+          <button type="button" class="back-button" data-back>Back to the list</button>
+          <h1 id="contacts-heading" tabindex="-1">Contact details</h1>
+          <p class="hint">These change everywhere they appear on the website.</p>
+          <div class="field">
+            <label for="contact-phone">Phone number for texts</label>
+            <input id="contact-phone" type="tel" maxlength="20" data-contact-field="phone">
+          </div>
+          <div class="field">
+            <label for="contact-email">Email address</label>
+            <input id="contact-email" type="email" maxlength="100" data-contact-field="email">
+            <p class="help">This is the address listeners see. Song requests and feedback are emailed separately, so tell Jamie if you change it.</p>
+          </div>
+          <div class="field">
+            <label for="contact-facebook">Facebook page link</label>
+            <input id="contact-facebook" type="url" inputmode="url" maxlength="300" data-contact-field="facebook">
+          </div>
+          <div class="field">
+            <label for="contact-x">X (Twitter) link</label>
+            <input id="contact-x" type="url" inputmode="url" maxlength="300" data-contact-field="x">
+          </div>
+          <div class="field">
+            <label for="contact-donate">PayPal donate link</label>
+            <input id="contact-donate" type="url" inputmode="url" maxlength="300" data-contact-field="donate">
+          </div>
+        </section>
+      </aside>
+
+      <section class="preview" aria-label="Preview of the website">
+        <div class="preview-bar">
+          <p>Preview. Only you can see changes until you publish them.</p>
+          <div class="preview-size" role="group" aria-label="Preview size">
+            <button type="button" data-preview-size="computer" aria-pressed="true">Computer</button>
+            <button type="button" data-preview-size="phone" aria-pressed="false">Phone</button>
+          </div>
+        </div>
+        <div class="preview-stage">
+          <iframe id="preview" title="Preview of the website"></iframe>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Asks before publishing, undoing or throwing changes away. -->
+  <dialog class="confirm" id="confirm" aria-labelledby="confirm-title" aria-describedby="confirm-text">
+    <form method="dialog">
+      <h2 id="confirm-title"></h2>
+      <p id="confirm-text"></p>
+      <div class="confirm-buttons">
+        <button value="yes" class="big-button" id="confirm-yes"></button>
+        <button value="no" class="quiet-button">Not now</button>
+      </div>
+    </form>
+  </dialog>
+
+  <p class="toast" id="toast" role="status"></p>
+</body>
+</html>
