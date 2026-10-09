@@ -1,71 +1,10 @@
-// Pages. Every page lives in this one file and only one is shown at a time,
-// so the music keeps playing while listeners move around the site.
+// The website's script. The smaller parts live in js/ and set themselves
+// up when they're imported; the rest is below.
 
-document.documentElement.classList.add('has-js');
-
-// Inside the editor, the website is shown in a frame with ?preview added.
-const isPreview = new URLSearchParams(location.search).has('preview') && window.parent !== window;
-
-const pages = document.querySelectorAll('[data-page]');
-const navLinks = document.querySelectorAll('.nav a');
-let firstPageShown = true;
-
-function showPage() {
-  const requested = location.hash.slice(1) || 'home';
-  const page = document.querySelector(`[data-page="${requested}"]`);
-
-  // Links such as "Skip to content" aren't pages, so leave the page as it is.
-  if (!page) {
-    if (firstPageShown) {
-      firstPageShown = false;
-      history.replaceState(null, '', '#home');
-      showPage();
-    }
-    return;
-  }
-
-  pages.forEach((section) => {
-    section.hidden = section !== page;
-  });
-  navLinks.forEach((link) => {
-    if (link.getAttribute('href') === `#${requested}`) {
-      link.setAttribute('aria-current', 'page');
-    } else {
-      link.removeAttribute('aria-current');
-    }
-  });
-  document.title = page.dataset.title;
-
-  // Moving focus to the new page's heading tells screen readers it changed.
-  // Not in the editor's preview, where Jim is typing in the editor itself.
-  if (!firstPageShown) {
-    window.scrollTo(0, 0);
-    if (!isPreview) page.querySelector('h1').focus();
-  }
-  firstPageShown = false;
-}
-
-window.addEventListener('hashchange', showPage);
-showPage();
-
-// Phone menu
-
-const menuButton = document.querySelector('.menu-button');
-const mainNav = document.getElementById('main-nav');
-
-menuButton.hidden = false;
-menuButton.addEventListener('click', () => {
-  const open = menuButton.getAttribute('aria-expanded') === 'true';
-  menuButton.setAttribute('aria-expanded', String(!open));
-  mainNav.classList.toggle('is-open', !open);
-});
-
-mainNav.addEventListener('click', (event) => {
-  if (event.target.closest('a')) {
-    menuButton.setAttribute('aria-expanded', 'false');
-    mainNav.classList.remove('is-open');
-  }
-});
+import { DAYS, formatHour, recall, remember } from './js/shared.js';
+import { isPreview } from './js/pages.js';
+import './js/reading.js';
+import './js/forms.js';
 
 // Listening
 
@@ -415,7 +354,6 @@ setInterval(updateTracks, TRACK_REFRESH_MS);
 // listener is. Jim can also switch it by hand from the editor, for a show
 // that isn't on the list or one he can't do.
 
-const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const onAirTags = document.querySelectorAll('[data-on-air]');
 const nextShowTexts = document.querySelectorAll('[data-next-show]');
 const showsTable = document.querySelector('[data-shows]');
@@ -431,12 +369,6 @@ function readShows() {
 
 let shows = readShows();
 let liveOverride = { mode: 'auto' };
-
-function formatHour(hour) {
-  if (hour === 0 || hour === 24) return 'midnight';
-  if (hour === 12) return '12 noon';
-  return hour > 12 ? `${hour - 12}pm` : `${hour}am`;
-}
 
 function ukNow() {
   const parts = new Intl.DateTimeFormat('en-GB', {
@@ -542,96 +474,6 @@ volumeSliders.forEach((slider) => {
     if (audio.muted && slider.value > 0) {
       audio.muted = false;
       showMuted();
-    }
-  });
-});
-
-// Text size and dark mode, remembered on this device
-
-const readingTools = document.querySelector('.reading-tools');
-const sizeButtons = document.querySelectorAll('[data-size]');
-const darkToggle = document.querySelector('.dark-toggle');
-const deviceDark = window.matchMedia('(prefers-color-scheme: dark)');
-
-function remember(key, value) {
-  try {
-    localStorage.setItem(key, value);
-  } catch {
-    // The choice still applies until the page is closed.
-  }
-}
-
-function recall(key) {
-  try {
-    return localStorage.getItem(key);
-  } catch {
-    return null;
-  }
-}
-
-function setSize(size) {
-  if (size === 'standard') {
-    delete document.documentElement.dataset.size;
-  } else {
-    document.documentElement.dataset.size = size;
-  }
-  sizeButtons.forEach((button) => {
-    button.setAttribute('aria-pressed', String(button.dataset.size === size));
-  });
-}
-
-// Until someone chooses, the site follows the device's own light or dark setting.
-function setTheme(theme) {
-  if (theme) document.documentElement.dataset.theme = theme;
-  const dark = theme ? theme === 'dark' : deviceDark.matches;
-  darkToggle.setAttribute('aria-pressed', String(dark));
-}
-
-readingTools.hidden = false;
-setSize(recall('coast-text-size') || 'standard');
-setTheme(recall('coast-theme'));
-
-sizeButtons.forEach((button) => {
-  button.addEventListener('click', () => {
-    setSize(button.dataset.size);
-    remember('coast-text-size', button.dataset.size);
-  });
-});
-
-darkToggle.addEventListener('click', () => {
-  const theme = darkToggle.getAttribute('aria-pressed') === 'true' ? 'light' : 'dark';
-  setTheme(theme);
-  remember('coast-theme', theme);
-});
-
-deviceDark.addEventListener('change', () => setTheme(recall('coast-theme')));
-
-// Requests and feedback are sent to Netlify Forms, which emails them on.
-
-document.querySelectorAll('[data-form]').forEach((form) => {
-  const status = form.querySelector('[data-form-status]');
-  const submit = form.querySelector('[type="submit"]');
-
-  form.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    submit.disabled = true;
-    status.classList.remove('is-error');
-    status.textContent = 'Sending…';
-
-    try {
-      const response = await fetch('/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(new FormData(form)).toString(),
-      });
-      if (!response.ok) throw new Error(response.statusText);
-      form.reset();
-      status.textContent = form.dataset.success;
-    } catch {
-      status.classList.add('is-error');
-      status.textContent = "That didn't send. Please try again, or email coastradio@hotmail.com.";
-    } finally {
-      submit.disabled = false;
     }
   });
 });
