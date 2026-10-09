@@ -345,14 +345,19 @@ publishButton.addEventListener('click', async () => {
   saveTimer = 0;
   publishButton.disabled = true;
   publishButton.textContent = 'Publishing…';
+  // Publish a copy, so anything Jim types while this is sending stays
+  // marked as not published yet.
+  const version = structuredClone(content);
   try {
     await saveQueue;
-    await api('publish', { method: 'POST', body: content });
-    published = structuredClone(content);
-    setStatus('All changes saved');
+    await api('publish', { method: 'POST', body: version });
+    published = version;
+    if (!saveTimer) setStatus('All changes saved');
     toast('Published. Your changes are on the website.');
   } catch (error) {
     toast(error.message, true);
+    // The waiting save was cancelled above, so save the draft now instead.
+    saveSoon();
   } finally {
     publishButton.textContent = 'Publish changes';
     updatePublishState();
