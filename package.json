@@ -1,0 +1,13 @@
+{
+  "name": "coast-radio",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "hash-password": "node scripts/hash-password.mjs"
+  },
+  "dependencies": {
+    "@netlify/blobs": "^11.1.4",
+    "@netlify/functions": "^6.0.2"
+  }
+}

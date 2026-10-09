@@ -2,3 +2,6 @@
 # scripts) stays private and is never served to visitors.
 [build]
   publish = "public"
+
+[functions]
+  directory = "netlify/functions"
