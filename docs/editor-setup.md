@@ -43,6 +43,16 @@ Give Jim the password in person or by phone, not by email or text.
 
 Run `npm run hash-password` again, replace `ADMIN_PASSWORD_HASH` in Netlify and redeploy. Replacing `SESSION_SECRET` as well signs out every browser that's signed in.
 
+## Letting Jim change another piece of text
+
+Three places need to agree on the name, for example `aboutHeading`:
+
+1. `public/index.html`: add `data-edit="aboutHeading"` to the element.
+2. `netlify/lib/content.mjs`: add it to `TEXT_FIELDS` with a name Jim will understand and a length limit.
+3. `public/admin/js/panels/words.js`: add it to `WORDS`, under the page it's on, with the same limit.
+
+Then run `npm test`. The content tests build their text from `TEXT_FIELDS`, so they check the new field too. If one of the three is missed, Jim either won't see a box for it, his change won't be saved, or it won't show on the website.
+
 ## How it works
 
 | Address | What it does |

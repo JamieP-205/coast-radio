@@ -2,6 +2,9 @@
 # scripts) stays private and is never served to visitors.
 [build]
   publish = "public"
+  # The tests run before every deploy, so a change that breaks them never
+  # goes live.
+  command = "npm test"
 
 [functions]
   directory = "netlify/functions"
