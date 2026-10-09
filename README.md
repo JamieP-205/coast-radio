@@ -1,6 +1,10 @@
 # Coast Internet Radio
 
+[![Tests](https://github.com/JamieP-205/coast-radio/actions/workflows/test.yml/badge.svg)](https://github.com/JamieP-205/coast-radio/actions/workflows/test.yml)
+
 The website for Coast Internet Radio, a small internet radio station in Newry run by Jim Parr, playing country, Irish country and classic hits 24 hours a day.
+
+![The homepage: Jim Parr at the microphone with a red Listen live button, the song playing now with its album cover, and what's up next.](docs/homepage.webp)
 
 ## Status
 
