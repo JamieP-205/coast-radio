@@ -1,97 +1,6 @@
-// The website's script. The smaller parts live in js/ and set themselves
-// up when they're imported; the rest is below.
-
-import { DAYS, formatHour, recall, remember } from './js/shared.js';
-import { isPreview } from './js/pages.js';
-import './js/reading.js';
-import './js/forms.js';
-import './js/player.js';
-import './js/now-playing.js';
-
-// Jim live, or the 24-hour playlist. Worked out from the show times table so
-// the times are only written down once. Times are UK time, wherever the
-// listener is. Jim can also switch it by hand from the editor, for a show
-// that isn't on the list or one he can't do.
-
-const onAirTags = document.querySelectorAll('[data-on-air]');
-const nextShowTexts = document.querySelectorAll('[data-next-show]');
-const showsTable = document.querySelector('[data-shows]');
-
-function readShows() {
-  return [...showsTable.querySelectorAll('[data-day]')].map((row) => ({
-    row,
-    day: Number(row.dataset.day),
-    start: Number(row.dataset.start),
-    end: Number(row.dataset.end),
-  }));
-}
-
-let shows = readShows();
-let liveOverride = { mode: 'auto' };
-
-function ukNow() {
-  const parts = new Intl.DateTimeFormat('en-GB', {
-    timeZone: 'Europe/London',
-    weekday: 'long',
-    hour: 'numeric',
-    minute: 'numeric',
-    hourCycle: 'h23',
-  }).formatToParts(new Date());
-  const value = (type) => parts.find((part) => part.type === type).value;
-  return { day: DAYS.indexOf(value('weekday')), minutes: Number(value('hour')) * 60 + Number(value('minute')) };
-}
-
-function nextShowMessage(now, notToday = false) {
-  for (let ahead = notToday ? 1 : 0; ahead < 8; ahead += 1) {
-    const day = (now.day + ahead) % 7;
-    const next = shows.find((show) => show.day === day && (ahead > 0 || show.start * 60 > now.minutes));
-    if (next) {
-      const when = ahead === 0 ? 'Today' : ahead === 1 ? 'Tomorrow' : DAYS[day];
-      return `Next live show: ${when} at ${formatHour(next.start)}.`;
-    }
-  }
-  return 'See the show times.';
-}
-
-// The switch only lasts until the time Jim chose, then the show times
-// take over again.
-function liveSwitch() {
-  const { mode, until } = liveOverride;
-  return mode !== 'auto' && Date.now() < Date.parse(until) ? mode : 'auto';
-}
-
-function liveMessage(now, live, override) {
-  if (override === 'on') return 'Jim is live now.';
-  if (live) return `Jim is live now, until ${formatHour(live.end)}.`;
-  if (override === 'off') return `No live show today. ${nextShowMessage(now, true)}`;
-  return nextShowMessage(now);
-}
-
-function updateLiveShow() {
-  const now = ukNow();
-  const override = liveSwitch();
-  const live = override === 'off' ? undefined : shows.find((show) => show.day === now.day
-    && now.minutes >= show.start * 60 && now.minutes < show.end * 60);
-  const isLive = override === 'on' || Boolean(live);
-
-  shows.forEach((show) => {
-    show.row.classList.toggle('is-today', show.day === now.day && show !== live);
-    show.row.classList.toggle('is-live', show === live);
-  });
-
-  onAirTags.forEach((tag) => {
-    tag.textContent = isLive ? 'Jim is live' : '24-hour playlist';
-    tag.classList.toggle('is-live', isLive);
-  });
-
-  const message = liveMessage(now, live, override);
-  nextShowTexts.forEach((text) => {
-    text.textContent = message;
-  });
-}
-
-updateLiveShow();
-setInterval(updateLiveShow, 60000);
+import { isPreview } from './pages.js';
+import { setLiveSwitch, setShowTimes, showTimes } from './schedule.js';
+import { recall, remember } from './shared.js';
 
 // Content from the editor. The page is built with Jim's words already in it,
 // so it works on its own; anything he has published since is laid on top.
@@ -144,7 +53,7 @@ function readContent() {
     announcement: { show: false, text: '', link: '' },
     news: { title: '', date: '', text: '' },
     home: [...homeSections.keys()].map((id) => ({ id, show: id !== 'news' })),
-    shows: shows.map(({ day, start, end }) => ({ day, start, end })),
+    shows: showTimes(),
     live: { mode: 'auto' },
   };
 }
@@ -215,26 +124,6 @@ function applyHome(home, news) {
   });
 }
 
-function applyShows(list) {
-  // Monday first, like a printed schedule.
-  const weekOrder = (day) => (day + 6) % 7;
-  const rows = [...list]
-    .sort((a, b) => weekOrder(a.day) - weekOrder(b.day) || a.start - b.start)
-    .map(({ day, start, end }) => {
-      const row = document.createElement('tr');
-      Object.assign(row.dataset, { day, start, end });
-      const dayCell = document.createElement('th');
-      dayCell.scope = 'row';
-      dayCell.textContent = DAYS[day];
-      const timeCell = document.createElement('td');
-      timeCell.textContent = `${formatHour(start)} to ${formatHour(end)}`;
-      row.append(dayCell, timeCell);
-      return row;
-    });
-  showsTable.replaceChildren(...rows);
-  shows = readShows();
-}
-
 function applyContent(content) {
   applyColours(content.colours);
   applyText(content.text || {});
@@ -243,9 +132,8 @@ function applyContent(content) {
   if (content.announcement) applyAnnouncement(content.announcement);
   if (content.news) applyNews(content.news);
   if (content.home) applyHome(content.home, content.news || {});
-  if (content.shows) applyShows(content.shows);
-  liveOverride = content.live || { mode: 'auto' };
-  updateLiveShow();
+  if (content.shows) setShowTimes(content.shows);
+  setLiveSwitch(content.live);
 }
 
 async function loadPublishedContent() {

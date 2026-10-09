@@ -8,6 +8,13 @@ export function formatHour(hour) {
   return hour > 12 ? `${hour - 12}pm` : `${hour}am`;
 }
 
+// Jim's live switch from the editor only lasts until the time he chose, then
+// the show times take over again.
+export function liveSwitchMode(live) {
+  const { mode, until } = live;
+  return mode !== 'auto' && Date.now() < Date.parse(until) ? mode : 'auto';
+}
+
 // Choices remembered on this device. Some browsers block this, for example
 // in private browsing, so the website carries on without it.
 
