@@ -113,10 +113,15 @@ function checkShows(input, errors) {
   const list = Array.isArray(input) ? input.slice(0, MAX_SHOWS) : [];
   return list.filter((show) => {
     const { day, start, end } = show || {};
-    const valid = [day, start, end].every(Number.isInteger)
-      && day >= 0 && day <= 6 && start >= 0 && end <= 24 && end > start;
-    if (!valid) errors.push('Each show needs to finish after it starts.');
-    return valid;
+    if (![day, start, end].every(Number.isInteger) || day < 0 || day > 6) {
+      errors.push('Each show needs a day, a start time and a finish time.');
+      return false;
+    }
+    if (start < 0 || end > 24 || end <= start) {
+      errors.push('Each show needs to finish after it starts.');
+      return false;
+    }
+    return true;
   }).map(({ day, start, end }) => ({ day, start, end }));
 }
 

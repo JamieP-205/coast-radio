@@ -72,6 +72,13 @@ test('a show that ends before it starts is refused', () => {
   assert.ok(errors.includes('Each show needs to finish after it starts.'));
 });
 
+test('a show on a day that doesn\'t exist is refused with the right message', () => {
+  const input = goodContent();
+  input.shows.push({ day: 9, start: 10, end: 12 });
+  const { errors } = validateContent(input);
+  assert.deepEqual(errors, ['Each show needs a day, a start time and a finish time.']);
+});
+
 test('the home page must keep all three sections', () => {
   const input = goodContent();
   input.home.pop();
