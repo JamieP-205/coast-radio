@@ -37,4 +37,6 @@ npx netlify-cli dev
 
 ## How I use AI on this project
 
-I'm building this step by step using my own knowledge, online sources and AI, which helps explain broken code while I make the changes and commit them. Commit messages will say if Claude Code contributed to code.
+I built the first version myself in May 2026, using online tutorials, my class notes and some help from AI tools, and set up its hosting on Netlify and the two Cloudflare Workers.
+
+I rebuilt it in October 2026 with Claude Code, which wrote much of the code. I worked out with Jim what he needed, tested each change, committed and deployed it, and moved the live domain over to the new site.
