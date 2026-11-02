@@ -39,4 +39,4 @@ npx netlify-cli dev
 
 I built the first version myself in May 2026, using online tutorials, my class notes and some help from AI tools, and set up its hosting on Netlify and the two Cloudflare Workers.
 
-I rebuilt it in October 2026. Claude Code assisted with coding. I worked out with Jim what he needed, tested each change, committed and deployed it, and moved the live domain over to the new site.
+I rebuilt it in October 2026. Claude Code helped build it: I worked out with Jim what he needed, made the design decisions, tested each change on the live site, committed and deployed it, and moved the live domain over to the new site.
