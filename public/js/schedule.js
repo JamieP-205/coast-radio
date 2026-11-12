@@ -22,6 +22,7 @@ function readShows() {
 
 let shows = readShows();
 let liveOverride = { mode: 'auto' };
+let wasLive = false;
 
 function ukNow() {
   const parts = new Intl.DateTimeFormat('en-GB', {
@@ -70,6 +71,15 @@ function updateLiveShow() {
     tag.textContent = isLive ? 'Jim is live' : '24-hour playlist';
     tag.classList.toggle('is-live', isLive);
   });
+
+  // The sign flickers on when Jim goes live, and only then.
+  if (isLive && !wasLive) {
+    onAirTags.forEach((tag) => tag.classList.add('is-lighting'));
+    setTimeout(() => {
+      onAirTags.forEach((tag) => tag.classList.remove('is-lighting'));
+    }, 1000);
+  }
+  wasLive = isLive;
 
   const message = liveMessage(now, live, override);
   nextShowTexts.forEach((text) => {

@@ -1,0 +1,58 @@
+@font-face {
+  font-family: "Besley";
+  src: url("../public/fonts/besley.woff2") format("woff2");
+  font-weight: 400 900;
+}
+
+@font-face {
+  font-family: "Atkinson Hyperlegible Next";
+  src: url("../public/fonts/atkinson-hyperlegible-next.woff2") format("woff2");
+  font-weight: 200 800;
+}
+
+body {
+  display: grid;
+  grid-template-columns: 1fr 470px;
+  align-items: center;
+  gap: 50px;
+  width: 1200px;
+  height: 630px;
+  margin: 0;
+  padding: 0 70px;
+  box-sizing: border-box;
+  overflow: hidden;
+  background: #14466b;
+  color: #fff;
+}
+
+.logo {
+  display: block;
+  width: 330px;
+}
+
+.line {
+  margin: 44px 0 0;
+  font: 800 56px/1.08 "Besley", serif;
+  text-wrap: balance;
+}
+
+.web {
+  display: inline-block;
+  margin: 40px 0 0;
+  padding: 12px 24px;
+  border-radius: 14px;
+  background: #f6b73c;
+  color: #0b2134;
+  font: 800 30px/1 "Atkinson Hyperlegible Next", sans-serif;
+}
+
+.photo {
+  width: 470px;
+  height: 470px;
+  box-sizing: border-box;
+  object-fit: cover;
+  border: 9px solid #fff;
+  border-radius: 5px;
+  box-shadow: 0 28px 56px rgb(0 0 0 / 0.38);
+  transform: rotate(1.5deg);
+}

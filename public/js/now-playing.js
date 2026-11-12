@@ -4,6 +4,7 @@ const METADATA_URL = 'https://coast-metadata.jamieparr05.workers.dev/';
 const ARTWORK_URL = 'https://itunes.apple.com/search';
 const FALLBACK_ART = 'images/no-cover.svg';
 const TRACK_REFRESH_MS = 15000;
+const HIDDEN_REFRESH_MS = 60000;
 const CHANGE_MS = 280;
 
 const nowArt = document.getElementById('now-art');
@@ -17,6 +18,7 @@ const fullSong = document.getElementById('full-song');
 const fullArtist = document.getElementById('full-artist');
 const nextArt = document.getElementById('next-art');
 const comingUpTexts = document.querySelectorAll('[data-coming-up]');
+const upNextLines = document.querySelectorAll('[data-up-next]');
 const previouslyPlayed = document.getElementById('previously-played');
 const nowPlayingBlocks = document.querySelectorAll('.now, .bar-open, .full-now');
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -71,7 +73,13 @@ function findArtwork(track, size) {
       && shareAWord(track.song, result.trackName);
     const sameArtist = (result) => shareAWord(artist, result.artistName);
     artworkCache.set(key, searchArtwork(key, 'song', isMatch)
-      .then((url) => url || searchArtwork(artist, 'album', sameArtist)));
+      .then((url) => url || searchArtwork(artist, 'album', sameArtist))
+      .then((url) => {
+        // Don't remember a miss: the search may only have been busy, and
+        // the cover can be found the next time the song comes round.
+        if (!url) artworkCache.delete(key);
+        return url;
+      }));
   }
   return artworkCache.get(key)
     .then((url) => (url ? url.replace('100x100bb', `${size}x${size}bb`) : FALLBACK_ART));
@@ -124,7 +132,9 @@ async function showNowPlaying(track) {
       title: track.song,
       artist: track.artist,
       album: 'Coast Internet Radio',
-      artwork: [{ src: art === FALLBACK_ART ? 'images/jim-studio.webp' : art, sizes: '600x600' }],
+      artwork: art === FALLBACK_ART
+        ? [{ src: 'images/jim-studio.webp', sizes: '830x826', type: 'image/webp' }]
+        : [{ src: art, sizes: '600x600' }],
     });
   }
 }
@@ -136,6 +146,10 @@ async function showComingUp(track) {
     element.textContent = track.artist ? `${track.song} by ${track.artist}` : track.song;
   });
   nextArt.src = art;
+  // The Up next lines stay hidden until there is something to show.
+  upNextLines.forEach((line) => {
+    line.hidden = false;
+  });
 }
 
 // Just played. Songs already in the list keep their place in the page, so
@@ -210,7 +224,7 @@ async function updateTracks() {
     if (data.title && data.title !== currentTitle) {
       currentTitle = data.title;
       showNowPlaying(splitTrack(data.title));
-      if (Array.isArray(data.previous) && data.previous.length) showJustPlayed(data.previous);
+      if (Array.isArray(data.previous) && data.previous.length) showJustPlayed(data.previous.slice(0, 5));
     }
 
     if (data.comingUp && data.comingUp !== currentNext) {
@@ -222,5 +236,24 @@ async function updateTracks() {
   }
 }
 
+// Check often while the page is on screen or the station is playing (the
+// phone's lock screen shows the song too). With the page in the background
+// and nothing playing, check once a minute to save battery and data.
+let refreshTimer;
+
+function keepUpToDate() {
+  clearTimeout(refreshTimer);
+  const resting = document.hidden && !document.body.classList.contains('is-playing');
+  refreshTimer = setTimeout(async () => {
+    await updateTracks();
+    keepUpToDate();
+  }, resting ? HIDDEN_REFRESH_MS : TRACK_REFRESH_MS);
+}
+
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden) updateTracks();
+  keepUpToDate();
+});
+
 updateTracks();
-setInterval(updateTracks, TRACK_REFRESH_MS);
+keepUpToDate();

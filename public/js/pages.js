@@ -10,7 +10,7 @@ let firstPageShown = true;
 
 function showPage() {
   const requested = location.hash.slice(1) || 'home';
-  const page = document.querySelector(`[data-page="${requested}"]`);
+  const page = document.querySelector(`[data-page="${CSS.escape(requested)}"]`);
 
   // Links such as "Skip to content" aren't pages, so leave the page as it is.
   if (!page) {
@@ -45,25 +45,3 @@ function showPage() {
 
 window.addEventListener('hashchange', showPage);
 showPage();
-
-// Phone menu. Without this script the menu stays open, so the has-js class
-// tells the stylesheet it can fold the menu away.
-
-document.documentElement.classList.add('has-js');
-
-const menuButton = document.querySelector('.menu-button');
-const mainNav = document.getElementById('main-nav');
-
-menuButton.hidden = false;
-menuButton.addEventListener('click', () => {
-  const open = menuButton.getAttribute('aria-expanded') === 'true';
-  menuButton.setAttribute('aria-expanded', String(!open));
-  mainNav.classList.toggle('is-open', !open);
-});
-
-mainNav.addEventListener('click', (event) => {
-  if (event.target.closest('a')) {
-    menuButton.setAttribute('aria-expanded', 'false');
-    mainNav.classList.remove('is-open');
-  }
-});

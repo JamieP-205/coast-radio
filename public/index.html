@@ -5,25 +5,56 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Coast Internet Radio – Live country and classic hits from Newry</title>
   <meta name="description" content="Listen live to Coast Internet Radio with Jim Parr from Newry, Northern Ireland. Country, Irish country, American country, classic hits and golden oldies, 24 hours a day.">
-  <meta name="theme-color" content="#14466b">
+  <meta name="theme-color" content="#0d3150">
   <link rel="canonical" href="https://coastinternetradio.com/">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://coastinternetradio.com/">
   <meta property="og:title" content="Coast Internet Radio with Jim Parr">
   <meta property="og:description" content="Live country, Irish country, classic hits and oldies from Newry, Northern Ireland, 24 hours a day.">
-  <meta property="og:image" content="https://coastinternetradio.com/images/share.jpg">
+  <meta property="og:image" content="https://coastinternetradio.com/images/link-preview.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="The Coast Internet Radio logo beside Jim Parr at the microphone.">
   <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="favicon.ico" sizes="32x32">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="preload" href="fonts/besley.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/atkinson-hyperlegible-next.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="style.css">
+  <script src="js/first.js"></script>
   <script type="module" src="js/main.js"></script>
+  <script type="application/ld+json">
+  [
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Coast Internet Radio",
+      "url": "https://coastinternetradio.com/"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "RadioStation",
+      "name": "Coast Internet Radio",
+      "url": "https://coastinternetradio.com/",
+      "logo": "https://coastinternetradio.com/apple-touch-icon.png",
+      "image": "https://coastinternetradio.com/images/link-preview.jpg",
+      "description": "Country, Irish country and classic hits from Newry, Northern Ireland, 24 hours a day.",
+      "email": "coastradio@hotmail.com",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Newry",
+        "addressRegion": "Northern Ireland",
+        "addressCountry": "GB"
+      }
+    }
+  ]
+  </script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
 
-  <header class="band site-header">
+  <header class="site-header">
     <div class="utility">
       <div class="wrap utility-inner">
         <p class="utility-contact">Requests: text Jim on <a href="sms:+447935889228" data-contact="phone">07935 889228</a></p>
@@ -41,7 +72,6 @@
 
     <div class="wrap masthead">
       <a class="logo" href="#home"><img src="images/logo.svg" width="298" height="100" alt="Coast Internet Radio, home"></a>
-      <button type="button" class="menu-button" aria-expanded="false" aria-controls="main-nav" hidden>Menu</button>
       <nav class="main-nav" id="main-nav" aria-label="Main">
         <ul class="nav">
           <li><a href="#home">Home</a></li>
@@ -59,31 +89,49 @@
     <section class="announcement" aria-label="Announcement" data-announcement hidden>
       <div class="wrap announcement-inner">
         <p data-announcement-text></p>
-        <a data-announcement-link target="_blank" rel="noopener" hidden>Find out more<span class="visually-hidden"> (opens in a new tab)</span></a>
+        <a href="/" data-announcement-link target="_blank" rel="noopener" hidden>Find out more<span class="visually-hidden"> (opens in a new tab)</span></a>
       </div>
     </section>
 
     <!-- Home -->
     <div class="page" data-page="home" data-title="Coast Internet Radio – Live country and classic hits from Newry">
-      <section class="band hero-band" aria-labelledby="hero-title">
-        <div class="wrap hero">
-          <div class="presenter">
-            <img class="presenter-photo" data-edit-photo="studio" src="images/jim-studio.webp" width="600" height="600" alt="Jim Parr at the microphone in the studio, under an On Air sign.">
+      <section class="studio" aria-labelledby="hero-title">
+        <div class="desk">
+          <p class="on-air">
+            <span class="sign" data-on-air>On air</span>
+            <span class="next-show" data-next-show>See the show times.</span>
+            <a href="#shows">Show times</a>
+          </p>
+          <h1 id="hero-title" tabindex="-1" data-edit="heroTitle">Country, Irish country and classic hits from Newry</h1>
+
+          <div class="listen">
             <div class="player-controls" hidden>
               <button type="button" class="listen-button" data-play>
                 <span class="listen-icon" aria-hidden="true">
                   <svg class="play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                  <svg class="pause-icon" viewBox="0 0 24 24"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>
+                  <svg class="stop-icon" viewBox="0 0 24 24"><path d="M7 7h10v10H7z"/></svg>
                 </span>
                 <span data-play-label>Listen live</span>
               </button>
             </div>
+            <div class="volume" data-volume-control hidden>
+              <label for="volume">Volume</label>
+              <input type="range" class="slim" id="volume" min="0" max="100" value="80" data-volume>
+            </div>
           </div>
 
-          <div class="on-air">
-            <p class="on-air-tag" data-on-air>On air</p>
-            <h1 id="hero-title" tabindex="-1" data-edit="heroTitle">Country, Irish country and classic hits from Newry</h1>
+          <audio id="stream" controls preload="none" src="https://coast-stream.jamieparr05.workers.dev/stream">
+            <a href="https://coast-stream.jamieparr05.workers.dev/stream">Open the live stream</a>
+          </audio>
 
+          <p id="player-status" class="player-status" role="status"></p>
+        </div>
+
+        <img class="presenter-photo" data-edit-photo="studio" src="images/jim-studio.webp" width="830" height="826" fetchpriority="high" alt="Jim Parr at the microphone in the studio, under an On Air sign.">
+
+        <!-- What's on: the song playing now, and the one after it. -->
+        <div class="on-now">
+          <div class="wrap on-now-inner">
             <div class="now">
               <img id="now-art" class="art now-art" src="images/no-cover.svg" width="300" height="300" alt="">
               <div>
@@ -96,39 +144,17 @@
               </div>
             </div>
 
-            <audio id="stream" controls preload="none" src="https://coast-stream.jamieparr05.workers.dev/stream">
-              <a href="https://coast-stream.jamieparr05.workers.dev/stream">Open the live stream</a>
-            </audio>
-
-            <div class="volume" data-volume-control hidden>
-              <label for="volume">Volume</label>
-              <input type="range" class="slim" id="volume" min="0" max="100" value="80" data-volume>
-            </div>
-            <p id="player-status" class="player-status" role="status"></p>
-          </div>
-
-          <div class="hero-side">
-            <div class="side-panel">
-              <p class="side-label">Up next</p>
-              <div class="up-next">
-                <img id="next-art" class="art" src="images/no-cover.svg" width="200" height="200" alt="">
-                <p class="next-song" data-coming-up>Checking what's next…</p>
-              </div>
-            </div>
-            <div class="side-panel">
-              <p class="side-label">Jim live on air</p>
-              <p class="side-text" data-next-show>See the show times.</p>
-              <p><a href="#shows">Show times</a></p>
-            </div>
+            <p class="up-next" data-up-next hidden>
+              <img id="next-art" class="art" src="images/no-cover.svg" width="200" height="200" alt="">
+              <span><span class="up-next-label">Up next</span> <span class="next-song" data-coming-up></span></span>
+            </p>
           </div>
         </div>
       </section>
 
       <section class="wrap block" aria-labelledby="played-heading" data-section="played">
         <h2 id="played-heading">Just played</h2>
-        <ol class="played" id="previously-played">
-          <li class="played-empty">The last five songs will appear here.</li>
-        </ol>
+        <ol class="played" id="previously-played"></ol>
       </section>
 
       <section class="wrap block news" aria-labelledby="news-heading" data-section="news" hidden>
@@ -153,10 +179,17 @@
 
     <!-- Shows -->
     <div class="page" data-page="shows" data-title="Show times – Coast Internet Radio">
+      <header class="page-head">
+        <div class="wrap">
+          <h1 tabindex="-1">Show times</h1>
+          <p class="lead" data-edit="showsLead">Jim presents these shows live. The rest of the time, Coast plays music around the clock. All times are UK time.</p>
+        </div>
+      </header>
       <div class="wrap block narrow">
-        <h1 tabindex="-1">Show times</h1>
-        <p class="lead" data-edit="showsLead">Jim presents these shows live. The rest of the time, Coast plays music around the clock. All times are UK time.</p>
-        <p class="live-show" data-next-show>See when Jim is next live below.</p>
+        <p class="live-show">
+          <span class="sign" data-on-air>On air</span>
+          <span data-next-show>See when Jim is next live below.</span>
+        </p>
         <table class="schedule">
           <caption class="visually-hidden">Jim's live shows, UK time</caption>
           <thead>
@@ -175,9 +208,13 @@
 
     <!-- About Jim -->
     <div class="page" data-page="about" data-title="About Jim – Coast Internet Radio">
+      <header class="page-head">
+        <div class="wrap">
+          <h1 tabindex="-1">About Jim</h1>
+        </div>
+      </header>
       <div class="wrap block about">
         <div class="about-text">
-          <h1 tabindex="-1">About Jim</h1>
           <p class="lead" data-edit="aboutLead">Welcome to Coast Internet Radio. I'm Jim Parr, and I'm honoured to bring you the best in country, Irish country, American country, classic hits and the oldies you love.</p>
           <p data-edit="aboutText">Thank you for being part of our growing Coast community here in Newry, across Northern Ireland and around the world.</p>
           <p class="sign-off" data-edit="signOff">Thanks for listening, Jim</p>
@@ -198,13 +235,13 @@
 
     <!-- Requests -->
     <div class="page" data-page="requests" data-title="Request a song – Coast Internet Radio">
-      <div class="wrap block requests">
-        <div>
+      <header class="page-head">
+        <div class="wrap">
           <h1 tabindex="-1">Request a song</h1>
           <p class="lead" data-edit="requestsLead">Tell Jim the song, the artist and who it's for. Your request goes straight to his inbox.</p>
-          <p>You can also text Jim on <a href="sms:+447935889228" data-contact="phone">07935 889228</a> or email <a href="mailto:coastradio@hotmail.com?subject=Song%20request%20for%20Coast%20Internet%20Radio" data-contact="email">coastradio@hotmail.com</a>.</p>
         </div>
-
+      </header>
+      <div class="wrap block requests">
         <form class="form" name="song-request" method="POST" data-netlify="true" netlify-honeypot="bot-field" data-form data-success="Thanks! Your request is on its way to Jim.">
           <input type="hidden" name="form-name" value="song-request">
           <p class="bot-field"><label>Leave this empty <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
@@ -227,13 +264,21 @@
           <button type="submit" class="button">Send request</button>
           <p class="form-status" role="status" data-form-status></p>
         </form>
+
+        <div class="other-ways">
+          <p>You can also text Jim on <a href="sms:+447935889228" data-contact="phone">07935 889228</a> or email <a href="mailto:coastradio@hotmail.com?subject=Song%20request%20for%20Coast%20Internet%20Radio" data-contact="email">coastradio@hotmail.com</a>.</p>
+        </div>
       </div>
     </div>
 
     <!-- Help -->
     <div class="page" data-page="help" data-title="Help – Coast Internet Radio">
+      <header class="page-head">
+        <div class="wrap">
+          <h1 tabindex="-1">Help</h1>
+        </div>
+      </header>
       <div class="wrap block narrow">
-        <h1 tabindex="-1">Help</h1>
 
         <section aria-labelledby="how-heading">
           <h2 id="how-heading">How to listen</h2>
@@ -321,7 +366,7 @@
     </div>
   </main>
 
-  <footer class="band footer">
+  <footer class="footer">
     <div class="wrap footer-inner">
       <img class="footer-logo" src="images/logo.svg" width="298" height="100" alt="Coast Internet Radio">
       <p data-edit="footerTagline">Country, Irish country and classic hits from Newry, Northern Ireland, 24 hours a day.</p>
@@ -335,7 +380,7 @@
     </div>
   </footer>
 
-  <!-- The bar at the bottom, laid out like Spotify's: song, controls, volume. -->
+  <!-- The bar at the bottom: the song, the Listen button, the volume. -->
   <section class="player-bar" aria-label="Player" hidden>
     <div class="wrap player-bar-inner">
       <button type="button" class="bar-open" data-open-player>
@@ -350,10 +395,9 @@
       <div class="bar-controls">
         <button type="button" class="round-play" data-play>
           <svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
-          <svg class="pause-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>
-          <span class="visually-hidden" data-play-label>Listen live</span>
+          <svg class="stop-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h10v10H7z"/></svg>
+          <span class="play-word" data-play-label>Listen live</span>
         </button>
-        <span class="live-pill" aria-hidden="true">Live</span>
       </div>
 
       <div class="bar-right">
@@ -378,7 +422,7 @@
   <dialog class="player-view" id="player-view" aria-labelledby="full-song">
     <div class="player-view-inner">
       <div class="player-view-top">
-        <p class="on-air-tag" data-on-air>On air</p>
+        <p class="sign" data-on-air>On air</p>
         <button type="button" class="close-player" data-close-player>
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
           Close
@@ -400,7 +444,7 @@
 
       <button type="button" class="round-play round-play-large" data-play>
         <svg class="play-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
-        <svg class="pause-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>
+        <svg class="stop-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h10v10H7z"/></svg>
         <span class="visually-hidden" data-play-label>Listen live</span>
       </button>
 
@@ -414,7 +458,7 @@
         <input type="range" class="slim" id="full-volume" min="0" max="100" value="80" data-volume>
       </div>
       <p class="volume-note" data-volume-note hidden>Use your phone's volume buttons to turn it up or down.</p>
-      <p class="full-next">Up next: <span data-coming-up>Checking what's next…</span></p>
+      <p class="full-next" data-up-next hidden>Up next: <span data-coming-up></span></p>
     </div>
   </dialog>
 </body>

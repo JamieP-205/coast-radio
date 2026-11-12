@@ -612,12 +612,12 @@ textarea[aria-invalid="true"] {
   border-radius: 6px;
 }
 
-/* The little red pill is the website's red button. */
+/* The little amber block is the website's Listen live button. */
 .swatch-sample span {
   width: 1.8rem;
   height: 0.7rem;
-  border-radius: 999px;
-  background: var(--red);
+  border-radius: 0.2rem;
+  background: #f6b73c;
 }
 
 .swatch-navy {

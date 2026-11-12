@@ -15,6 +15,15 @@ export function liveSwitchMode(live) {
   return mode !== 'auto' && Date.now() < Date.parse(until) ? mode : 'auto';
 }
 
+// If the stream drops, the player tries again by itself: quickly at first,
+// then every half minute, and after about two and a half minutes it stops
+// and asks the listener. Returns the wait in milliseconds, or null to stop.
+const RETRY_SECONDS = [2, 4, 8, 16, 30, 30, 30, 30];
+
+export function retryDelay(attempt) {
+  return attempt < RETRY_SECONDS.length ? RETRY_SECONDS[attempt] * 1000 : null;
+}
+
 // Choices remembered on this device. Some browsers block this, for example
 // in private browsing, so the website carries on without it.
 

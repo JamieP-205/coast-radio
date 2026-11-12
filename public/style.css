@@ -1,3 +1,17 @@
+/* Coast Internet Radio.
+
+   Two typefaces, each with a job. Besley is a Clarendon, the letter of
+   country show posters and old radio dials: headings, the song and the
+   Listen button. Atkinson Hyperlegible Next was drawn for readers with low
+   vision: everything else. */
+
+@font-face {
+  font-family: "Besley";
+  src: url("fonts/besley.woff2") format("woff2");
+  font-weight: 400 900;
+  font-display: swap;
+}
+
 @font-face {
   font-family: "Atkinson Hyperlegible Next";
   src: url("fonts/atkinson-hyperlegible-next.woff2") format("woff2");
@@ -5,24 +19,38 @@
   font-display: swap;
 }
 
-/* Navy and red, from the Coast logo. */
+/* Navy and coral come from the Coast logo. The cream page and the amber of
+   the Listen button come from Jim's studio photo: the wall behind him and
+   the On Air sign. Amber is only ever used for Listen live, and coral only
+   for "Jim is live" and for things that went wrong. */
 :root {
   color-scheme: light;
-  --bg: #fff;
-  --surface: #eef3f8;
-  --text: #18222e;
-  --muted: #4d5966;
-  --line: #d8dfe7;
-  --field: #5b6878;
+  --page: #fbf5e8;
+  --surface: #f2e9d6;
+  --field-bg: #fff;
+  --text: #17212b;
+  --muted: #4a5561;
+  --line: #ddd2bc;
+  --field: #56626f;
   --brand: #14466b;
   --brand-deep: #0d3150;
   --on-brand: #fff;
   --on-brand-soft: #dbe6f0;
-  --accent: #c4362c;
-  --accent-hover: #a42a22;
+  --heading: #0d3150;
   --link: #14466b;
   --link-hover: #a42a22;
+  --button: #14466b;
+  --button-hover: #0d3150;
+  --on-button: #fff;
+  --amber: #f6b73c;
+  --amber-hover: #ffc859;
+  --amber-edge: #b07b14;
+  --on-amber: #0b2134;
+  --live: #c4362c;
+  --live-glow: #ff6b5e;
+  --error: #a42a22;
   --focus: #0d3150;
+  --display: "Besley", Georgia, "Times New Roman", serif;
   --font: "Atkinson Hyperlegible Next", Verdana, sans-serif;
 }
 
@@ -34,15 +62,16 @@
 
 body {
   margin: 0;
-  background: var(--bg);
+  background: var(--page);
   color: var(--text);
   font-family: var(--font);
-  font-size: 1.125rem;
-  line-height: 1.6;
+  font-size: 1.1875rem;
+  line-height: 1.55;
 }
 
 h1,
 h2,
+h3,
 p,
 ol,
 ul,
@@ -51,24 +80,42 @@ dd {
   margin: 0;
 }
 
+h1,
+h2,
+h3 {
+  font-family: var(--display);
+  font-weight: 800;
+  text-wrap: balance;
+}
+
 a {
   color: var(--link);
-  text-underline-offset: 0.15em;
+  text-decoration-thickness: 0.09em;
+  text-underline-offset: 0.18em;
 }
 
 a:hover {
   color: var(--link-hover);
 }
 
+img {
+  max-width: 100%;
+}
+
+/* The navy parts of the page need a white focus ring; the cream parts a
+   navy one. */
+.site-header,
+.announcement,
+.studio,
+.footer,
+.player-bar,
+.player-view {
+  --focus: #fff;
+}
+
 :focus-visible {
   outline: 3px solid var(--focus);
   outline-offset: 3px;
-}
-
-.band :focus-visible,
-.player-bar :focus-visible,
-.player-view :focus-visible {
-  outline-color: #fff;
 }
 
 /* Headings get focus when a page opens, but don't need a ring for it. */
@@ -83,7 +130,7 @@ a:hover {
   z-index: 20;
   padding: 0.6rem 1rem;
   background: #fff;
-  color: var(--brand-deep);
+  color: #0d3150;
   font-weight: 700;
 }
 
@@ -105,25 +152,34 @@ a:hover {
 }
 
 .wrap {
-  max-width: 72rem;
+  max-width: 74rem;
   margin-inline: auto;
   padding-inline: 1.25rem;
 }
 
-.band {
+@media (min-width: 44rem) {
+  .wrap {
+    padding-inline: 2rem;
+  }
+}
+
+/* Header: the reading tools, the logo and the five pages. Every page link
+   is always on show, on phones too. */
+
+.site-header {
   background: var(--brand);
   color: var(--on-brand);
 }
 
-.band a {
+.site-header a,
+.studio a,
+.footer a {
   color: var(--on-brand);
 }
 
-/* Top bar */
-
 .utility {
   background: var(--brand-deep);
-  font-size: 0.95rem;
+  font-size: 1rem;
 }
 
 .utility-inner {
@@ -131,8 +187,8 @@ a:hover {
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 0.5rem 1.5rem;
-  padding-block: 0.4rem;
+  gap: 0.4rem 1.5rem;
+  padding-block: 0.45rem;
 }
 
 .utility-contact {
@@ -140,18 +196,71 @@ a:hover {
 }
 
 .utility-contact a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
   font-weight: 700;
 }
 
-/* Masthead: the logo and the menu */
+.reading-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  margin-left: auto;
+}
+
+.text-size {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.tool-label {
+  margin-right: 0.3rem;
+  color: var(--on-brand-soft);
+}
+
+.text-size button,
+.dark-toggle {
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  padding: 0.1rem 0.7rem;
+  border: 2px solid rgb(255 255 255 / 0.5);
+  border-radius: 0.4rem;
+  background: transparent;
+  color: var(--on-brand);
+  font: 700 1rem/1 var(--font);
+  cursor: pointer;
+}
+
+.text-size [data-size="large"] {
+  font-size: 1.15rem;
+}
+
+.text-size [data-size="largest"] {
+  font-size: 1.25rem;
+}
+
+.text-size button:hover,
+.dark-toggle:hover {
+  border-color: #fff;
+}
+
+.text-size [aria-pressed="true"],
+.dark-toggle[aria-pressed="true"] {
+  border-color: #fff;
+  background: #fff;
+  color: #0d3150;
+}
 
 .masthead {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 0.5rem 2rem;
-  padding-block: 1rem;
+  gap: 0.25rem 2rem;
+  padding-block: 0.9rem;
 }
 
 .logo {
@@ -162,67 +271,51 @@ a:hover {
 .logo img {
   display: block;
   width: auto;
-  height: 3.4rem;
+  height: 3.75rem;
 }
 
 .nav {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.25rem 1.5rem;
+  gap: 0 1.75rem;
   padding: 0;
   list-style: none;
 }
 
 .nav a {
-  display: block;
-  padding-block: 0.6rem;
-  border-bottom: 3px solid transparent;
+  display: flex;
+  align-items: center;
+  min-height: 2.75rem;
+  font-size: 1.1875rem;
   font-weight: 700;
   text-decoration: none;
+  box-shadow: inset 0 -0.2rem 0 transparent;
 }
 
 .nav a:hover {
-  border-bottom-color: rgb(255 255 255 / 0.6);
+  box-shadow: inset 0 -0.2rem 0 rgb(255 255 255 / 0.55);
 }
 
 .nav [aria-current="page"] {
-  border-bottom-color: #fff;
+  box-shadow: inset 0 -0.2rem 0 #fff;
 }
 
-.menu-button {
-  min-height: 2.75rem;
-  padding: 0.35rem 1rem;
-  border: 2px solid rgb(255 255 255 / 0.7);
-  border-radius: 999px;
-  background: transparent;
-  color: var(--on-brand);
-  font: 700 1rem var(--font);
-  cursor: pointer;
-}
-
-.menu-button[aria-expanded="true"] {
-  background: #fff;
-  color: var(--brand-deep);
-}
-
-@media (min-width: 48rem) {
-  .menu-button {
-    display: none !important;
-  }
-}
-
-/* On phones the menu folds away behind the Menu button. */
 @media (max-width: 47.99rem) {
   .utility-contact {
     display: none;
   }
 
-  .logo img {
-    height: 2.75rem;
+  .reading-tools {
+    width: 100%;
+    justify-content: space-between;
   }
 
-  .has-js .main-nav:not(.is-open) {
-    display: none;
+  .masthead {
+    padding-block: 0.75rem 0.35rem;
+  }
+
+  .logo img {
+    height: 3rem;
   }
 
   .main-nav {
@@ -230,27 +323,34 @@ a:hover {
   }
 
   .nav {
-    display: grid;
-    gap: 0;
+    justify-content: space-between;
+    gap: 0 0.75rem;
   }
 
   .nav a {
-    padding-block: 0.75rem;
-    border-bottom: 1px solid rgb(255 255 255 / 0.2);
+    font-size: 1rem;
   }
 
-  .nav [aria-current="page"] {
-    border-bottom-color: rgb(255 255 255 / 0.2);
-    text-decoration: underline;
-    text-decoration-thickness: 3px;
-    text-underline-offset: 0.3em;
+  .text-size button,
+  .dark-toggle {
+    padding-inline: 0.5rem;
+  }
+
+  .tool-label {
+    margin-right: 0.1rem;
+  }
+}
+
+@media (max-width: 22rem) {
+  .tool-label {
+    display: none;
   }
 }
 
 /* Jim's announcement, across the top of every page */
 
 .announcement {
-  background: var(--accent);
+  background: var(--live);
   color: #fff;
 }
 
@@ -259,7 +359,7 @@ a:hover {
   flex-wrap: wrap;
   align-items: center;
   gap: 0.25rem 1rem;
-  padding-block: 0.75rem;
+  padding-block: 0.8rem;
   font-weight: 700;
 }
 
@@ -267,158 +367,307 @@ a:hover {
   color: #fff;
 }
 
-.announcement :focus-visible {
-  outline-color: #fff;
-}
+/* Home: the studio. On the left, in the order a listener needs them: is
+   Jim live, the Listen button, what's playing. On the right, Jim. */
 
-/* Home: Jim, what's playing now, and what's next */
-
-.hero-band {
-  border-top: 1px solid rgb(255 255 255 / 0.15);
-}
-
-.hero {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 2rem;
-  padding-top: 1.5rem;
-  padding-bottom: 2.5rem;
-}
-
-@media (min-width: 48rem) {
-  .hero {
-    grid-template-columns: 15rem 1fr;
-    align-items: center;
-    gap: 2rem 3rem;
-    padding-top: 2rem;
-    padding-bottom: 3rem;
-  }
-
-  .hero-side {
-    grid-column: 1 / -1;
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-@media (min-width: 66rem) {
-  .hero {
-    grid-template-columns: 16rem 1fr 17rem;
-  }
-
-  .hero-side {
-    grid-column: auto;
-    grid-template-columns: 1fr;
-  }
-}
-
-.presenter {
+.studio {
   position: relative;
-  justify-self: center;
-  width: min(100%, 13rem);
-  padding-bottom: 1.75rem;
+  overflow: hidden;
+  background: var(--brand);
+  color: var(--on-brand);
 }
 
-@media (min-width: 48rem) {
-  .presenter {
-    width: min(100%, 16rem);
+/* Faint slats, like the wooden panel behind Jim in the photo. */
+.studio::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 0 55%;
+  background: repeating-linear-gradient(to bottom, rgb(255 255 255 / 0.035) 0 0.9rem, transparent 0.9rem 1.8rem);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 45%);
+  mask-image: linear-gradient(to right, transparent, #000 45%);
+}
+
+.studio > * {
+  position: relative;
+}
+
+/* On phones the order is: the desk, what's on, then Jim's photo, so the
+   Listen button and the song are both near the top. */
+.studio {
+  display: flex;
+  flex-direction: column;
+}
+
+.desk {
+  padding: 1.5rem 1.25rem 1.75rem;
+}
+
+.on-now {
+  order: 1;
+}
+
+.presenter-photo {
+  order: 2;
+}
+
+/* From tablets up, the desk and the photo sit side by side. The empty outer
+   columns keep them in line with the rest of the page. */
+@media (min-width: 44rem) {
+  .studio {
+    display: grid;
+    grid-template-columns: 0 minmax(0, 1fr) minmax(14rem, 38%) 0;
+    column-gap: 2rem;
+    align-items: center;
+  }
+
+  .desk {
+    grid-column: 2;
+    padding: 2.75rem 0 3rem;
+  }
+
+  .on-now {
+    grid-column: 1 / -1;
+    grid-row: 2;
   }
 }
 
-/* Photos fill a fixed frame, so any photo Jim chooses fits the layout. */
-.presenter-photo {
-  display: block;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 1;
-  object-fit: cover;
-  border: 5px solid #fff;
-  border-radius: 8px;
+@media (min-width: 60rem) {
+  .studio {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 41rem) minmax(18rem, 27rem) minmax(0, 1fr);
+  }
+
+  .desk {
+    padding-block: 3rem 3.5rem;
+  }
 }
 
-.player-controls {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
+.on-air {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 0.9rem;
+  font-weight: 700;
 }
 
+.on-air a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+}
+
+/* The On Air sign. Dark for the 24-hour playlist, lit when Jim is live. */
+.sign {
+  display: inline-block;
+  padding: 0.3rem 0.8rem;
+  border: 2px solid rgb(255 255 255 / 0.45);
+  border-radius: 0.3rem;
+  color: var(--on-brand);
+  font-size: 0.95rem;
+  font-weight: 800;
+  line-height: 1.3;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.live-show .sign {
+  border-color: var(--field);
+  color: var(--text);
+  font-family: var(--font);
+}
+
+.sign.is-live {
+  border-color: var(--live-glow);
+  background: var(--live);
+  color: #fff;
+  box-shadow: 0 0 1.4rem rgb(255 107 94 / 0.65);
+}
+
+.studio h1 {
+  max-width: 20ch;
+  margin-top: 1.1rem;
+  font-size: clamp(2.1rem, 1rem + 3.2vw, 3.6rem);
+  line-height: 1.08;
+}
+
+.listen {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.25rem 2.25rem;
+  margin-top: 1.75rem;
+}
+
+/* The Listen button is the biggest thing on the page and looks like a key
+   you can press. Once the station is playing it turns into a quieter Stop. */
 .listen-button {
   display: inline-flex;
   align-items: center;
-  gap: 0.7rem;
-  min-height: 3.5rem;
-  padding: 0.4rem 1.5rem 0.4rem 0.45rem;
+  gap: 1rem;
+  min-height: 5rem;
+  padding: 0.6rem 2.25rem 0.6rem 0.75rem;
   border: 0;
-  border-radius: 999px;
-  background: var(--accent);
-  color: #fff;
-  font: 800 1.25rem/1 var(--font);
+  border-radius: 1rem;
+  background: var(--amber);
+  color: var(--on-amber);
+  font: 800 1.9rem/1 var(--display);
   white-space: nowrap;
-  box-shadow: 0 6px 18px rgb(0 0 0 / 0.3);
+  box-shadow: 0 0.4rem 0 var(--amber-edge), 0 1rem 1.6rem rgb(0 0 0 / 0.28);
   cursor: pointer;
 }
 
 .listen-button:hover {
-  background: var(--accent-hover);
+  background: var(--amber-hover);
+}
+
+/* On phones the button fills the width, and on the narrowest screens with
+   the largest text its words may wrap rather than be cut off. */
+@media (max-width: 30rem) {
+  .player-controls,
+  .listen-button,
+  .volume {
+    width: 100%;
+  }
+
+  .listen-button {
+    padding-right: 1rem;
+    white-space: normal;
+    text-align: left;
+  }
+
+  .volume input {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+.listen-button:active {
+  transform: translateY(0.25rem);
+  box-shadow: 0 0.15rem 0 var(--amber-edge), 0 0.4rem 0.8rem rgb(0 0 0 / 0.28);
 }
 
 .listen-icon {
+  position: relative;
   display: grid;
+  flex: none;
   place-items: center;
-  width: 2.7rem;
-  height: 2.7rem;
+  width: 3.75rem;
+  height: 3.75rem;
   border-radius: 50%;
-  background: #fff;
+  background: var(--on-amber);
 }
 
 .listen-icon svg {
-  width: 1.5rem;
-  height: 1.5rem;
-  fill: var(--accent);
+  width: 2rem;
+  height: 2rem;
+  fill: var(--amber);
 }
 
-.pause-icon,
+.stop-icon,
 .is-playing .play-icon {
   display: none;
 }
 
-.is-playing .pause-icon {
+.is-playing .stop-icon {
   display: block;
 }
 
-.on-air-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.15rem 0.75rem;
-  border: 2px solid #fff;
-  border-radius: 4px;
-  font-size: 0.95rem;
-  font-weight: 800;
+.is-playing .listen-button {
+  background: var(--brand-deep);
+  color: #fff;
+  box-shadow: inset 0 0 0 2px rgb(255 255 255 / 0.6), 0 0.4rem 0 rgb(0 0 0 / 0.35);
 }
 
-.on-air-tag::before {
-  content: "";
-  width: 0.6rem;
-  height: 0.6rem;
-  border-radius: 50%;
+.is-playing .listen-button:active {
+  box-shadow: inset 0 0 0 2px rgb(255 255 255 / 0.6), 0 0.15rem 0 rgb(0 0 0 / 0.35);
+}
+
+.is-playing .listen-icon {
   background: #fff;
 }
 
-.hero h1 {
-  max-width: 24ch;
-  margin-top: 0.9rem;
-  font-size: clamp(1.5rem, 3vw, 2.1rem);
-  font-weight: 800;
-  line-height: 1.15;
-  text-wrap: balance;
+.is-playing .listen-icon svg {
+  fill: var(--brand-deep);
+}
+
+/* While the station is connecting, a ring turns around the button's icon. */
+.is-connecting .listen-icon::after,
+.is-connecting .round-play::after {
+  content: "";
+  position: absolute;
+  inset: -0.35rem;
+  border: 0.2rem solid rgb(255 255 255 / 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .is-connecting .listen-icon::after,
+  .is-connecting .round-play::after {
+    animation: turn 0.9s linear infinite;
+  }
+}
+
+@keyframes turn {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.studio audio {
+  display: block;
+  width: 100%;
+  margin-top: 1.5rem;
+}
+
+.player-status {
+  min-height: 1.55em;
+  margin-top: 1rem;
+  color: var(--on-brand-soft);
+  font-size: 1.0625rem;
+}
+
+.volume {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  font-weight: 700;
+}
+
+.volume input {
+  width: 11rem;
 }
 
 .art {
   flex: none;
-  border-radius: 6px;
+  border-radius: 0.25rem;
   background: var(--brand-deep);
   object-fit: cover;
+}
+
+/* What's on, along the bottom of the studio: now playing, then up next. */
+.on-now {
+  position: relative;
+  background: var(--brand-deep);
+}
+
+.on-now-inner {
+  display: grid;
+  gap: 1.25rem;
+  padding-block: 1.25rem 1.4rem;
+}
+
+@media (min-width: 44rem) {
+  .on-now-inner {
+    grid-template-columns: minmax(0, 1fr) minmax(14rem, 38%);
+    align-items: center;
+    gap: 2rem;
+  }
+}
+
+@media (min-width: 60rem) {
+  .on-now-inner {
+    grid-template-columns: minmax(0, 41rem) minmax(18rem, 27rem);
+  }
 }
 
 /* If the song name won't fit beside the cover, it moves underneath. */
@@ -427,24 +676,16 @@ a:hover {
   flex-wrap: wrap;
   align-items: center;
   gap: 1rem 1.25rem;
-  margin-top: 1.5rem;
 }
 
 .now > div {
-  flex: 1 1 10rem;
+  flex: 1 1 11rem;
 }
 
 .now-art {
   width: 6.5rem;
   height: 6.5rem;
-  box-shadow: 0 8px 24px rgb(0 0 0 / 0.3);
-}
-
-@media (min-width: 48rem) {
-  .now-art {
-    width: 8.5rem;
-    height: 8.5rem;
-  }
+  box-shadow: 0 0.5rem 1.4rem rgb(0 0 0 / 0.35);
 }
 
 .now-label {
@@ -452,7 +693,7 @@ a:hover {
   align-items: center;
   gap: 0.5rem;
   color: var(--on-brand-soft);
-  font-size: 1rem;
+  font-size: 1.0625rem;
   font-weight: 700;
 }
 
@@ -472,7 +713,7 @@ a:hover {
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .is-playing .bars span {
+  .is-playing:not(.is-connecting) .bars span {
     animation: level 0.8s ease-in-out infinite alternate;
   }
 
@@ -501,121 +742,131 @@ a:hover {
 
 .now-song {
   margin-top: 0.15rem;
-  font-size: clamp(1.4rem, 2.6vw, 1.75rem);
-  font-weight: 800;
+  font-family: var(--display);
+  font-size: clamp(1.45rem, 1.1rem + 1.3vw, 1.9rem);
+  font-weight: 700;
   line-height: 1.2;
 }
 
 .now-artist {
-  margin-top: 0.15rem;
-  font-size: 1.15rem;
-}
-
-.on-air audio {
-  display: block;
-  width: 100%;
-  margin-top: 1rem;
-}
-
-.volume {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  margin-top: 1.25rem;
-  font-weight: 700;
-}
-
-.volume input {
-  width: 9rem;
-  accent-color: #fff;
-}
-
-.player-status {
-  margin-top: 0.4rem;
-  color: var(--on-brand-soft);
-  font-size: 1rem;
-}
-
-.hero-side {
-  display: grid;
-  gap: 1rem;
-}
-
-.side-panel {
-  padding: 1.1rem 1.25rem;
-  border-radius: 8px;
-  background: var(--brand-deep);
-}
-
-.side-label {
-  color: var(--on-brand-soft);
-  font-size: 0.95rem;
-  font-weight: 700;
+  margin-top: 0.2rem;
+  font-size: 1.25rem;
 }
 
 .up-next {
   display: flex;
   align-items: center;
   gap: 0.85rem;
-  margin-top: 0.6rem;
+  line-height: 1.35;
 }
 
 .up-next .art {
-  width: 4rem;
-  height: 4rem;
+  width: 3.75rem;
+  height: 3.75rem;
+}
+
+.up-next-label {
+  display: block;
+  color: var(--on-brand-soft);
+  font-size: 1.0625rem;
+  font-weight: 700;
 }
 
 .next-song {
   font-weight: 700;
-  line-height: 1.35;
 }
 
-.side-text {
-  margin-top: 0.3rem;
-  font-size: 1.15rem;
-  font-weight: 800;
-  line-height: 1.35;
+/* Photos fill a fixed frame, so any photo Jim chooses fits the layout. The
+   white edge makes it a photograph on the studio wall. */
+.presenter-photo {
+  display: block;
+  width: calc(100% - 2.5rem);
+  max-width: 27rem;
+  height: auto;
+  aspect-ratio: 1;
+  margin: 2rem auto 2.25rem;
+  object-fit: cover;
+  border: 0.45rem solid #fff;
+  border-radius: 0.25rem;
+  box-shadow: 0 1.5rem 3rem rgb(0 0 0 / 0.35);
 }
 
-.side-text + p {
-  margin-top: 0.4rem;
+@media (min-width: 44rem) {
+  .presenter-photo {
+    grid-column: 3;
+    width: 100%;
+    margin: 2.5rem 0;
+    transform: rotate(1.5deg);
+  }
 }
 
 /* Page content */
 
 .block {
-  padding-top: 3rem;
+  padding-top: 3.5rem;
 }
 
-.narrow {
-  max-width: 50rem;
+/* Pages that are mostly reading keep their lines a comfortable length. */
+.narrow > * {
+  max-width: 48rem;
 }
 
-.page h1:not(#hero-title) {
-  margin-bottom: 1rem;
-  color: var(--link);
-  font-size: clamp(2rem, 4vw, 2.6rem);
-  font-weight: 800;
-  line-height: 1.1;
+/* A page fades in when it opens, quickly enough not to hold anyone up. */
+@media (prefers-reduced-motion: no-preference) {
+  .page {
+    animation: page-in 0.16s ease-out;
+  }
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Every page after the home page opens with its name on the station's
+   navy, carrying on from the header. */
+.page-head {
+  --focus: #fff;
+  padding-block: 1.5rem 2.25rem;
+  background: var(--brand);
+  color: var(--on-brand);
+}
+
+.page-head h1 {
+  font-size: clamp(2.3rem, 1.5rem + 3.4vw, 3.6rem);
+  line-height: 1.08;
+}
+
+.page-head .lead {
+  margin-top: 0.9rem;
+  color: var(--on-brand-soft);
+}
+
+@media (min-width: 48rem) {
+  .page-head {
+    padding-block: 2.25rem 3rem;
+  }
+}
+
+.page-head + .block {
+  padding-top: 2.5rem;
 }
 
 .block h2 {
   margin-bottom: 1rem;
-  font-size: 1.6rem;
-  font-weight: 800;
-  line-height: 1.2;
-}
-
-.narrow h1 + section {
-  margin-top: 2rem;
+  color: var(--heading);
+  font-size: clamp(1.6rem, 1.4rem + 0.9vw, 2rem);
+  line-height: 1.15;
 }
 
 .narrow section + section {
-  margin-top: 3rem;
+  margin-top: 3.5rem;
 }
 
 .lead {
-  font-size: 1.3rem;
+  max-width: 40rem;
+  font-size: 1.375rem;
   line-height: 1.5;
 }
 
@@ -624,14 +875,21 @@ a:hover {
 }
 
 .sign-off {
-  font-weight: 800;
+  font-family: var(--display);
+  font-size: 1.25rem;
+  font-weight: 700;
 }
 
-/* Just played: a list on phones, a row of covers on bigger screens. */
+/* Just played: a list on phones, a row of covers on bigger screens. The
+   whole section waits out of sight until the first songs arrive. */
+
+[data-section="played"]:has(.played:empty) {
+  display: none;
+}
 
 .played {
   display: grid;
-  gap: 0.25rem;
+  gap: 1rem;
   padding: 0;
   list-style: none;
 }
@@ -640,13 +898,12 @@ a:hover {
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding: 0.5rem 0;
-  border-bottom: 1px solid var(--line);
 }
 
 .played .art {
-  width: 4rem;
-  height: 4rem;
+  width: 4.5rem;
+  height: 4.5rem;
+  box-shadow: 0 0.25rem 0.7rem rgb(0 0 0 / 0.16);
 }
 
 .played-song {
@@ -660,22 +917,16 @@ a:hover {
   color: var(--muted);
 }
 
-.played-empty {
-  color: var(--muted);
-}
-
 @media (min-width: 48rem) {
   .played {
     grid-template-columns: repeat(5, 1fr);
-    gap: 1.5rem;
+    gap: 1.75rem;
   }
 
   .played li {
     flex-direction: column;
     align-items: stretch;
-    gap: 0.6rem;
-    padding: 0;
-    border: 0;
+    gap: 0.7rem;
   }
 
   .played .art {
@@ -683,72 +934,122 @@ a:hover {
     height: auto;
     aspect-ratio: 1;
   }
-
-  .played .played-empty {
-    grid-column: 1 / -1;
-  }
 }
 
-.welcome {
-  padding-top: 4rem;
-}
+/* Jim's welcome */
 
+/* Jim's welcome is set large in the heading face, as his own words. */
 .welcome .lead {
-  max-width: 40rem;
+  max-width: 46rem;
+  font-family: var(--display);
+  font-size: clamp(1.45rem, 1.15rem + 1.5vw, 2.1rem);
+  font-weight: 500;
+  line-height: 1.35;
+  text-wrap: pretty;
 }
 
 .welcome .sign-off {
-  margin-top: 1rem;
+  margin-top: 1.1rem;
 }
 
 /* Station news, written in the editor */
 
 .news-item {
-  max-width: 40rem;
-  padding: 1.25rem 1.5rem;
-  border-left: 5px solid var(--brand);
+  max-width: 44rem;
+  padding: 1.4rem 1.6rem 1.5rem;
+  border-radius: 0.5rem;
   background: var(--surface);
 }
 
 .news-item h3 {
-  margin: 0;
-  font-size: 1.3rem;
-  line-height: 1.3;
+  font-size: 1.45rem;
+  line-height: 1.25;
 }
 
 .news-date {
   margin-bottom: 0.5rem;
   color: var(--muted);
-  font-size: 1rem;
+  font-size: 1.0625rem;
 }
 
 /* Shows */
 
 .live-show {
-  margin-top: 1.5rem;
-  padding: 1rem 1.25rem;
-  border-left: 5px solid var(--accent);
-  background: var(--surface);
-  font-size: 1.2rem;
-  font-weight: 800;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 1rem;
+  color: var(--heading);
+  font-family: var(--display);
+  font-size: clamp(1.45rem, 1.2rem + 1vw, 1.8rem);
+  font-weight: 700;
+  line-height: 1.25;
 }
 
 .schedule {
   width: 100%;
   margin-top: 1.5rem;
   border-collapse: collapse;
+  font-size: 1.25rem;
 }
 
 .schedule th,
 .schedule td {
-  padding: 0.8rem 0.75rem;
+  padding: 1rem 0.9rem;
   border-bottom: 1px solid var(--line);
   text-align: left;
 }
 
+.schedule td {
+  white-space: nowrap;
+}
+
+@media (max-width: 30rem) {
+  .schedule {
+    font-size: 1.1875rem;
+  }
+
+  .schedule th,
+  .schedule td {
+    padding-inline: 0.5rem;
+  }
+}
+
 .schedule thead th {
+  padding-block: 0.5rem;
   color: var(--muted);
-  font-size: 1rem;
+  font-size: 1.0625rem;
+}
+
+.schedule tbody th {
+  font-family: var(--display);
+  font-weight: 700;
+}
+
+.schedule .is-today,
+.schedule .is-live {
+  background: var(--surface);
+}
+
+.schedule .is-today th::after,
+.schedule .is-live th::after {
+  display: inline-block;
+  margin-left: 0.6rem;
+  font: 700 1.0625rem var(--font);
+  vertical-align: middle;
+}
+
+.schedule .is-today th::after {
+  content: "today";
+  color: var(--muted);
+}
+
+.schedule .is-live th::after {
+  content: "live now";
+  padding: 0.05rem 0.55rem;
+  border-radius: 0.3rem;
+  background: var(--live);
+  color: #fff;
 }
 
 /* About Jim */
@@ -761,8 +1062,8 @@ a:hover {
 
 @media (min-width: 48rem) {
   .about {
-    grid-template-columns: 1fr 18rem;
-    gap: 3rem;
+    grid-template-columns: 1fr 20rem;
+    gap: 3.5rem;
   }
 }
 
@@ -776,51 +1077,73 @@ a:hover {
 
 .about-photo {
   width: 100%;
-  max-width: 14rem;
+  max-width: 16rem;
   height: auto;
   aspect-ratio: 420 / 500;
   object-fit: cover;
-  border-radius: 8px;
+  border: 0.45rem solid #fff;
+  border-radius: 0.25rem;
+  box-shadow: 0 1rem 2.2rem rgb(0 0 0 / 0.2);
 }
 
 @media (min-width: 48rem) {
   .about-photo {
-    max-width: 18rem;
+    max-width: 20rem;
+    margin-top: 0.75rem;
+    transform: rotate(-1.5deg);
   }
 }
 
+/* Support Coast sits on a band of its own, right across the page. */
 .support {
-  padding-top: 4rem;
+  margin-top: 4rem;
+  padding-block: 3rem 3.5rem;
+  background: var(--surface);
+  box-shadow: 0 0 0 100vmax var(--surface);
+  clip-path: inset(0 -100vmax);
 }
 
-/* Buttons */
+main:has(.page:not([hidden]) .support) + .footer {
+  margin-top: 0;
+}
+
+.about .lead {
+  font-family: var(--display);
+  font-size: clamp(1.45rem, 1.15rem + 1.5vw, 2.1rem);
+  font-weight: 500;
+  line-height: 1.35;
+  text-wrap: pretty;
+}
+
+/* Buttons. Navy, because amber belongs to Listen live alone. */
 
 .button-row {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
-  margin-top: 1.5rem;
+  margin-top: 1.75rem;
 }
 
 .button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 3.25rem;
-  padding: 0.5rem 1.4rem;
-  border: 2px solid var(--accent);
-  border-radius: 999px;
-  background: var(--accent);
-  color: #fff;
-  font: 800 1.125rem var(--font);
+  min-height: 3.5rem;
+  padding: 0.5rem 1.6rem;
+  border: 2px solid var(--button);
+  border-radius: 0.7rem;
+  background: var(--button);
+  color: var(--on-button);
+  font: 700 1.1875rem var(--font);
+  text-align: center;
   text-decoration: none;
   cursor: pointer;
 }
 
 .button:hover {
-  border-color: var(--accent-hover);
-  background: var(--accent-hover);
-  color: #fff;
+  border-color: var(--button-hover);
+  background: var(--button-hover);
+  color: var(--on-button);
 }
 
 .button:disabled {
@@ -829,34 +1152,58 @@ a:hover {
 }
 
 .button-plain {
-  border-color: var(--link);
   background: transparent;
   color: var(--link);
 }
 
 .button-plain:hover {
-  border-color: var(--link);
-  background: var(--link);
-  color: var(--bg);
+  border-color: var(--button);
+  background: var(--button);
+  color: var(--on-button);
+}
+
+@media (max-width: 30rem) {
+  .button-row .button,
+  .form .button {
+    width: 100%;
+  }
 }
 
 /* Requests and feedback forms */
 
+/* The form comes first; the other ways to reach Jim sit beside it. */
 .requests {
   display: grid;
-  gap: 2rem;
+  gap: 2.5rem;
 }
 
-@media (min-width: 52rem) {
+.other-ways {
+  font-size: 1.375rem;
+  line-height: 1.5;
+}
+
+/* A phone number is never broken across two lines. */
+[data-contact="phone"] {
+  white-space: nowrap;
+}
+
+@media (min-width: 56rem) {
   .requests {
-    grid-template-columns: 1fr 1.2fr;
-    gap: 3rem;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 4.5rem;
+  }
+
+  .other-ways {
+    align-self: start;
+    padding: 1.5rem 1.75rem 1.75rem;
+    border-radius: 0.5rem;
+    background: var(--surface);
   }
 }
 
 .form {
   display: grid;
-  gap: 1.1rem;
+  gap: 1.25rem;
   justify-items: start;
 }
 
@@ -866,7 +1213,7 @@ a:hover {
 
 .field {
   display: grid;
-  gap: 0.35rem;
+  gap: 0.4rem;
   width: 100%;
 }
 
@@ -883,11 +1230,11 @@ input:not([type]),
 select,
 textarea {
   width: 100%;
-  min-height: 3rem;
-  padding: 0.6rem 0.8rem;
+  min-height: 3.5rem;
+  padding: 0.7rem 0.9rem;
   border: 2px solid var(--field);
-  border-radius: 6px;
-  background: var(--bg);
+  border-radius: 0.4rem;
+  background: var(--field-bg);
   color: var(--text);
   font: inherit;
 }
@@ -900,12 +1247,31 @@ textarea {
   display: none;
 }
 
+/* Messages after sending a form */
+
+.form-status:empty {
+  display: none;
+}
+
+.form-status {
+  width: 100%;
+  padding: 0.9rem 1.1rem;
+  border-radius: 0.4rem;
+  background: var(--surface);
+  font-weight: 700;
+}
+
+.form-status.is-error {
+  background: var(--error);
+  color: #fff;
+}
+
 /* Help */
 
 .ways {
   display: grid;
-  gap: 1.25rem;
-  margin-bottom: 1.5rem;
+  gap: 1.5rem 2.5rem;
+  margin-bottom: 1.75rem;
 }
 
 @media (min-width: 40rem) {
@@ -914,13 +1280,10 @@ textarea {
   }
 }
 
-.ways div {
-  padding-top: 0.75rem;
-  border-top: 1px solid var(--line);
-}
-
 .ways dt {
-  font-weight: 800;
+  font-family: var(--display);
+  font-size: 1.25rem;
+  font-weight: 700;
 }
 
 .faq {
@@ -933,10 +1296,12 @@ textarea {
 
 .faq summary {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: 1rem 0.25rem;
-  font-weight: 800;
+  min-height: 3.75rem;
+  padding: 0.75rem 0.25rem;
+  font-weight: 700;
   cursor: pointer;
   list-style: none;
 }
@@ -949,7 +1314,7 @@ textarea {
   content: "+";
   flex: none;
   color: var(--link);
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   line-height: 1;
 }
 
@@ -958,25 +1323,27 @@ textarea {
 }
 
 .faq details p {
-  padding: 0 0.25rem 1.25rem;
+  padding: 0 0.25rem 1.4rem;
 }
 
 /* Footer */
 
 .footer {
-  margin-top: 4rem;
-  padding-block: 2.5rem;
-  font-size: 1rem;
+  margin-top: 5rem;
+  padding-block: 2.75rem;
+  background: var(--brand-deep);
+  color: var(--on-brand);
+  font-size: 1.0625rem;
 }
 
 .footer-inner > * + * {
-  margin-top: 0.75rem;
+  margin-top: 0.9rem;
 }
 
 .footer-logo {
   display: block;
   width: auto;
-  height: 3rem;
+  height: 3.25rem;
 }
 
 .footer p {
@@ -986,58 +1353,59 @@ textarea {
 .footer-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.25rem 1.5rem;
+  gap: 0 1.75rem;
   padding: 0;
   list-style: none;
   font-weight: 700;
 }
 
 .footer-links a {
-  display: inline-block;
-  padding-block: 0.4rem;
+  display: inline-flex;
+  align-items: center;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
 }
 
 .footer-small {
-  padding-top: 1rem;
-  border-top: 1px solid rgb(255 255 255 / 0.25);
-  font-size: 0.95rem;
+  padding-top: 0.5rem;
+  font-size: 1rem;
 }
 
-/* Thin volume sliders that fill up to the volume, like Spotify's. */
+/* Volume sliders that fill up to the volume. */
 
 input.slim {
   -webkit-appearance: none;
   appearance: none;
-  height: 1.5rem;
+  height: 2.75rem;
   background: transparent;
   cursor: pointer;
 }
 
 input.slim::-webkit-slider-runnable-track {
-  height: 4px;
-  border-radius: 2px;
+  height: 6px;
+  border-radius: 3px;
   background: linear-gradient(to right, #fff var(--fill, 80%), rgb(255 255 255 / 0.3) var(--fill, 80%));
 }
 
 input.slim::-moz-range-track {
-  height: 4px;
-  border-radius: 2px;
+  height: 6px;
+  border-radius: 3px;
   background: linear-gradient(to right, #fff var(--fill, 80%), rgb(255 255 255 / 0.3) var(--fill, 80%));
 }
 
 input.slim::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 14px;
-  height: 14px;
-  margin-top: -5px;
+  width: 22px;
+  height: 22px;
+  margin-top: -8px;
   border: 0;
   border-radius: 50%;
   background: #fff;
 }
 
 input.slim::-moz-range-thumb {
-  width: 14px;
-  height: 14px;
+  width: 22px;
+  height: 22px;
   border: 0;
   border-radius: 50%;
   background: #fff;
@@ -1053,6 +1421,11 @@ input.slim::-moz-range-thumb {
 
   .is-entering {
     animation: slide-in 0.34s ease-out;
+  }
+
+  /* The sign flickers on, once, when Jim goes live. */
+  .sign.is-lighting {
+    animation: light-up 0.7s linear;
   }
 }
 
@@ -1070,43 +1443,23 @@ input.slim::-moz-range-thumb {
   }
 }
 
-/* Jim live, or the 24-hour playlist */
-
-.on-air-tag.is-live {
-  border-color: #ff6b5e;
-  background: var(--accent);
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .on-air-tag.is-live::before {
-    animation: pulse 1.6s ease-in-out infinite;
-  }
-}
-
-@keyframes pulse {
-  50% {
+@keyframes light-up {
+  0%,
+  18%,
+  34% {
     opacity: 0.35;
   }
-}
 
-.schedule .is-today {
-  background: var(--surface);
-}
-
-.schedule .is-today th::after {
-  content: " (today)";
-  color: var(--muted);
-  font-weight: 400;
-}
-
-.schedule .is-live th::after {
-  content: " (live now)";
-  color: var(--accent);
-  font-weight: 800;
+  10%,
+  26%,
+  50%,
+  100% {
+    opacity: 1;
+  }
 }
 
 /* The player bar: on every page, and on the home page once the main
-   Listen button scrolls away. Laid out like Spotify's on bigger screens. */
+   Listen button scrolls away. */
 
 .player-bar:not([hidden]) {
   position: fixed;
@@ -1115,7 +1468,7 @@ input.slim::-moz-range-thumb {
   padding-bottom: env(safe-area-inset-bottom);
   background: var(--brand-deep);
   color: #fff;
-  box-shadow: 0 -4px 18px rgb(0 0 0 / 0.25);
+  box-shadow: 0 -0.25rem 1.2rem rgb(0 0 0 / 0.3);
   visibility: hidden;
   transform: translateY(110%);
   transition: transform 0.25s ease, visibility 0.25s;
@@ -1127,14 +1480,14 @@ input.slim::-moz-range-thumb {
 }
 
 body:has(.player-bar.is-shown) {
-  padding-bottom: 5rem;
+  padding-bottom: 5.5rem;
 }
 
 .player-bar-inner {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  padding-block: 0.6rem;
+  gap: 0.75rem;
+  padding-block: 0.7rem;
 }
 
 /* The song in the bar is a button that opens the full player. */
@@ -1158,8 +1511,8 @@ body:has(.player-bar.is-shown) {
 }
 
 .player-bar .art {
-  width: 3.25rem;
-  height: 3.25rem;
+  width: 3.5rem;
+  height: 3.5rem;
 }
 
 .bar-text {
@@ -1180,75 +1533,72 @@ body:has(.player-bar.is-shown) {
 }
 
 .bar-artist {
-  color: #d3e0ec;
-  font-size: 0.95rem;
+  color: var(--on-brand-soft);
+  font-size: 1.0625rem;
 }
 
 .bar-controls {
-  position: relative;
   display: flex;
   align-items: center;
 }
 
+/* The round Listen button in the bar and the full player: amber to start,
+   white once the station is playing, the same as the big one. */
 .round-play {
-  display: grid;
+  position: relative;
+  display: flex;
   flex: none;
-  place-items: center;
-  width: 2.9rem;
-  height: 2.9rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  min-width: 3.5rem;
+  height: 3.5rem;
   padding: 0;
   border: 0;
-  border-radius: 50%;
-  background: #fff;
-  color: var(--brand-deep);
+  border-radius: 1.75rem;
+  background: var(--amber);
+  color: var(--on-amber);
+  font: 800 1.1875rem/1 var(--font);
+  white-space: nowrap;
   cursor: pointer;
-  transition: transform 0.15s ease;
 }
 
 .round-play:hover {
-  transform: scale(1.06);
+  background: var(--amber-hover);
 }
 
-.round-play:active {
-  transform: scale(0.95);
+.is-playing .round-play {
+  background: #fff;
+  color: #0d3150;
 }
 
 .round-play svg {
-  width: 1.45rem;
-  height: 1.45rem;
+  width: 1.8rem;
+  height: 1.8rem;
   fill: currentColor;
 }
 
 .round-play-large {
-  width: 4.5rem;
-  height: 4.5rem;
+  width: 5.5rem;
+  height: 5.5rem;
+  border-radius: 50%;
 }
 
 .round-play-large svg {
-  width: 2.1rem;
-  height: 2.1rem;
+  width: 2.75rem;
+  height: 2.75rem;
 }
 
-.live-pill,
-.live-line-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-size: 0.9rem;
-  font-weight: 800;
-}
-
-.live-pill::before,
-.live-line-label::before {
-  content: "";
-  width: 0.5rem;
-  height: 0.5rem;
-  border-radius: 50%;
-  background: #ff6b5e;
-}
-
-.live-pill {
-  display: none;
+/* On phones the bar's button is just the icon; the words are still there
+   for screen readers. */
+@media (max-width: 47.99rem) {
+  .play-word {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
 }
 
 .bar-right {
@@ -1269,8 +1619,8 @@ body:has(.player-bar.is-shown) {
   display: grid;
   flex: none;
   place-items: center;
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2.75rem;
+  height: 2.75rem;
   padding: 0;
   border: 0;
   border-radius: 50%;
@@ -1281,12 +1631,12 @@ body:has(.player-bar.is-shown) {
 
 .mute-button:hover,
 .bar-expand:hover {
-  background: rgb(255 255 255 / 0.12);
+  background: rgb(255 255 255 / 0.14);
 }
 
 .mute-button svg {
-  width: 1.4rem;
-  height: 1.4rem;
+  width: 1.6rem;
+  height: 1.6rem;
   fill: currentColor;
 }
 
@@ -1301,8 +1651,8 @@ body:has(.player-bar.is-shown) {
 
 .bar-expand svg,
 .close-player svg {
-  width: 1.3rem;
-  height: 1.3rem;
+  width: 1.5rem;
+  height: 1.5rem;
   fill: none;
   stroke: currentColor;
   stroke-width: 2.5;
@@ -1310,12 +1660,12 @@ body:has(.player-bar.is-shown) {
   stroke-linejoin: round;
 }
 
-/* Bigger screens: song on the left, play in the middle, volume on the right. */
+/* Bigger screens: song on the left, Listen in the middle, volume on the right. */
 @media (min-width: 48rem) {
   .player-bar-inner {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-    gap: 1rem;
+    gap: 1.25rem;
   }
 
   .bar-open {
@@ -1323,11 +1673,8 @@ body:has(.player-bar.is-shown) {
     max-width: 100%;
   }
 
-  .live-pill {
-    position: absolute;
-    left: calc(100% + 0.75rem);
-    display: inline-flex;
-    white-space: nowrap;
+  .player-bar .round-play {
+    padding: 0 1.4rem 0 1rem;
   }
 
   .bar-right {
@@ -1339,7 +1686,7 @@ body:has(.player-bar.is-shown) {
   }
 
   .bar-volume .slim {
-    width: 7.5rem;
+    width: 8rem;
   }
 }
 
@@ -1370,7 +1717,7 @@ body:has(.player-bar.is-shown) {
   flex-direction: column;
   align-items: center;
   gap: 1.25rem;
-  width: min(100%, 30rem);
+  width: min(100%, 31rem);
   margin: auto;
   padding: 1.25rem 1.25rem calc(1.5rem + env(safe-area-inset-bottom));
   text-align: center;
@@ -1380,6 +1727,7 @@ body:has(.player-bar.is-shown) {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 1rem;
   width: 100%;
 }
 
@@ -1387,19 +1735,19 @@ body:has(.player-bar.is-shown) {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  min-height: 2.75rem;
-  padding: 0.35rem 1rem 0.35rem 0.75rem;
-  border: 2px solid rgb(255 255 255 / 0.7);
-  border-radius: 999px;
+  min-height: 3rem;
+  padding: 0.35rem 1.1rem 0.35rem 0.8rem;
+  border: 2px solid rgb(255 255 255 / 0.6);
+  border-radius: 0.7rem;
   background: transparent;
   color: #fff;
-  font: 700 1rem var(--font);
+  font: 700 1.0625rem var(--font);
   cursor: pointer;
 }
 
 .close-player:hover {
   background: #fff;
-  color: var(--brand-deep);
+  color: #0d3150;
 }
 
 .full-now {
@@ -1414,21 +1762,21 @@ body:has(.player-bar.is-shown) {
   width: min(100%, 22rem, 40vh);
   height: auto;
   aspect-ratio: 1;
-  border-radius: 8px;
+  border-radius: 0.3rem;
   object-fit: cover;
-  box-shadow: 0 16px 40px rgb(0 0 0 / 0.4);
+  box-shadow: 0 1rem 2.5rem rgb(0 0 0 / 0.45);
 }
 
 .full-song {
-  font-size: 1.6rem;
-  font-weight: 800;
+  font-size: 1.75rem;
+  font-weight: 700;
   line-height: 1.2;
 }
 
 .full-artist {
   margin-top: 0.3rem;
-  color: #dbe6f0;
-  font-size: 1.15rem;
+  color: var(--on-brand-soft);
+  font-size: 1.25rem;
 }
 
 /* Live radio has nothing to rewind, so the line stays full, marked Live. */
@@ -1446,6 +1794,22 @@ body:has(.player-bar.is-shown) {
   background: #fff;
 }
 
+.live-line-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.live-line-label::before {
+  content: "";
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: var(--live-glow);
+}
+
 .full-volume {
   display: flex;
   align-items: center;
@@ -1459,7 +1823,7 @@ body:has(.player-bar.is-shown) {
 
 .volume-note,
 .full-next {
-  color: #dbe6f0;
+  color: var(--on-brand-soft);
 }
 
 .full-next span {
@@ -1486,7 +1850,7 @@ body:has(.player-bar.is-shown) {
   }
 }
 
-/* Text size and dark mode */
+/* Text size. Everything is sized in rem, so it all grows together. */
 
 :root[data-size="large"] {
   font-size: 115%;
@@ -1496,147 +1860,94 @@ body:has(.player-bar.is-shown) {
   font-size: 130%;
 }
 
+/* Dark mode: deep navy, never grey or brown. It follows the device until
+   the listener chooses with the Dark mode button. The same colours are set
+   twice because one is a media query and the other a choice. */
+
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     color-scheme: dark;
-    --bg: #0e1620;
-    --surface: #16212d;
-    --text: #e7edf3;
-    --muted: #a8b5c2;
-    --line: #2b3948;
-    --field: #7d8b9a;
-    --brand: #123a5a;
+    --page: #0b1622;
+    --surface: #14222f;
+    --field-bg: #0f1c29;
+    --text: #e9eef3;
+    --muted: #aab7c4;
+    --line: #26384a;
+    --field: #8494a4;
+    --brand: #103654;
     --brand-deep: #0a2236;
-    --link: #8fc3ee;
+    --heading: #e9eef3;
+    --link: #9cccf2;
     --link-hover: #ffb3ab;
-    --focus: #8fc3ee;
+    --button: #cfe3f5;
+    --button-hover: #fff;
+    --on-button: #0a2236;
+    --error: #8f241d;
+    --focus: #9cccf2;
   }
 }
 
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --bg: #0e1620;
-  --surface: #16212d;
-  --text: #e7edf3;
-  --muted: #a8b5c2;
-  --line: #2b3948;
-  --field: #7d8b9a;
-  --brand: #123a5a;
+  --page: #0b1622;
+  --surface: #14222f;
+  --field-bg: #0f1c29;
+  --text: #e9eef3;
+  --muted: #aab7c4;
+  --line: #26384a;
+  --field: #8494a4;
+  --brand: #103654;
   --brand-deep: #0a2236;
-  --link: #8fc3ee;
+  --heading: #e9eef3;
+  --link: #9cccf2;
   --link-hover: #ffb3ab;
-  --focus: #8fc3ee;
-}
-
-.reading-tools {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.5rem 1rem;
-}
-
-.text-size {
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-}
-
-.tool-label {
-  margin-right: 0.3rem;
-  color: var(--on-brand-soft);
-}
-
-.text-size button,
-.dark-toggle {
-  min-width: 2.5rem;
-  min-height: 2.25rem;
-  padding: 0.1rem 0.6rem;
-  border: 1px solid rgb(255 255 255 / 0.55);
-  border-radius: 6px;
-  background: transparent;
-  color: var(--on-brand);
-  font: 700 0.95rem/1 var(--font);
-  cursor: pointer;
-}
-
-.text-size [data-size="large"] {
-  font-size: 1.1rem;
-}
-
-.text-size [data-size="largest"] {
-  font-size: 1.25rem;
-}
-
-.text-size button:hover,
-.dark-toggle:hover {
-  border-color: #fff;
-}
-
-.text-size [aria-pressed="true"],
-.dark-toggle[aria-pressed="true"] {
-  border-color: #fff;
-  background: #fff;
-  color: var(--brand-deep);
-}
-
-@media (max-width: 47.99rem) {
-  .reading-tools {
-    width: 100%;
-    justify-content: space-between;
-  }
-}
-
-@media (max-width: 22rem) {
-  .tool-label {
-    display: none;
-  }
-}
-
-/* Messages after sending a form */
-
-.form-status:empty {
-  display: none;
-}
-
-.form-status {
-  padding: 0.75rem 1rem;
-  border-left: 4px solid var(--brand);
-  background: var(--surface);
-  font-weight: 700;
-}
-
-.form-status.is-error {
-  border-color: var(--accent);
+  --button: #cfe3f5;
+  --button-hover: #fff;
+  --on-button: #0a2236;
+  --error: #8f241d;
+  --focus: #9cccf2;
 }
 
 /* Colour themes Jim can choose in the editor. Navy is the default above.
-   The red stays the same in every theme because it comes from the logo. */
+   Amber and coral stay the same in every theme. */
 
 :root[data-colours="sea"] {
   --brand: #0e5a63;
   --brand-deep: #093f46;
+  --heading: #093f46;
   --link: #0e5a63;
+  --button: #0e5a63;
+  --button-hover: #093f46;
   --focus: #093f46;
 }
 
 :root[data-colours="heather"] {
   --brand: #4f3a6b;
   --brand-deep: #372750;
+  --heading: #372750;
   --link: #4f3a6b;
+  --button: #4f3a6b;
+  --button-hover: #372750;
   --focus: #372750;
 }
 
 :root[data-colours="charcoal"] {
   --brand: #343b43;
   --brand-deep: #22272d;
+  --heading: #22272d;
   --link: #343b43;
+  --button: #343b43;
+  --button-hover: #22272d;
   --focus: #22272d;
 }
 
 @media (prefers-color-scheme: dark) {
   :root[data-colours]:not([data-theme="light"]) {
-    --link: #8fc3ee;
-    --focus: #8fc3ee;
+    --heading: #e9eef3;
+    --link: #9cccf2;
+    --button: #cfe3f5;
+    --button-hover: #fff;
+    --focus: #9cccf2;
   }
 
   :root[data-colours="sea"]:not([data-theme="light"]) {
@@ -1656,8 +1967,11 @@ body:has(.player-bar.is-shown) {
 }
 
 :root[data-colours][data-theme="dark"] {
-  --link: #8fc3ee;
-  --focus: #8fc3ee;
+  --heading: #e9eef3;
+  --link: #9cccf2;
+  --button: #cfe3f5;
+  --button-hover: #fff;
+  --focus: #9cccf2;
 }
 
 :root[data-colours="sea"][data-theme="dark"] {

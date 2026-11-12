@@ -6,7 +6,7 @@ Jim signs in at https://coastinternetradio.com/admin/ to change the website hims
 
 - **Words:** the headline, welcome message, sign-off, About Jim, support message, page introductions and the footer line.
 - **Photos:** the studio photo on the home page and the photo on About Jim. Photos are made smaller in the browser before they're uploaded.
-- **Colours:** Coast navy, sea green, heather or charcoal. The red stays the same because it's in the logo.
+- **Colours:** Coast navy, sea green, heather or charcoal. The amber Listen live button and the red "Jim is live" sign stay the same in every colour.
 - **Home page layout:** move Just played, News and the welcome message up or down, or hide them.
 - **Announcement:** a red bar across the top of every page, with an optional link.
 - **News:** one short story on the home page.
@@ -51,7 +51,7 @@ Three places need to agree on the name, for example `aboutHeading`:
 2. `netlify/lib/content.mjs`: add it to `TEXT_FIELDS` with a name Jim will understand and a length limit.
 3. `public/admin/js/panels/words.js`: add it to `WORDS`, under the page it's on, with the same limit.
 
-Then run `npm test`. The content tests build their text from `TEXT_FIELDS`, so they check the new field too. If one of the three is missed, Jim either won't see a box for it, his change won't be saved, or it won't show on the website.
+Then run `npm test`. The content tests build their text from `TEXT_FIELDS`, so they check the new field too, and `tests/site.test.mjs` fails if the three places don't agree, if the text in the page is empty or longer than its limit, or if the element holds anything other than plain text.
 
 ## How it works
 

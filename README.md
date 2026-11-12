@@ -6,7 +6,7 @@
 
 The website for Coast Internet Radio, a small internet radio station in Newry run by Jim Parr, playing country, Irish country and classic hits 24 hours a day.
 
-![The homepage: Jim Parr at the microphone with a red Listen live button, the song playing now with its album cover, and what's up next.](docs/homepage.webp)
+![The homepage: a large amber Listen live button beside a photo of Jim Parr at the microphone, with the song playing now, its album cover and what's up next underneath.](docs/homepage.webp)
 
 ## Status
 
@@ -23,9 +23,12 @@ public/              The website and the editor (/admin/), served as they are
 netlify/functions/   One small function for each /api/ address
 netlify/lib/         Sign-in, storage and the checks every change passes
 scripts/             npm run hash-password, for setting the editor password
-tests/               Unit tests, run with npm test
-docs/                How to set up and use the editor
+tests/               Unit tests, and checks that the page, the editor and the forms still agree, run with npm test
+docs/                How to set up and use the editor, and the design notes
+design/              The source of the link-preview picture
 ```
+
+The reasons behind the colours, type, layout and motion are in [docs/design.md](docs/design.md).
 
 ## Running it locally
 
