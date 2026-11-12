@@ -63,7 +63,7 @@ There are no scroll effects and nothing loops while the station is silent.
 - `js/first.js` is loaded before the page is drawn so saved text size and dark mode never flash. It must stay a plain script, not a module.
 - Inputs are styled with `input:not([type])`.
 - `tests/site.test.mjs` lists every hook the scripts, the editor and Netlify Forms rely on.
-- Older iPads are common among listeners, so the stylesheet avoids `light-dark()` and `color-mix()`. That is why the dark colours are written out twice.
+- Older iPads are common among listeners, so the stylesheet avoids `light-dark()` and `color-mix()`. That is why the dark colours are written out twice. The whole site still needs Safari 15.4 or later (iOS and iPadOS 15.4): the stylesheet uses `:has()` to hide an empty "Just played" section, space the footer and leave room above the player bar, and the scripts use `?.` and `??=`. On iOS 14 to 15.3 those three layout touches are missing. On iOS 13 and older the scripts don't run, so the browser's own audio player still plays the station, but now playing, whether Jim is live and the editor's changes don't appear, and every page shows at once.
 
 ## The link-preview picture
 
