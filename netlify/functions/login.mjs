@@ -23,7 +23,10 @@ export default async (req, context) => {
   if (lockedOut) return message('Too many wrong tries. Please wait 15 minutes and try again.', 429);
 
   const { username = '', password = '' } = await req.json().catch(() => ({}));
-  const correct = sameText(String(username).trim(), ADMIN_USERNAME) && checkPassword(password, ADMIN_PASSWORD_HASH);
+  // Both checks always run, so a wrong username takes as long as a wrong password.
+  const usernameRight = sameText(String(username).trim(), ADMIN_USERNAME);
+  const passwordRight = checkPassword(password, ADMIN_PASSWORD_HASH);
+  const correct = usernameRight && passwordRight;
 
   if (!correct) {
     const fresh = Date.now() - tries.since >= LOCKOUT_MS;
