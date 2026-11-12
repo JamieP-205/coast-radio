@@ -6,6 +6,8 @@ const FALLBACK_ART = 'images/no-cover.svg';
 const TRACK_REFRESH_MS = 15000;
 const HIDDEN_REFRESH_MS = 60000;
 const CHANGE_MS = 280;
+const ARTWORK_WAIT_MS = 5000;
+const METADATA_WAIT_MS = 8000;
 
 const nowArt = document.getElementById('now-art');
 const nowSong = document.getElementById('now-song');
@@ -53,8 +55,15 @@ function shareAWord(ours, theirs) {
   return words(ours).some((word) => theirWords.includes(word));
 }
 
+// Gives up on a request that hangs, so a slow service can't hold things up.
+// Older browsers without AbortSignal.timeout simply wait as before.
+function giveUpAfter(ms) {
+  return typeof AbortSignal.timeout === 'function' ? AbortSignal.timeout(ms) : undefined;
+}
+
 function searchArtwork(term, entity, accept) {
-  return fetch(`${ARTWORK_URL}?term=${encodeURIComponent(term)}&entity=${entity}&limit=5&country=gb`)
+  return fetch(`${ARTWORK_URL}?term=${encodeURIComponent(term)}&entity=${entity}&limit=5&country=gb`,
+    { signal: giveUpAfter(ARTWORK_WAIT_MS) })
     .then((response) => (response.ok ? response.json() : { results: [] }))
     .then((data) => data.results.find(accept)?.artworkUrl100 || '')
     .catch(() => '');
@@ -217,7 +226,10 @@ function showJustPlayed(list) {
 
 async function updateTracks() {
   try {
-    const response = await fetch(`${METADATA_URL}?t=${Date.now()}`, { cache: 'no-store' });
+    const response = await fetch(`${METADATA_URL}?t=${Date.now()}`, {
+      cache: 'no-store',
+      signal: giveUpAfter(METADATA_WAIT_MS),
+    });
     if (!response.ok) return;
     const data = await response.json();
 
