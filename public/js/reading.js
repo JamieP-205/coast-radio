@@ -3,7 +3,7 @@
 import { recall, remember } from './shared.js';
 
 const readingTools = document.querySelector('.reading-tools');
-const sizeButtons = document.querySelectorAll('[data-size]');
+const sizeButtons = document.querySelectorAll('.text-size [data-size]');
 const darkToggle = document.querySelector('.dark-toggle');
 const deviceDark = window.matchMedia('(prefers-color-scheme: dark)');
 
