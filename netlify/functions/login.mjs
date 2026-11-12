@@ -44,4 +44,8 @@ export default async (req, context) => {
 export const config = {
   path: '/api/login',
   method: 'POST',
+  // Netlify turns away more than 10 sign-in attempts a minute from one
+  // connection before this function runs, so many tries sent at once can't
+  // slip past the count above.
+  rateLimit: { windowLimit: 10, windowSize: 60, aggregateBy: ['ip', 'domain'] },
 };
