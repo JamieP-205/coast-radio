@@ -26,7 +26,8 @@ function setTheme(theme) {
 }
 
 readingTools.hidden = false;
-setSize(recall('coast-text-size') || 'standard');
+const savedSize = recall('coast-text-size');
+setSize(savedSize === 'large' || savedSize === 'largest' ? savedSize : 'standard');
 setTheme(recall('coast-theme'));
 
 sizeButtons.forEach((button) => {
