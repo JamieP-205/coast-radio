@@ -66,7 +66,7 @@ Then run `npm test`. The content tests build their text from `TEXT_FIELDS`, so t
 - Everything is stored in Netlify Blobs: `coast-site` holds the draft, the published version, the last 10 versions and sign-in attempts, and `coast-photos` holds uploaded photos.
 - Every draft is checked by `netlify/lib/content.mjs` before it's saved. Unknown fields are dropped, text has length limits, links must be `https://`, and photos must come from the site itself, so nothing Jim types can add code to the page.
 - The site's own script applies published content with `textContent` and plain attributes, never as HTML.
-- Sign-in uses a scrypt hash of the password and a signed, HttpOnly cookie that lasts 30 days. Five wrong tries from one connection pause sign-in for 15 minutes. Anything that changes the site must also come from the site's own pages.
+- Sign-in uses a scrypt hash of the password and a signed, HttpOnly cookie that lasts 30 days. The cookie is signed with `SESSION_SECRET`, so changing `SESSION_SECRET` in Netlify and redeploying signs every device out: all existing session cookies stop working. Changing only the password doesn't sign anyone out. Five wrong tries from one connection pause sign-in for 15 minutes. Anything that changes the site must also come from the site's own pages.
 - The editor shows the real website in a frame at `/?preview`. The page then waits for content from the editor instead of loading the published version, and tells the editor what Jim clicks on.
 
 ## If something goes wrong
