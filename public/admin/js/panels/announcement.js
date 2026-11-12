@@ -1,11 +1,12 @@
 // Announcement: a message across the top of every page.
 
 import { isWebLink } from '../checks.js';
-import { change, content } from '../draft.js';
+import { change, content, showSaveState } from '../draft.js';
 
 const announcementShow = document.getElementById('announcement-show');
 const announcementText = document.getElementById('announcement-text');
 const announcementLink = document.getElementById('announcement-link');
+const announcementLinkProblem = document.getElementById('announcement-link-problem');
 
 announcementShow.addEventListener('change', () => change((draft) => {
   draft.announcement.show = announcementShow.checked;
@@ -24,10 +25,16 @@ announcementText.addEventListener('input', () => {
 
 announcementLink.addEventListener('input', () => {
   const link = announcementLink.value.trim();
-  announcementLink.setAttribute('aria-invalid', String(Boolean(link) && !isWebLink(link)));
-  if (!link || isWebLink(link)) change((draft) => {
-    draft.announcement.link = link;
-  });
+  const ok = !link || isWebLink(link);
+  announcementLink.setAttribute('aria-invalid', String(!ok));
+  announcementLinkProblem.textContent = ok ? '' : 'Not saved yet. Paste the whole link, starting with https://';
+  if (ok) {
+    change((draft) => {
+      draft.announcement.link = link;
+    });
+  } else {
+    showSaveState();
+  }
 });
 
 export function fillAnnouncement() {
@@ -35,4 +42,5 @@ export function fillAnnouncement() {
   announcementText.value = content.announcement.text;
   announcementLink.value = content.announcement.link;
   announcementLink.removeAttribute('aria-invalid');
+  announcementLinkProblem.textContent = '';
 }

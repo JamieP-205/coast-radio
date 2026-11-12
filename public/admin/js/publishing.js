@@ -2,10 +2,10 @@
 
 import { api } from './api.js';
 import {
-  change, defaults, content, hasWaitingSave, holdSaves, loadVersions, markPublished, published,
-  saveSoon, updatePublishState,
+  change, defaults, content, holdSaves, loadVersions, markPublished, published,
+  saveSoon, showSaveState, updatePublishState,
 } from './draft.js';
-import { confirmAction, setStatus, toast } from './messages.js';
+import { confirmAction, toast } from './messages.js';
 import { fillPanels } from './panels.js';
 
 const publishButton = document.getElementById('publish-button');
@@ -29,7 +29,7 @@ publishButton.addEventListener('click', async () => {
     await saving;
     await api('publish', { method: 'POST', body: version });
     markPublished(version);
-    if (!hasWaitingSave()) setStatus('All changes saved');
+    showSaveState();
     toast('Published. Your changes are on the website.');
   } catch (error) {
     toast(error.message, true);
@@ -56,7 +56,7 @@ undoButton.addEventListener('click', async () => {
     const { restored } = await api('undo', { method: 'POST' });
     await loadVersions();
     fillPanels();
-    setStatus('All changes saved');
+    showSaveState();
     toast(restored === 'original'
       ? 'Done. The website is back to how it was first built.'
       : 'Done. The website is back to how it was before.');

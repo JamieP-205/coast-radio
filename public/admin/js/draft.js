@@ -58,12 +58,20 @@ function saveDraft() {
   saveQueue = saveQueue.then(async () => {
     try {
       await api('draft', { method: 'PUT', body: version });
-      if (!saveTimer) setStatus('All changes saved');
+      showSaveState();
     } catch (error) {
       setStatus(`Not saved yet. ${error.message}`, true);
     }
   });
   return saveQueue;
+}
+
+// A box with a problem isn't saved until it's fixed, so the status only says
+// everything is saved when no box is marked as having a problem.
+export function showSaveState() {
+  if (saveTimer) return;
+  const waiting = document.querySelector('[aria-invalid="true"]');
+  setStatus(waiting ? 'Not saved yet. One box needs fixing: see the note under it.' : 'All changes saved', Boolean(waiting));
 }
 
 export function saveSoon() {

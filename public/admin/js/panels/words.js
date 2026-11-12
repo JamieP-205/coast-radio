@@ -1,6 +1,6 @@
 // Words: every piece of text Jim can change, grouped by the page it's on.
 
-import { change, content } from '../draft.js';
+import { change, content, showSaveState } from '../draft.js';
 import { showInPreview } from '../preview.js';
 
 // The limits match the checks in netlify/lib/content.mjs.
@@ -81,9 +81,13 @@ function wordField(group, { key, label, max, help }) {
     showWordState(input);
     // An empty box can't be saved, so the website keeps the last words
     // until Jim types something.
-    if (input.value.trim()) change((draft) => {
-      draft.text[key] = input.value;
-    });
+    if (input.value.trim()) {
+      change((draft) => {
+        draft.text[key] = input.value;
+      });
+    } else {
+      showSaveState();
+    }
   });
   return field;
 }

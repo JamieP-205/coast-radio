@@ -2,6 +2,7 @@
 // A panel is filled in from the draft every time it opens, so it always
 // shows the latest changes, even ones made in another panel.
 
+import { showSaveState } from './draft.js';
 import { showInPreview } from './preview.js';
 import { fillAnnouncement } from './panels/announcement.js';
 import { fillColours } from './panels/colours.js';
@@ -29,7 +30,10 @@ export function fillPanels() {
 }
 
 function openPanel(name, focus = true) {
+  // Opening a panel puts back what's saved, which clears any box with a problem.
+  const hadProblem = document.querySelector('[aria-invalid="true"]');
   PANELS[name]?.fill();
+  if (hadProblem) showSaveState();
   document.querySelectorAll('[data-panel]').forEach((panel) => {
     panel.hidden = panel.dataset.panel !== name;
   });

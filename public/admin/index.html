@@ -147,7 +147,8 @@
           </div>
           <div class="field">
             <label for="announcement-link">Link for "Find out more" <span class="optional">(optional)</span></label>
-            <input id="announcement-link" type="url" inputmode="url" maxlength="300" placeholder="https://" aria-describedby="announcement-link-help">
+            <input id="announcement-link" type="url" inputmode="url" maxlength="300" placeholder="https://" aria-describedby="announcement-link-problem announcement-link-help">
+            <p class="field-problem" id="announcement-link-problem"></p>
             <p class="help" id="announcement-link-help">Paste a web address, such as a Facebook post. Leave it empty for no link.</p>
           </div>
         </section>
@@ -203,24 +204,29 @@
           <p class="hint">These change everywhere they appear on the website.</p>
           <div class="field">
             <label for="contact-phone">Phone number for texts</label>
-            <input id="contact-phone" type="tel" maxlength="20" data-contact-field="phone">
+            <input id="contact-phone" type="tel" maxlength="20" aria-describedby="contact-phone-problem" data-contact-field="phone">
+            <p class="field-problem" id="contact-phone-problem"></p>
           </div>
           <div class="field">
             <label for="contact-email">Email address</label>
-            <input id="contact-email" type="email" maxlength="100" data-contact-field="email">
+            <input id="contact-email" type="email" maxlength="100" aria-describedby="contact-email-problem" data-contact-field="email">
+            <p class="field-problem" id="contact-email-problem"></p>
             <p class="help">This is the address listeners see. Song requests and feedback are emailed separately, so tell Jamie if you change it.</p>
           </div>
           <div class="field">
             <label for="contact-facebook">Facebook page link</label>
-            <input id="contact-facebook" type="url" inputmode="url" maxlength="300" data-contact-field="facebook">
+            <input id="contact-facebook" type="url" inputmode="url" maxlength="300" aria-describedby="contact-facebook-problem" data-contact-field="facebook">
+            <p class="field-problem" id="contact-facebook-problem"></p>
           </div>
           <div class="field">
             <label for="contact-x">X (Twitter) link</label>
-            <input id="contact-x" type="url" inputmode="url" maxlength="300" data-contact-field="x">
+            <input id="contact-x" type="url" inputmode="url" maxlength="300" aria-describedby="contact-x-problem" data-contact-field="x">
+            <p class="field-problem" id="contact-x-problem"></p>
           </div>
           <div class="field">
             <label for="contact-donate">PayPal donate link</label>
-            <input id="contact-donate" type="url" inputmode="url" maxlength="300" data-contact-field="donate">
+            <input id="contact-donate" type="url" inputmode="url" maxlength="300" aria-describedby="contact-donate-problem" data-contact-field="donate">
+            <p class="field-problem" id="contact-donate-problem"></p>
           </div>
         </section>
       </aside>
