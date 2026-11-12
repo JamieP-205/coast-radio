@@ -2009,3 +2009,339 @@ body:has(.player-bar.is-shown) {
 .is-preview .schedule:hover {
   outline-style: solid;
 }
+
+/* Phones. One thing at a time, in the order a listener needs it: is Jim
+   on, the Listen button, the song. Everything else is quieter and tighter
+   than on a big screen. */
+
+@media (max-width: 43.99rem) {
+  /* The desk's contents and Jim's photo share one grid, so his photo can
+     sit beside the headline instead of filling a screen of its own. */
+  .studio {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 1rem;
+    align-items: center;
+    padding: 0.9rem 1.25rem 0;
+  }
+
+  .studio::before {
+    inset: 0;
+  }
+
+  .desk {
+    display: contents;
+  }
+
+  .desk > * {
+    position: relative;
+    grid-column: 1 / -1;
+  }
+
+  /* One quiet line: the sign and when Jim is next on. The Shows link is
+     already in the menu just above. */
+  .on-air {
+    grid-row: 1;
+    gap: 0.35rem 0.65rem;
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--on-brand-soft);
+  }
+
+  .on-air a {
+    display: none;
+  }
+
+  .on-air .sign {
+    padding: 0.15rem 0.5rem;
+    border-width: 1px;
+    font-size: 0.75rem;
+  }
+
+  .studio h1 {
+    grid-row: 2;
+    grid-column: 1;
+    max-width: none;
+    margin-top: 0.85rem;
+    font-size: 1.6rem;
+    line-height: 1.15;
+    text-wrap: balance;
+  }
+
+  .presenter-photo {
+    grid-row: 2;
+    grid-column: 2;
+    order: 0;
+    width: 5.75rem;
+    margin: 0.85rem 0 0;
+    border-width: 0.2rem;
+    border-radius: 50%;
+    box-shadow: 0 0.5rem 1.2rem rgb(0 0 0 / 0.3);
+  }
+
+  .listen {
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+  }
+
+  .listen-button {
+    min-height: 4.5rem;
+  }
+
+  .player-status:empty {
+    display: none;
+  }
+
+  .on-now {
+    order: 0;
+    grid-column: 1 / -1;
+    margin: 1.4rem -1.25rem 0;
+  }
+
+  .on-now-inner {
+    gap: 0;
+    padding-block: 1rem;
+  }
+
+  .now {
+    flex-wrap: nowrap;
+    gap: 0.9rem;
+  }
+
+  .now > div {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .now-art {
+    width: 4.5rem;
+    height: 4.5rem;
+  }
+
+  .now-label {
+    font-size: 0.875rem;
+  }
+
+  .now-song {
+    margin-top: 0.1rem;
+    font-size: 1.3rem;
+  }
+
+  .now-artist {
+    margin-top: 0.1rem;
+    font-size: 1.0625rem;
+    color: var(--on-brand-soft);
+  }
+
+  /* Up next is a single line under a hairline, without its own cover. */
+  .up-next {
+    display: flex;
+    align-items: baseline;
+    gap: 0;
+    margin-top: 0.9rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid rgb(255 255 255 / 0.16);
+    font-size: 1rem;
+    line-height: 1.4;
+  }
+
+  .up-next .art {
+    display: none;
+  }
+
+  .up-next > span {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+  }
+
+  .up-next-label {
+    flex: none;
+    font-size: 0.875rem;
+  }
+
+  .next-song {
+    font-weight: 400;
+  }
+
+  /* Page content */
+
+  .block {
+    padding-top: 2.25rem;
+  }
+
+  .block h2 {
+    margin-bottom: 0.75rem;
+    font-size: 1.4rem;
+  }
+
+  .played {
+    gap: 0;
+  }
+
+  .played li {
+    gap: 0.85rem;
+    padding-block: 0.6rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .played li:last-child {
+    border-bottom: 0;
+  }
+
+  .played .art {
+    width: 3.25rem;
+    height: 3.25rem;
+    box-shadow: none;
+  }
+
+  .played-song {
+    font-size: 1.0625rem;
+    font-weight: 700;
+  }
+
+  .played-artist {
+    font-size: 1rem;
+  }
+
+  .lead,
+  .welcome .lead {
+    font-size: 1.1875rem;
+    line-height: 1.5;
+  }
+
+  .welcome .sign-off {
+    margin-top: 0.75rem;
+    font-size: 1.125rem;
+  }
+
+  .button-row {
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+  }
+
+  .page-head {
+    padding-block: 0.9rem 1.5rem;
+  }
+
+  .page-head h1 {
+    font-size: 2rem;
+  }
+
+  .page-head .lead {
+    margin-top: 0.6rem;
+    font-size: 1.0625rem;
+  }
+
+  .page-head + .block {
+    padding-top: 1.75rem;
+  }
+
+  .live-show {
+    font-size: 1.25rem;
+  }
+
+  .schedule {
+    margin-top: 1rem;
+    font-size: 1.125rem;
+  }
+
+  .schedule th,
+  .schedule td {
+    padding: 0.8rem 0.25rem;
+  }
+
+  /* Footer: smaller, and it carries the space the player bar needs so no
+     strip of page colour shows underneath it. */
+  .footer {
+    margin-top: 3rem;
+    padding-block: 2rem;
+    font-size: 1rem;
+  }
+
+  .footer-logo {
+    height: 2.5rem;
+  }
+
+  .footer-links {
+    display: grid;
+    grid-template-columns: auto auto;
+    justify-content: start;
+    gap: 0 1.5rem;
+  }
+
+  /* The text-size and dark-mode buttons keep their size for fingers but
+     lose some of their weight, so the station's name leads the page. */
+  .text-size button,
+  .dark-toggle {
+    border-width: 1px;
+    border-color: rgb(255 255 255 / 0.35);
+    font-weight: 600;
+  }
+
+  .tool-label {
+    font-size: 0.9375rem;
+  }
+
+  .footer-small {
+    font-size: 0.9375rem;
+  }
+
+  body:has(.player-bar.is-shown) {
+    padding-bottom: 0;
+  }
+
+  body:has(.player-bar.is-shown) .footer {
+    padding-bottom: 7.5rem;
+  }
+}
+
+/* Phones change volume with their side buttons, so the slider under the
+   Listen button only adds clutter there. */
+@media (max-width: 43.99rem) and (pointer: coarse) {
+  .listen .volume {
+    display: none;
+  }
+}
+
+/* With larger text, or on the narrowest phones, the headline needs the full
+   width, so Jim's photo moves up beside the On Air sign instead. */
+@media (max-width: 43.99rem) {
+  [data-size] .on-air {
+    grid-column: 1;
+  }
+
+  [data-size] .studio h1 {
+    grid-column: 1 / -1;
+  }
+
+  [data-size] .presenter-photo {
+    grid-row: 1;
+    width: 4.5rem;
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 22rem) {
+  .on-air {
+    grid-column: 1;
+  }
+
+  .studio h1 {
+    grid-column: 1 / -1;
+  }
+
+  .presenter-photo {
+    grid-row: 1;
+    width: 4.5rem;
+    margin-top: 0;
+  }
+
+  .nav {
+    gap: 0 0.25rem;
+  }
+
+  .nav a {
+    font-size: 0.875rem;
+  }
+}
