@@ -1,4 +1,4 @@
-import { isPreview, pageForLink } from './pages.js';
+import { isPreview, pageForLink, withAllPages } from './pages.js';
 import { setLiveSwitch, setShowTimes, showTimes } from './schedule.js';
 import { recall, remember } from './shared.js';
 
@@ -125,15 +125,17 @@ function applyHome(home, news) {
 }
 
 function applyContent(content) {
-  applyColours(content.colours);
-  applyText(content.text || {});
-  applyPhotos(content.photos || {});
-  if (content.contacts) applyContacts(content.contacts);
-  if (content.announcement) applyAnnouncement(content.announcement);
-  if (content.news) applyNews(content.news);
-  if (content.home) applyHome(content.home, content.news || {});
-  if (content.shows) setShowTimes(content.shows);
-  setLiveSwitch(content.live);
+  withAllPages(() => {
+    applyColours(content.colours);
+    applyText(content.text || {});
+    applyPhotos(content.photos || {});
+    if (content.contacts) applyContacts(content.contacts);
+    if (content.announcement) applyAnnouncement(content.announcement);
+    if (content.news) applyNews(content.news);
+    if (content.home) applyHome(content.home, content.news || {});
+    if (content.shows) setShowTimes(content.shows);
+    setLiveSwitch(content.live);
+  });
 }
 
 async function loadPublishedContent() {

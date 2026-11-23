@@ -1,17 +1,26 @@
-// Pages. Every page lives in index.html and only one is shown at a time, so
-// the music keeps playing while listeners move around the site. Each page
-// also has its own address (/shows, /about and so on), built by
-// scripts/build-pages.mjs, so search engines can list them separately.
+// Pages. The music keeps playing while listeners move around the site because
+// the browser never loads a new document. Each page also has its own address
+// (/shows, /about and so on), built by scripts/build-pages.mjs. Only the page
+// being read is kept in the document, so search engines see one page per
+// address; the others wait in memory until they're opened.
 
 // Inside the editor, the website is shown in a frame with ?preview added.
 // The frame stays on one address and uses #page to move between pages.
 export const isPreview = new URLSearchParams(location.search).has('preview') && window.parent !== window;
 
-const pages = document.querySelectorAll('[data-page]');
+// The built pages keep the others in <template> tags. Every script expects
+// the whole website while it sets up, so unpack them first.
+document.querySelectorAll('template[data-stored-page]').forEach((template) => {
+  template.replaceWith(template.content);
+});
+
+const main = document.getElementById('main');
+const pages = new Map([...document.querySelectorAll('[data-page]')].map((page) => [page.dataset.page, page]));
 const navLinks = document.querySelectorAll('.nav a');
 let currentPage = null;
+let keepingOnePage = false;
 
-const pageExists = (id) => Boolean(id) && Boolean(document.querySelector(`[data-page="${CSS.escape(id)}"]`));
+const pageExists = (id) => pages.has(id);
 const addressOf = (id) => (id === 'home' ? '/' : `/${id}`);
 
 // The page a link inside the site goes to, or null for any other link.
@@ -27,15 +36,24 @@ function pageFromAddress() {
   return pageExists(id) ? id : 'home';
 }
 
+function keepOnlyCurrentPage() {
+  pages.forEach((page, id) => {
+    if (id !== currentPage) page.remove();
+  });
+  const page = pages.get(currentPage);
+  if (!page.isConnected) main.append(page);
+}
+
 function showPage(id) {
   if (id === currentPage) return;
   const isFirstPage = currentPage === null;
-  const page = document.querySelector(`[data-page="${CSS.escape(id)}"]`);
+  const page = pages.get(id);
   currentPage = id;
 
   pages.forEach((section) => {
     section.hidden = section !== page;
   });
+  if (keepingOnePage) keepOnlyCurrentPage();
   navLinks.forEach((link) => {
     if (pageForLink(link) === id) {
       link.setAttribute('aria-current', 'page');
@@ -50,6 +68,26 @@ function showPage(id) {
   if (!isFirstPage) {
     window.scrollTo(0, 0);
     if (!isPreview) page.querySelector('h1').focus();
+  }
+}
+
+// Runs once every script has set up. The audio moves out of the home page
+// first, because a browser stops any audio that leaves the document.
+export function keepOnePageInDocument() {
+  if (isPreview) return;
+  document.body.append(document.getElementById('stream'));
+  keepingOnePage = true;
+  keepOnlyCurrentPage();
+}
+
+// Jim's published changes can touch any page, so they're applied with every
+// page briefly back in the document. This happens before the screen redraws.
+export function withAllPages(update) {
+  if (keepingOnePage) pages.forEach((page) => main.append(page));
+  try {
+    update();
+  } finally {
+    if (keepingOnePage) keepOnlyCurrentPage();
   }
 }
 

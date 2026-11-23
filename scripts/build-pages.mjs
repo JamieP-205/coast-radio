@@ -38,10 +38,13 @@ export function buildPage(index, id) {
   // The station's details belong to the home page alone.
   html = setTag(html, /\s*<script type="application\/ld\+json">[\s\S]*?<\/script>/, '');
 
-  // Show this page and hide the others.
-  html = html.replace(/<div class="page" data-page="(\w+)"( hidden)?/g, (_, page) => (
-    `<div class="page" data-page="${page}"${page === id ? '' : ' hidden'}`
-  ));
+  // Show this page. The others go in <template> tags, which browsers and
+  // search engines don't treat as part of the page; pages.js unpacks them.
+  html = html.replace(/<div class="page" data-page="(\w+)"( hidden)?[\s\S]*?\n    <\/div>(?=\n\n    <!--|\n  <\/main>)/g, (block, page) => {
+    if (page === id) return block.replace(`data-page="${page}" hidden`, `data-page="${page}"`);
+    const stored = block.replace(`data-page="${page}"${block.includes(`data-page="${page}" hidden`) ? ' hidden' : ''}`, `data-page="${page}" hidden`);
+    return `<template data-stored-page="${page}">${stored}</template>`;
+  });
 
   // Netlify registers each form from index.html, so every copy posts to /.
   return html

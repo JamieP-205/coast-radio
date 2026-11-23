@@ -256,6 +256,18 @@ test('each built page has its own address, title and description, and shows only
   assert.equal(descriptions.size, EXTRA_PAGES.length);
 });
 
+test('each built page holds only its own content outside template tags', () => {
+  for (const id of EXTRA_PAGES) {
+    const html = buildPage(read('public/index.html'), id);
+    const outside = html.replace(/<template data-stored-page="\w+">[\s\S]*?<\/template>/g, '');
+    assert.deepEqual(find(outside, 'div', 'data-page').map((page) => page.attrs['data-page']), [id]);
+    assert.equal(find(outside, 'h1').length, 1, `${id} should show one h1`);
+    const stored = [...html.matchAll(/<template data-stored-page="(\w+)">/g)].map(([, page]) => page);
+    assert.equal(stored.length, EXTRA_PAGES.length, `${id} should store the other pages`);
+    assert.ok(!stored.includes(id), `${id} stored itself`);
+  }
+});
+
 test('only the home page is visible in index.html', () => {
   const visible = find(index, 'div', 'data-page').filter((page) => !('hidden' in page.attrs));
   assert.deepEqual(visible.map((page) => page.attrs['data-page']), ['home']);
