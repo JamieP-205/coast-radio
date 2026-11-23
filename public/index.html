@@ -226,7 +226,7 @@
     </div>
 
     <!-- Songs -->
-    <div class="page" data-page="songs" hidden data-title="Songs played on Coast Internet Radio" data-description="Search the country, Irish country and classic hits played on Coast Internet Radio, and see what played today, on live shows and on repeats.">
+    <div class="page" data-page="songs" hidden data-title="Songs played on Coast Internet Radio" data-description="Search the country, Irish country and classic hits played on Coast Internet Radio, and see what played today.">
       <header class="page-head songs-head">
         <div class="wrap">
           <h1 tabindex="-1">Songs</h1>
@@ -240,15 +240,13 @@
             <button type="button" data-song-view="popular" aria-pressed="false">Most played</button>
             <button type="button" data-song-view="az" aria-pressed="false">A to Z</button>
             <button type="button" data-song-view="saved" aria-pressed="false">Saved</button>
-            <button type="button" data-song-view="live" aria-pressed="false">Live shows</button>
-            <button type="button" data-song-view="repeat" aria-pressed="false">Repeats</button>
           </div>
         </div>
       </header>
       <div class="wrap block songs">
         <p class="song-message" id="song-message" role="status" hidden></p>
-        <ol class="song-list" id="song-list"></ol>
-        <div id="song-more" aria-hidden="true"></div>
+        <ol class="song-list" id="song-list" tabindex="-1"></ol>
+        <nav class="song-pages" id="song-pages" aria-label="Song pages" hidden></nav>
       </div>
     </div>
 

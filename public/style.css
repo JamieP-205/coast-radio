@@ -2575,13 +2575,6 @@ body:has(.page) :is(.site-header, .footer) img.logo-on-dark {
   border-bottom: 1px solid var(--line);
 }
 
-.show-row {
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 1rem;
-  min-height: 4rem;
-  padding-block: 0.5rem;
-}
-
 .song-main {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
@@ -2700,8 +2693,54 @@ body:has(.page) :is(.site-header, .footer) img.logo-on-dark {
   color: var(--on-button);
 }
 
-#song-more {
-  height: 1px;
+.song-list:focus {
+  outline: none;
+}
+
+.song-pages {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  padding-top: 1.5rem;
+}
+
+.song-page {
+  min-width: 2.75rem;
+  height: 2.75rem;
+  padding: 0 0.5rem;
+  border: 0;
+  border-radius: 0.5rem;
+  background: none;
+  color: var(--text);
+  font: 700 var(--t-small) var(--font);
+  cursor: pointer;
+}
+
+.song-page:hover:not(:disabled) {
+  background: var(--line);
+}
+
+.song-page[aria-current="page"] {
+  background: var(--button);
+  color: var(--on-button);
+}
+
+.song-page[aria-current="page"]:hover {
+  background: var(--button-hover);
+}
+
+.song-page:disabled {
+  color: var(--muted);
+  opacity: 0.45;
+  cursor: default;
+}
+
+.song-gap {
+  min-width: 1.25rem;
+  color: var(--muted);
+  text-align: center;
 }
 
 .nav-extra {
@@ -2738,6 +2777,20 @@ body:has(.page) :is(.site-header, .footer) img.logo-on-dark {
     gap: 1.15rem;
   }
 
+  .song-page {
+    min-width: 2.5rem;
+    padding: 0 0.25rem;
+  }
+
+  .song-pages {
+    flex-wrap: nowrap;
+    gap: 0.1rem;
+  }
+
+  [data-size] .song-pages {
+    flex-wrap: wrap;
+  }
+
   .song-actions {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -2765,6 +2818,14 @@ body:has(.page) :is(.site-header, .footer) img.logo-on-dark {
 }
 
 @media (max-width: 24rem) {
+  .song-views {
+    gap: 0.8rem;
+  }
+
+  .song-views button {
+    font-size: 0.9375rem;
+  }
+
   .nav {
     gap: 0 0.4rem;
   }

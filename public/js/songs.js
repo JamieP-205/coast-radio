@@ -5,29 +5,28 @@ import { recall, remember } from './shared.js';
 
 const HISTORY_URL = 'https://coast-history.jamieparr05.workers.dev';
 const SAVED_KEY = 'coast-saved-songs';
-const BATCH = 60;
+const PAGE_SIZE = 50;
 const REFRESH_MS = 45000;
+const phone = window.matchMedia('(max-width: 30rem)');
 
 const page = document.querySelector('[data-page="songs"]');
 const search = document.getElementById('song-search');
 const viewButtons = page.querySelectorAll('[data-song-view]');
 const list = document.getElementById('song-list');
-const more = document.getElementById('song-more');
+const pager = document.getElementById('song-pages');
 const message = document.getElementById('song-message');
 const requestForm = document.forms['song-request'];
 const requestLink = document.querySelector('.nav a[href="/requests"]');
 
 const songs = new Map();
 const dayPlays = new Map();
-let days = [];
-let shows = [];
+let dayCounts = [];
 let saved = readSaved();
 let view = 'recent';
-let items = [];
-let shown = 0;
-let nextDay = 0;
+let pageNumber = 1;
 let loaded = false;
 let loading = false;
+let renderCount = 0;
 let searchTimer;
 let refreshTimer;
 
@@ -63,13 +62,6 @@ function lastPlayed(seconds) {
   return shortDate.format(toDate(key));
 }
 
-function lengthOf(seconds) {
-  const minutes = Math.round(seconds / 60);
-  const hours = Math.floor(minutes / 60);
-  if (!hours) return `${minutes} min`;
-  return minutes % 60 ? `${hours} hr ${minutes % 60} min` : `${hours} hr`;
-}
-
 const plain = (text) => text.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/['’]/g, '')
   .replace(/[^a-z0-9]+/g, ' ').trim();
 
@@ -94,8 +86,9 @@ function searchResults(query) {
 }
 
 const songItem = (song, side) => ({ type: 'song', song, side });
+const isRecent = () => view === 'recent' && !search.value.trim();
 
-function buildItems() {
+function listItems() {
   const query = search.value.trim();
   if (query) return searchResults(query).map((song) => songItem(song, lastPlayed(song.last)));
 
@@ -107,25 +100,32 @@ function buildItems() {
   if (view === 'az') {
     return all.sort((a, b) => a.name.localeCompare(b.name)).map((song) => songItem(song, lastPlayed(song.last)));
   }
-  if (view === 'saved') {
-    return all.filter((song) => saved.has(song.id)).sort((a, b) => a.name.localeCompare(b.name))
-      .map((song) => songItem(song, lastPlayed(song.last)));
-  }
-  if (view === 'live' || view === 'repeat') {
-    return shows.filter((show) => show[0] === view).map((show) => ({ type: 'show', show }));
-  }
-  return recentItems();
+  return all.filter((song) => saved.has(song.id)).sort((a, b) => a.name.localeCompare(b.name))
+    .map((song) => songItem(song, lastPlayed(song.last)));
 }
 
-function recentItems() {
-  const result = [];
-  days.slice(0, nextDay).forEach((key) => {
-    const plays = (dayPlays.get(key) || []).filter(([, id]) => songs.has(id));
-    if (!plays.length) return;
-    result.push({ type: 'day', label: dayName(key) });
-    plays.forEach(([at, id]) => result.push(songItem(songs.get(id), timeOf(at))));
+const recentTotal = () => dayCounts.reduce((total, [, plays]) => total + plays, 0);
+
+// Finds which days hold this page, and loads only those.
+async function recentItems(number) {
+  const start = (number - 1) * PAGE_SIZE;
+  const end = start + PAGE_SIZE;
+  const parts = [];
+  let offset = 0;
+  for (const [key, plays] of dayCounts) {
+    if (offset >= end) break;
+    if (offset + plays > start) parts.push({ key, from: Math.max(start - offset, 0), to: Math.min(end - offset, plays) });
+    offset += plays;
+  }
+  await Promise.all(parts.map(async ({ key }) => {
+    if (!dayPlays.has(key) || key === today()) dayPlays.set(key, await getJson(`/day/${key}`));
+  }));
+
+  return parts.flatMap(({ key, from, to }) => {
+    const rows = dayPlays.get(key).slice(from, to).filter(([, id]) => songs.has(id))
+      .map(([at, id]) => songItem(songs.get(id), timeOf(at)));
+    return rows.length ? [{ type: 'day', label: dayName(key) }, ...rows] : [];
   });
-  return result;
 }
 
 function heart() {
@@ -216,30 +216,45 @@ function songRow({ song, side }) {
   return row;
 }
 
-function showRow({ show: [kind, start, end, seconds, original] }) {
-  const row = element('li', 'song-row show-row');
-  const date = dayKey.format(new Date(start * 1000));
-  const words = element('span', 'song-words');
-  words.append(element('span', 'song-name', dayName(date)));
-  let detail = end ? `${timeOf(start)} to ${timeOf(end)}` : `From ${timeOf(start)}`;
-  if (kind === 'repeat') {
-    detail = original && original !== date ? `${timeOf(start)}, first aired ${longDate.format(toDate(original)).replace(',', '')}` : timeOf(start);
-  }
-  words.append(element('span', 'song-artist', detail));
-  const length = seconds || (end ? end - start : null);
-  row.append(words, element('span', 'song-side', length ? lengthOf(length) : 'On air'));
-  return row;
+function rowFor(item) {
+  return item.type === 'day' ? element('li', 'song-day', item.label) : songRow(item);
 }
 
-function addBatch() {
-  const fragment = document.createDocumentFragment();
-  items.slice(shown, shown + BATCH).forEach((item) => {
-    if (item.type === 'day') fragment.append(element('li', 'song-day', item.label));
-    else if (item.type === 'show') fragment.append(showRow(item));
-    else fragment.append(songRow(item));
+function goToPage(number) {
+  pageNumber = number;
+  render();
+  list.focus({ preventScroll: true });
+  window.scrollTo(0, Math.max(0, page.querySelector('.songs').getBoundingClientRect().top + window.scrollY - 8));
+}
+
+function pagerButton(label, number, current, accessibleName) {
+  const button = element('button', 'song-page', label);
+  button.type = 'button';
+  if (accessibleName) button.setAttribute('aria-label', accessibleName);
+  if (current) button.setAttribute('aria-current', 'page');
+  if (number === null) button.disabled = true;
+  else button.addEventListener('click', () => goToPage(number));
+  return button;
+}
+
+function renderPager(last) {
+  pager.hidden = last <= 1;
+  if (last <= 1) {
+    pager.replaceChildren();
+    return;
+  }
+  // Phones show fewer numbers so the pages always fit on one line.
+  const nearby = phone.matches ? [pageNumber] : [pageNumber - 1, pageNumber, pageNumber + 1];
+  const numbers = [...new Set([1, ...nearby, last])]
+    .filter((number) => number >= 1 && number <= last)
+    .sort((a, b) => a - b);
+  const parts = [pagerButton('‹', pageNumber > 1 ? pageNumber - 1 : null, false, 'Previous page')];
+  numbers.forEach((number, index) => {
+    if (index && number - numbers[index - 1] > 1) parts.push(element('span', 'song-gap', '…'));
+    parts.push(pagerButton(number.toLocaleString('en-GB'), number, number === pageNumber, `Page ${number}`));
   });
-  list.append(fragment);
-  shown = Math.min(shown + BATCH, items.length);
+  parts.push(pagerButton('›', pageNumber < last ? pageNumber + 1 : null, false, 'Next page'));
+  pager.replaceChildren(...parts);
 }
 
 function emptyMessage() {
@@ -249,66 +264,50 @@ function emptyMessage() {
   return 'Nothing here yet.';
 }
 
-function render() {
-  items = buildItems();
-  shown = 0;
-  list.replaceChildren();
-  addBatch();
-  message.hidden = items.length > 0 || (view === 'recent' && !search.value.trim() && nextDay < days.length);
-  if (!items.length) message.textContent = emptyMessage();
-  requestAnimationFrame(keepFilling);
-}
-
-async function loadDay(index) {
-  const key = days[index];
-  if (key && !dayPlays.has(key)) dayPlays.set(key, await getJson(`/day/${key}`));
-}
-
-async function loadMoreDays() {
-  if (loading || nextDay >= days.length) return;
-  loading = true;
+async function render() {
+  renderCount += 1;
+  const thisRender = renderCount;
+  let items;
+  let total;
   try {
-    await loadDay(nextDay);
-    nextDay += 1;
-    const before = shown;
-    items = recentItems();
-    shown = before;
-    addBatch();
+    if (isRecent()) {
+      total = recentTotal();
+      pageNumber = Math.min(pageNumber, Math.max(1, Math.ceil(total / PAGE_SIZE)));
+      items = await recentItems(pageNumber);
+    } else {
+      const all = listItems();
+      total = all.length;
+      pageNumber = Math.min(pageNumber, Math.max(1, Math.ceil(total / PAGE_SIZE)));
+      items = all.slice((pageNumber - 1) * PAGE_SIZE, pageNumber * PAGE_SIZE);
+    }
   } catch {
-    // The next scroll tries again.
+    if (thisRender !== renderCount) return;
+    message.hidden = false;
+    message.textContent = "That page couldn't load. Check your connection and try again.";
     return;
-  } finally {
-    loading = false;
   }
-  keepFilling();
-}
+  if (thisRender !== renderCount) return;
 
-// Adds more until the list reaches past the bottom of the screen.
-function keepFilling() {
-  if (!loaded || page.hidden || more.getBoundingClientRect().top > window.innerHeight + 600) return;
-  if (shown < items.length) {
-    addBatch();
-    requestAnimationFrame(keepFilling);
-  } else if (view === 'recent' && !search.value.trim()) {
-    loadMoreDays();
-  }
+  list.replaceChildren(...items.map(rowFor));
+  message.hidden = items.length > 0;
+  if (!items.length) message.textContent = emptyMessage();
+  renderPager(Math.ceil(total / PAGE_SIZE));
 }
 
 async function refresh() {
-  if (page.hidden || !days.length) return;
+  if (page.hidden || !loaded) return;
   try {
-    const key = today();
-    const plays = await getJson(`/day/${key}`);
-    if (!days.includes(key)) days.unshift(key);
-    const previous = dayPlays.get(key) || [];
-    if (plays.length === previous.length) return;
-    dayPlays.set(key, plays);
-    if (plays.some(([, id]) => !songs.has(id))) {
-      const { songs: latest } = await getJson('/catalogue');
-      latest.forEach(addSong);
+    const before = recentTotal();
+    dayCounts = await getJson('/day-counts');
+    if (recentTotal() === before) return;
+    const latest = await getJson(`/day/${today()}`);
+    dayPlays.set(today(), latest);
+    if (latest.some(([, id]) => !songs.has(id))) {
+      const { songs: catalogue } = await getJson('/catalogue');
+      catalogue.forEach(addSong);
       setPlaceholder();
     }
-    if (view === 'recent' && !search.value.trim() && window.scrollY < 300) render();
+    if (isRecent() && pageNumber === 1 && window.scrollY < 300) render();
   } catch {
     // Keep showing what's there until the next check.
   }
@@ -324,18 +323,15 @@ async function load() {
   message.hidden = false;
   message.textContent = 'Loading songs…';
   try {
-    const [catalogue, dayList, showList] = await Promise.all([getJson('/catalogue'), getJson('/days'), getJson('/shows')]);
+    const [catalogue, counts] = await Promise.all([getJson('/catalogue'), getJson('/day-counts')]);
     catalogue.songs.forEach(addSong);
-    days = dayList;
-    // A few minutes of the live marker is a studio glitch, not a show.
-    shows = showList.filter(([kind, start, end]) => kind !== 'live' || !end || end - start >= 600);
-    if (days.length) await loadDay(0);
-    nextDay = days.length ? 1 : 0;
+    dayCounts = counts;
     loaded = true;
     setPlaceholder();
-    render();
+    await render();
     refreshTimer ??= setInterval(refresh, REFRESH_MS);
   } catch {
+    message.hidden = false;
     message.textContent = "Songs couldn't load. Check your connection and open this page again.";
   } finally {
     loading = false;
@@ -344,6 +340,7 @@ async function load() {
 
 function setView(next) {
   view = next;
+  pageNumber = 1;
   search.value = '';
   viewButtons.forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.songView === view)));
   render();
@@ -356,18 +353,17 @@ search.addEventListener('input', () => {
   clearTimeout(searchTimer);
   searchTimer = setTimeout(() => {
     const searching = Boolean(search.value.trim());
+    pageNumber = 1;
     viewButtons.forEach((button) => button.setAttribute('aria-pressed', String(!searching && button.dataset.songView === view)));
     render();
   }, 90);
 });
 
-new IntersectionObserver(([entry]) => {
-  if (entry.isIntersecting) keepFilling();
-}, { rootMargin: '600px' }).observe(more);
+phone.addEventListener('change', () => {
+  if (loaded) render();
+});
 
 window.addEventListener('coast:page', (event) => {
-  if (event.detail !== 'songs') return;
-  load();
-  requestAnimationFrame(keepFilling);
+  if (event.detail === 'songs') load();
 });
 if (!page.hidden) load();
