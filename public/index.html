@@ -73,21 +73,6 @@
   <a class="skip-link" href="#main">Skip to content</a>
 
   <header class="site-header">
-    <div class="utility">
-      <div class="wrap utility-inner">
-        <p class="utility-contact">Requests: text Jim on <a href="sms:+447935889228" data-contact="phone">07935 889228</a></p>
-        <div class="reading-tools" hidden>
-          <div class="text-size" role="group" aria-label="Text size">
-            <span class="tool-label" aria-hidden="true">Text size</span>
-            <button type="button" data-size="standard">A<span class="visually-hidden"> standard text</span></button>
-            <button type="button" data-size="large">A+<span class="visually-hidden"> large text</span></button>
-            <button type="button" data-size="largest">A++<span class="visually-hidden"> largest text</span></button>
-          </div>
-          <button type="button" class="dark-toggle" aria-pressed="false">Dark mode</button>
-        </div>
-      </div>
-    </div>
-
     <div class="wrap masthead">
       <a class="logo" href="/"><img src="images/logo.svg" width="298" height="100" alt="Coast Internet Radio, home"></a>
       <nav class="main-nav" id="main-nav" aria-label="Main">
@@ -99,6 +84,21 @@
           <li><a href="/help">Help</a></li>
         </ul>
       </nav>
+      <details class="settings reading-tools" hidden>
+        <summary>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M19.4 13a7.7 7.7 0 0 0 0-2l2-1.6-2-3.4-2.4 1a7.3 7.3 0 0 0-1.7-1L15 3.5h-4l-.4 2.5a7.3 7.3 0 0 0-1.7 1l-2.4-1-2 3.4 2 1.6a7.7 7.7 0 0 0 0 2l-2 1.6 2 3.4 2.4-1a7.3 7.3 0 0 0 1.7 1l.4 2.5h4l.4-2.5a7.3 7.3 0 0 0 1.7-1l2.4 1 2-3.4-2-1.6zM12 15.2a3.2 3.2 0 1 1 0-6.4 3.2 3.2 0 0 1 0 6.4z"/></svg>
+          Settings
+        </summary>
+        <div class="settings-panel">
+          <div class="text-size" role="group" aria-label="Text size">
+            <span class="tool-label" aria-hidden="true">Text size</span>
+            <button type="button" data-size="standard">A<span class="visually-hidden"> standard text</span></button>
+            <button type="button" data-size="large">A+<span class="visually-hidden"> large text</span></button>
+            <button type="button" data-size="largest">A++<span class="visually-hidden"> largest text</span></button>
+          </div>
+          <button type="button" class="dark-toggle" aria-pressed="false">Dark mode</button>
+        </div>
+      </details>
     </div>
   </header>
 
@@ -112,7 +112,7 @@
     </section>
 
     <!-- Home -->
-    <div class="page" data-page="home" data-title="Coast Internet Radio – Live country and classic hits from Newry">
+    <div class="page" data-page="home" data-title="Coast Internet Radio – Irish country and classic hits, live from Newry">
       <section class="studio" aria-labelledby="hero-title">
         <div class="desk">
           <p class="on-air">
@@ -338,15 +338,9 @@
             </details>
             <details>
               <summary>Can I make the text bigger?</summary>
-              <p>Yes. Use the A, A+ and A++ buttons at the very top of the page.</p>
+              <p>Yes. Open Settings at the top of the page, then use the A, A+ and A++ buttons.</p>
             </details>
           </div>
-        </section>
-
-        <section aria-labelledby="privacy-heading">
-          <h2 id="privacy-heading">Privacy</h2>
-          <p>This website doesn't use cookies, adverts or tracking. Your text size and dark mode choices are saved on your own device, along with a copy of the latest wording on the website so pages open quickly.</p>
-          <p>To show album covers, your browser asks Apple's iTunes search for each song's cover, so Apple receives those requests from your device. Requests and feedback you send are emailed to the station through Netlify, which hosts this website.</p>
         </section>
 
         <section aria-labelledby="feedback-heading">
@@ -382,6 +376,20 @@
         </section>
       </div>
     </div>
+
+    <!-- Privacy -->
+    <div class="page" data-page="privacy" hidden data-title="Privacy – Coast Internet Radio" data-description="How Coast Internet Radio handles your information, including saved settings, song requests, feedback, album covers and website hosting.">
+      <header class="page-head">
+        <div class="wrap">
+          <h1 tabindex="-1">Privacy</h1>
+        </div>
+      </header>
+      <div class="wrap block narrow privacy">
+        <p>This website doesn't use cookies or adverts. Your text size and dark mode choices are saved on your own device, along with a copy of the latest wording on the website so pages open quickly.</p>
+        <p>To show album covers, your browser asks Apple's iTunes search for each song's cover, so Apple receives those requests from your device. Requests and feedback you send are emailed to the station through Netlify, which hosts this website.</p>
+        <p>Netlify also adds a small script that measures how quickly pages load. It can send Netlify the page address, your browser, operating system, type of device and screen size.</p>
+      </div>
+    </div>
   </main>
 
   <footer class="footer">
@@ -393,6 +401,7 @@
         <li><a href="https://x.com/coast_radio" data-contact="x">X</a></li>
         <li><a href="mailto:coastradio@hotmail.com" data-contact="email">coastradio@hotmail.com</a></li>
         <li><a href="https://www.paypal.com/donate/?hosted_button_id=QYFZXU895WSE8" data-contact="donate" target="_blank" rel="noopener">Donate<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+        <li><a href="/privacy">Privacy</a></li>
       </ul>
       <p class="footer-small">Licensed for music broadcast by <a href="https://www.prsformusic.com/">PRS for Music</a> and <a href="https://www.ppluk.com/">PPL</a>. &copy; 2026 Coast Internet Radio, Newry. Formerly coastinternetradio.co.uk.</p>
     </div>

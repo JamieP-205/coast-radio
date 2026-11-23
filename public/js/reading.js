@@ -1,4 +1,4 @@
-// Text size and dark mode, remembered on this device.
+// Text size and dark mode, in the Settings menu and remembered on this device.
 
 import { recall, remember } from './shared.js';
 
@@ -44,3 +44,15 @@ darkToggle.addEventListener('click', () => {
 });
 
 deviceDark.addEventListener('change', () => setTheme(recall('coast-theme')));
+
+// The menu closes when you click elsewhere or press Escape.
+document.addEventListener('click', (event) => {
+  if (readingTools.open && !readingTools.contains(event.target)) readingTools.open = false;
+});
+
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && readingTools.open) {
+    readingTools.open = false;
+    readingTools.querySelector('summary').focus();
+  }
+});

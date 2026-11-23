@@ -216,8 +216,8 @@ test('every hook the scripts look for is in the page', () => {
   assert.deepEqual(sizes.sort(), ['largest', 'large', 'standard'].sort());
 });
 
-test('the five pages each have a title, one focusable heading and a link in the menu', () => {
-  const pages = ['home', 'shows', 'about', 'requests', 'help'];
+test('every page has a title and one focusable heading, and the main five are in the menu', () => {
+  const pages = ['home', 'shows', 'about', 'requests', 'help', 'privacy'];
   assert.deepEqual(withAttr(index, 'data-page').map((tag) => tag.attrs['data-page']), pages);
   const nav = index.match(/<ul class="nav">([\s\S]*?)<\/ul>/)[1];
   const links = find(nav, 'a').map((tag) => tag.attrs.href);
@@ -228,7 +228,8 @@ test('the five pages each have a title, one focusable heading and a link in the 
     assert.equal(headings.length, 1, `${id} should have one h1`);
     assert.equal(headings[0].attrs.tabindex, '-1', `${id} h1 needs tabindex="-1"`);
     const address = id === 'home' ? '/' : `/${id}`;
-    assert.ok(links.includes(address), `the menu has no link to ${address}`);
+    if (id === 'privacy') assert.ok(index.includes('<a href="/privacy">Privacy</a>'), 'the footer has no privacy link');
+    else assert.ok(links.includes(address), `the menu has no link to ${address}`);
   }
 });
 
@@ -248,6 +249,7 @@ test('each built page has its own address, title and description, and shows only
     const visible = find(html, 'div', 'data-page').filter((page) => !('hidden' in page.attrs));
     assert.deepEqual(visible.map((page) => page.attrs['data-page']), [id]);
     assert.ok(!html.includes('data-netlify'), `${id} would register the forms a second time`);
+    for (const form of find(html, 'form')) assert.equal(form.attrs.action, '/', `${id} form must post to /`);
     assert.ok(!html.includes('application/ld+json'), `${id} repeats the station details`);
     assert.ok(sitemap.includes(`<loc>${SITE}/${id}</loc>`), `${id} is not in the sitemap`);
   }
