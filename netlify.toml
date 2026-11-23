@@ -3,8 +3,8 @@
 [build]
   publish = "public"
   # Builds each page's own address, then runs the tests, so a change that
-  # breaks them never goes live.
-  command = "node scripts/build-pages.mjs && npm test"
+  # breaks them never goes live. The home page is trimmed last.
+  command = "node scripts/build-pages.mjs && npm test && node scripts/build-pages.mjs --home"
 
 [functions]
   directory = "netlify/functions"

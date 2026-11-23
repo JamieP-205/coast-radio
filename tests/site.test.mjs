@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import { COLOURS, HOME_SECTIONS, PHOTO_KEYS, TEXT_FIELDS } from '../netlify/lib/content.mjs';
-import { buildPage, EXTRA_PAGES, SITE } from '../scripts/build-pages.mjs';
+import { buildFormDefinitions, buildHome, buildPage, EXTRA_PAGES, SITE } from '../scripts/build-pages.mjs';
 
 const read = (path) => readFileSync(new URL(`../${path}`, import.meta.url), 'utf8');
 const exists = (path) => existsSync(new URL(`../public/${path}`, import.meta.url));
@@ -266,6 +266,27 @@ test('each built page holds only its own content outside template tags', () => {
     assert.equal(stored.length, EXTRA_PAGES.length, `${id} should store the other pages`);
     assert.ok(!stored.includes(id), `${id} stored itself`);
   }
+});
+
+test('the built home page holds only its own content and keeps the station details', () => {
+  const html = buildHome(read('public/index.html'));
+  const outside = html.replace(/<template data-stored-page="\w+">[\s\S]*?<\/template>/g, '');
+  assert.deepEqual(find(outside, 'div', 'data-page').map((page) => page.attrs['data-page']), ['home']);
+  assert.equal(find(outside, 'h1').length, 1);
+  assert.equal([...html.matchAll(/<template data-stored-page=/g)].length, EXTRA_PAGES.length);
+  assert.ok(html.includes('application/ld+json'));
+  assert.ok(!html.includes('data-netlify'), 'the home page would register the forms a second time');
+  for (const form of find(html, 'form')) assert.equal(form.attrs.action, '/');
+});
+
+test('the form definitions page keeps both Netlify forms and stays out of search', () => {
+  const html = buildFormDefinitions(read('public/index.html'));
+  assert.equal(find(html, 'form').filter((form) => form.attrs['data-netlify'] === 'true').length, 2);
+  for (const field of ['song', 'artist', 'name', 'message', 'bot-field', 'type', 'contact']) {
+    assert.ok(html.includes(`name="${field}"`), `${field} is missing`);
+  }
+  assert.ok(html.includes('<meta name="robots" content="noindex">'));
+  assert.ok(!read('public/sitemap.xml').includes('form-definitions'));
 });
 
 test('only the home page is visible in index.html', () => {
