@@ -3,6 +3,7 @@ node_modules/
 
 # Pages built from index.html on each deploy
 public/shows.html
+public/songs.html
 public/about.html
 public/requests.html
 public/help.html

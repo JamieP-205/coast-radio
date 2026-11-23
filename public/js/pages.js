@@ -62,6 +62,7 @@ function showPage(id) {
     }
   });
   document.title = page.dataset.title;
+  window.dispatchEvent(new CustomEvent('coast:page', { detail: id }));
 
   // Moving focus to the new page's heading tells screen readers it changed.
   // Not in the editor's preview, where Jim is typing in the editor itself.

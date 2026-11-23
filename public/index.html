@@ -79,7 +79,8 @@
         <ul class="nav">
           <li><a href="/">Home</a></li>
           <li><a href="/shows">Shows</a></li>
-          <li><a href="/about">About Jim</a></li>
+          <li><a href="/songs">Songs</a></li>
+          <li><a href="/about">About<span class="nav-extra"> Jim</span></a></li>
           <li><a href="/requests">Requests</a></li>
           <li><a href="/help">Help</a></li>
         </ul>
@@ -221,6 +222,33 @@
             <tr data-day="0" data-start="10" data-end="13"><th scope="row">Sunday</th><td>10am to 1pm</td></tr>
           </tbody>
         </table>
+      </div>
+    </div>
+
+    <!-- Songs -->
+    <div class="page" data-page="songs" hidden data-title="Songs played on Coast Internet Radio" data-description="Search the country, Irish country and classic hits played on Coast Internet Radio, and see what played today, on live shows and on repeats.">
+      <header class="page-head songs-head">
+        <div class="wrap">
+          <h1 tabindex="-1">Songs</h1>
+          <div class="song-search">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.5 3a7.5 7.5 0 0 1 5.9 12.1l4.8 4.8-1.3 1.3-4.8-4.8A7.5 7.5 0 1 1 10.5 3zm0 1.9a5.6 5.6 0 1 0 0 11.2 5.6 5.6 0 0 0 0-11.2z"/></svg>
+            <label class="visually-hidden" for="song-search">Search songs and artists</label>
+            <input id="song-search" type="search" placeholder="Search songs" autocomplete="off" enterkeyhint="search">
+          </div>
+          <div class="song-views" role="group" aria-label="Show songs by">
+            <button type="button" data-song-view="recent" aria-pressed="true">Recent</button>
+            <button type="button" data-song-view="popular" aria-pressed="false">Most played</button>
+            <button type="button" data-song-view="az" aria-pressed="false">A to Z</button>
+            <button type="button" data-song-view="saved" aria-pressed="false">Saved</button>
+            <button type="button" data-song-view="live" aria-pressed="false">Live shows</button>
+            <button type="button" data-song-view="repeat" aria-pressed="false">Repeats</button>
+          </div>
+        </div>
+      </header>
+      <div class="wrap block songs">
+        <p class="song-message" id="song-message" role="status" hidden></p>
+        <ol class="song-list" id="song-list"></ol>
+        <div id="song-more" aria-hidden="true"></div>
       </div>
     </div>
 
@@ -385,7 +413,7 @@
         </div>
       </header>
       <div class="wrap block narrow privacy">
-        <p>This website doesn't use cookies or adverts. Your text size and dark mode choices are saved on your own device, along with a copy of the latest wording on the website so pages open quickly.</p>
+        <p>This website doesn't use cookies or adverts. Your text size, dark mode choices and saved songs are kept on your own device, along with a copy of the latest wording on the website so pages open quickly.</p>
         <p>To show album covers, your browser asks Apple's iTunes search for each song's cover, so Apple receives those requests from your device. Requests and feedback you send are emailed to the station through Netlify, which hosts this website.</p>
         <p>Netlify also adds a small script that measures how quickly pages load. It can send Netlify the page address, your browser, operating system, type of device and screen size.</p>
       </div>

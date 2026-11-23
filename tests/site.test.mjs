@@ -217,7 +217,7 @@ test('every hook the scripts look for is in the page', () => {
 });
 
 test('every page has a title and one focusable heading, and the main five are in the menu', () => {
-  const pages = ['home', 'shows', 'about', 'requests', 'help', 'privacy'];
+  const pages = ['home', 'shows', 'songs', 'about', 'requests', 'help', 'privacy'];
   assert.deepEqual(withAttr(index, 'data-page').map((tag) => tag.attrs['data-page']), pages);
   const nav = index.match(/<ul class="nav">([\s\S]*?)<\/ul>/)[1];
   const links = find(nav, 'a').map((tag) => tag.attrs.href);
@@ -306,7 +306,11 @@ test('every outside file the pages load comes from a host the policy allows', ()
 
 test('every address the scripts fetch is on a host the policy allows', () => {
   const allowed = [...policy('connect-src'), ...policy('media-src'), ...policy('img-src')];
-  const found = Object.entries(scripts).flatMap(([file, code]) => [...code.matchAll(/https:\/\/[^'"`\s)]+/g)].map(([url]) => ({ file, url })));
+  // Spotify, YouTube and Apple Music are links people open, not addresses the page fetches.
+  const outboundLinks = /^https:\/\/(open\.spotify\.com|www\.youtube\.com|music\.apple\.com)\//;
+  const found = Object.entries(scripts)
+    .flatMap(([file, code]) => [...code.matchAll(/https:\/\/[^'"`\s)]+/g)].map(([url]) => ({ file, url })))
+    .filter(({ url }) => !outboundLinks.test(url));
   assert.ok(found.length >= 3, 'expected the stream, metadata and artwork addresses');
   for (const { file, url } of found) assert.ok(allowedBy(allowed, url), `${file} uses ${url}, which the policy does not allow`);
 });

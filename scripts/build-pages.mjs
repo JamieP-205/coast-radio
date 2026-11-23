@@ -1,5 +1,5 @@
 // Run on every deploy, before the tests. Makes shows.html, about.html,
-// requests.html, help.html and privacy.html from index.html, so each page has its own
+// songs.html, requests.html, help.html and privacy.html from index.html, so each page has its own
 // address, title and description for search engines. They are the same
 // website with a different page showing, so index.html stays the only file
 // to edit. The copies are not kept in git.
@@ -8,7 +8,7 @@ import { writeFileSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 export const SITE = 'https://coastinternetradio.com';
-export const EXTRA_PAGES = ['shows', 'about', 'requests', 'help', 'privacy'];
+export const EXTRA_PAGES = ['shows', 'songs', 'about', 'requests', 'help', 'privacy'];
 
 function pageAttribute(html, id, name) {
   const tag = html.match(new RegExp(`<div[^>]*data-page="${id}"[^>]*>`))?.[0];

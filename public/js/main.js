@@ -8,5 +8,6 @@ import './player.js';
 import './now-playing.js';
 import './schedule.js';
 import './content.js';
+import './songs.js';
 
 keepOnePageInDocument();
