@@ -1,6 +1,12 @@
 # Dependencies
 node_modules/
 
+# Pages built from index.html on each deploy
+public/shows.html
+public/about.html
+public/requests.html
+public/help.html
+
 # Test output
 test-results/
 playwright-report/

@@ -5,6 +5,7 @@ import assert from 'node:assert/strict';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { test } from 'node:test';
 import { COLOURS, HOME_SECTIONS, PHOTO_KEYS, TEXT_FIELDS } from '../netlify/lib/content.mjs';
+import { buildPage, EXTRA_PAGES, SITE } from '../scripts/build-pages.mjs';
 
 const read = (path) => readFileSync(new URL(`../${path}`, import.meta.url), 'utf8');
 const exists = (path) => existsSync(new URL(`../public/${path}`, import.meta.url));
@@ -226,8 +227,36 @@ test('the five pages each have a title, one focusable heading and a link in the 
     const headings = find(pageSection(id), 'h1');
     assert.equal(headings.length, 1, `${id} should have one h1`);
     assert.equal(headings[0].attrs.tabindex, '-1', `${id} h1 needs tabindex="-1"`);
-    assert.ok(links.includes(`#${id}`), `the menu has no link to #${id}`);
+    const address = id === 'home' ? '/' : `/${id}`;
+    assert.ok(links.includes(address), `the menu has no link to ${address}`);
   }
+});
+
+test('each built page has its own address, title and description, and shows only itself', () => {
+  const sitemap = read('public/sitemap.xml');
+  const descriptions = new Set();
+  for (const id of EXTRA_PAGES) {
+    const html = buildPage(read('public/index.html'), id);
+    const tag = find(html, 'div', 'data-page').find((page) => page.attrs['data-page'] === id);
+    assert.equal(find(html, 'link').find((link) => link.attrs.rel === 'canonical').attrs.href, `${SITE}/${id}`);
+    assert.equal(find(html, 'meta').find((meta) => meta.attrs.property === 'og:url').attrs.content, `${SITE}/${id}`);
+    assert.equal(html.match(/<title>([^<]*)<\/title>/)[1], tag.attrs['data-title']);
+    const description = find(html, 'meta').find((meta) => meta.attrs.name === 'description').attrs.content;
+    assert.equal(description, tag.attrs['data-description']);
+    assert.ok(description.length <= 160, `${id} description is ${description.length} letters`);
+    descriptions.add(description);
+    const visible = find(html, 'div', 'data-page').filter((page) => !('hidden' in page.attrs));
+    assert.deepEqual(visible.map((page) => page.attrs['data-page']), [id]);
+    assert.ok(!html.includes('data-netlify'), `${id} would register the forms a second time`);
+    assert.ok(!html.includes('application/ld+json'), `${id} repeats the station details`);
+    assert.ok(sitemap.includes(`<loc>${SITE}/${id}</loc>`), `${id} is not in the sitemap`);
+  }
+  assert.equal(descriptions.size, EXTRA_PAGES.length);
+});
+
+test('only the home page is visible in index.html', () => {
+  const visible = find(index, 'div', 'data-page').filter((page) => !('hidden' in page.attrs));
+  assert.deepEqual(visible.map((page) => page.attrs['data-page']), ['home']);
 });
 
 test('the pages follow the Content-Security-Policy: no inline styles, scripts or handlers', () => {
@@ -273,6 +302,7 @@ test('every local file the pages point at exists', () => {
     for (const { attrs } of tagsIn(html)) {
       for (const url of [attrs.src, attrs.href]) {
         if (!url || /^(https?:|#|mailto:|sms:|\/$)/.test(url)) continue;
+        if (EXTRA_PAGES.includes(url.slice(1))) continue;
         const file = url.replace(/[?#].*$/, '').replace(/^\//, '');
         assert.ok(exists(file), `${url} does not exist under public/`);
       }

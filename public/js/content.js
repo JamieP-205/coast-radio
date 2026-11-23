@@ -1,4 +1,4 @@
-import { isPreview } from './pages.js';
+import { isPreview, pageForLink } from './pages.js';
 import { setLiveSwitch, setShowTimes, showTimes } from './schedule.js';
 import { recall, remember } from './shared.js';
 
@@ -199,7 +199,7 @@ function startPreview() {
       event.preventDefault();
       event.stopPropagation();
       editor.postMessage({ type: 'edit', ...editFor(editable) }, location.origin);
-    } else if (link && !link.getAttribute('href')?.startsWith('#')) {
+    } else if (link && !link.getAttribute('href')?.startsWith('#') && !pageForLink(link)) {
       event.preventDefault();
       if (link.dataset.contact) editor.postMessage({ type: 'edit', kind: 'contacts' }, location.origin);
     }
