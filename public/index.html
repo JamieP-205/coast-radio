@@ -74,7 +74,7 @@
 
   <header class="site-header">
     <div class="wrap masthead">
-      <a class="logo" href="/"><img src="images/logo.svg" width="298" height="100" alt="Coast Internet Radio, home"></a>
+      <a class="logo" href="/"><img class="logo-on-light" src="images/logo-navy.svg" width="298" height="100" alt="Coast Internet Radio, home"><img class="logo-on-dark" src="images/logo.svg" width="298" height="100" alt="Coast Internet Radio, home"></a>
       <nav class="main-nav" id="main-nav" aria-label="Main">
         <ul class="nav">
           <li><a href="/">Home</a></li>
@@ -87,7 +87,7 @@
       <details class="settings reading-tools" hidden>
         <summary>
           <svg viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M19.4 13a7.7 7.7 0 0 0 0-2l2-1.6-2-3.4-2.4 1a7.3 7.3 0 0 0-1.7-1L15 3.5h-4l-.4 2.5a7.3 7.3 0 0 0-1.7 1l-2.4-1-2 3.4 2 1.6a7.7 7.7 0 0 0 0 2l-2 1.6 2 3.4 2.4-1a7.3 7.3 0 0 0 1.7 1l.4 2.5h4l.4-2.5a7.3 7.3 0 0 0 1.7-1l2.4 1 2-3.4-2-1.6zM12 15.2a3.2 3.2 0 1 1 0-6.4 3.2 3.2 0 0 1 0 6.4z"/></svg>
-          Settings
+          <span class="visually-hidden">Settings</span>
         </summary>
         <div class="settings-panel">
           <div class="text-size" role="group" aria-label="Text size">
@@ -238,17 +238,17 @@
           <p class="sign-off" data-edit="signOff">Thanks for listening, Jim</p>
         </div>
         <img class="about-photo" data-edit-photo="about" src="images/jim-and-dog.webp" width="420" height="500" alt="Jim at home, holding his small white dog.">
-      </div>
 
-      <section class="wrap block support" aria-labelledby="support-heading">
-        <h2 id="support-heading">Support Coast</h2>
-        <p class="lead" data-edit="supportLead">Your support keeps the music playing and helps us keep broadcasting.</p>
-        <p data-edit="supportNote">Real people. Real radio. Real support.</p>
-        <p class="button-row">
-          <a class="button" href="https://www.paypal.com/donate/?hosted_button_id=QYFZXU895WSE8" data-contact="donate" target="_blank" rel="noopener">Donate with PayPal<span class="visually-hidden"> (opens in a new tab)</span></a>
-          <a class="button button-plain" href="https://www.facebook.com/share/1aN1Jtus5Y/" data-contact="facebook">Follow Jim on Facebook</a>
-        </p>
-      </section>
+        <section class="support" aria-labelledby="support-heading">
+          <h2 id="support-heading">Support Coast</h2>
+          <p class="lead" data-edit="supportLead">Your support keeps the music playing and helps us keep broadcasting.</p>
+          <p data-edit="supportNote">Real people. Real radio. Real support.</p>
+          <p class="button-row">
+            <a class="button" href="https://www.paypal.com/donate/?hosted_button_id=QYFZXU895WSE8" data-contact="donate" target="_blank" rel="noopener">Donate with PayPal<span class="visually-hidden"> (opens in a new tab)</span></a>
+            <a class="button button-plain" href="https://www.facebook.com/share/1aN1Jtus5Y/" data-contact="facebook">Follow Jim on Facebook</a>
+          </p>
+        </section>
+      </div>
     </div>
 
     <!-- Requests -->
@@ -394,7 +394,8 @@
 
   <footer class="footer">
     <div class="wrap footer-inner">
-      <img class="footer-logo" src="images/logo.svg" width="298" height="100" alt="Coast Internet Radio">
+      <img class="footer-logo logo-on-light" src="images/logo-navy.svg" width="298" height="100" alt="Coast Internet Radio">
+      <img class="footer-logo logo-on-dark" src="images/logo.svg" width="298" height="100" alt="Coast Internet Radio">
       <p data-edit="footerTagline">Country, Irish country and classic hits from Newry, Northern Ireland, 24 hours a day.</p>
       <ul class="footer-links">
         <li><a href="https://www.facebook.com/share/1aN1Jtus5Y/" data-contact="facebook">Facebook</a></li>

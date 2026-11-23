@@ -1,9 +1,9 @@
 /* Coast Internet Radio.
 
-   Two typefaces, each with a job. Besley is a Clarendon, the letter of
-   country show posters and old radio dials: headings, the song and the
-   Listen button. Atkinson Hyperlegible Next was drawn for readers with low
-   vision: everything else. */
+   Two typefaces, each with one job. Besley is a Clarendon, the letter of
+   country show posters and old radio dials: page titles and section
+   headings only. Atkinson Hyperlegible Next was drawn for readers with low
+   vision: everything else. Text comes in four sizes, set on :root. */
 
 @font-face {
   font-family: "Besley";
@@ -26,7 +26,7 @@
 :root {
   color-scheme: light;
   --page: #fbf5e8;
-  --surface: #f2e9d6;
+  --surface: var(--page);
   --field-bg: #fff;
   --text: #17212b;
   --muted: #4a5561;
@@ -34,8 +34,8 @@
   --field: #56626f;
   --brand: #14466b;
   --brand-deep: #0d3150;
-  --on-brand: #fff;
-  --on-brand-soft: #dbe6f0;
+  --on-brand: var(--text);
+  --on-brand-soft: var(--muted);
   --heading: #0d3150;
   --link: #14466b;
   --link-hover: #a42a22;
@@ -52,6 +52,10 @@
   --focus: #0d3150;
   --display: "Besley", Georgia, "Times New Roman", serif;
   --font: "Atkinson Hyperlegible Next", Verdana, sans-serif;
+  --t-title: clamp(1.9rem, 1.55rem + 1.5vw, 2.75rem);
+  --t-heading: 1.5rem;
+  --t-body: 1.125rem;
+  --t-small: 1rem;
 }
 
 *,
@@ -65,7 +69,7 @@ body {
   background: var(--page);
   color: var(--text);
   font-family: var(--font);
-  font-size: 1.1875rem;
+  font-size: var(--t-body);
   line-height: 1.55;
 }
 
@@ -81,11 +85,14 @@ dd {
 }
 
 h1,
-h2,
-h3 {
+h2 {
   font-family: var(--display);
   font-weight: 800;
   text-wrap: balance;
+}
+
+h3 {
+  font-weight: 700;
 }
 
 a {
@@ -102,14 +109,8 @@ img {
   max-width: 100%;
 }
 
-/* The navy parts of the page need a white focus ring; the cream parts a
-   navy one. */
-.site-header,
-.announcement,
-.studio,
-.footer,
-.player-bar,
-.player-view {
+/* Jim's coral announcement needs a white focus ring. */
+.announcement {
   --focus: #fff;
 }
 
@@ -167,7 +168,7 @@ img {
    is always on show, on phones too. */
 
 .site-header {
-  background: var(--brand-deep);
+  background: var(--page);
   color: var(--on-brand);
 }
 
@@ -212,18 +213,18 @@ img {
   display: flex;
   align-items: center;
   min-height: 2.75rem;
-  font-size: 1.0625rem;
+  font-size: var(--t-small);
   font-weight: 700;
   text-decoration: none;
   box-shadow: inset 0 -0.2rem 0 transparent;
 }
 
 .nav a:hover {
-  box-shadow: inset 0 -0.2rem 0 rgb(255 255 255 / 0.55);
+  box-shadow: inset 0 -0.2rem 0 var(--field);
 }
 
 .nav [aria-current="page"] {
-  box-shadow: inset 0 -0.2rem 0 #fff;
+  box-shadow: inset 0 -0.2rem 0 var(--text);
 }
 
 /* Settings: text size and dark mode, tucked into a menu. */
@@ -233,17 +234,14 @@ img {
 }
 
 .settings summary {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  min-height: 2.75rem;
-  padding-inline: 0.75rem;
-  border: 2px solid rgb(255 255 255 / 0.35);
-  border-radius: 0.4rem;
-  font-size: 1rem;
-  font-weight: 700;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
   list-style: none;
   cursor: pointer;
+  transition: background-color 0.12s ease;
 }
 
 .settings summary::-webkit-details-marker {
@@ -252,13 +250,18 @@ img {
 
 .settings summary:hover,
 .settings[open] summary {
-  border-color: #fff;
+  background: var(--line);
 }
 
 .settings summary svg {
-  width: 1.15rem;
-  height: 1.15rem;
+  width: 1.5rem;
+  height: 1.5rem;
   fill: currentColor;
+  transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.settings[open] summary svg {
+  transform: rotate(60deg);
 }
 
 .settings-panel {
@@ -271,9 +274,9 @@ img {
   width: max-content;
   max-width: calc(100vw - 2.5rem);
   padding: 1rem;
-  border: 1px solid rgb(255 255 255 / 0.25);
+  border: 1px solid var(--line);
   border-radius: 0.5rem;
-  background: var(--brand-deep);
+  background: var(--page);
   box-shadow: 0 0.75rem 2rem rgb(0 0 0 / 0.35);
 }
 
@@ -293,7 +296,7 @@ img {
   min-width: 2.75rem;
   min-height: 2.75rem;
   padding: 0.1rem 0.7rem;
-  border: 2px solid rgb(255 255 255 / 0.5);
+  border: 2px solid var(--field);
   border-radius: 0.4rem;
   background: transparent;
   color: var(--on-brand);
@@ -311,14 +314,14 @@ img {
 
 .text-size button:hover,
 .dark-toggle:hover {
-  border-color: #fff;
+  border-color: var(--text);
 }
 
 .text-size [aria-pressed="true"],
 .dark-toggle[aria-pressed="true"] {
-  border-color: #fff;
-  background: #fff;
-  color: #0d3150;
+  border-color: var(--text);
+  background: var(--text);
+  color: var(--page);
 }
 
 @media (max-width: 47.99rem) {
@@ -342,7 +345,6 @@ img {
   }
 
   .nav a {
-    font-size: 1rem;
   }
 }
 
@@ -372,18 +374,8 @@ img {
 .studio {
   position: relative;
   overflow: hidden;
-  background: var(--brand);
+  background: var(--page);
   color: var(--on-brand);
-}
-
-/* Faint slats, like the wooden panel behind Jim in the photo. */
-.studio::before {
-  content: "";
-  position: absolute;
-  inset: 0 0 0 55%;
-  background: repeating-linear-gradient(to bottom, rgb(255 255 255 / 0.035) 0 0.9rem, transparent 0.9rem 1.8rem);
-  -webkit-mask-image: linear-gradient(to right, transparent, #000 45%);
-  mask-image: linear-gradient(to right, transparent, #000 45%);
 }
 
 .studio > * {
@@ -458,10 +450,10 @@ img {
 .sign {
   display: inline-block;
   padding: 0.3rem 0.8rem;
-  border: 2px solid rgb(255 255 255 / 0.45);
+  border: 2px solid var(--field);
   border-radius: 0.3rem;
   color: var(--on-brand);
-  font-size: 0.95rem;
+  font-size: var(--t-small);
   font-weight: 800;
   line-height: 1.3;
   letter-spacing: 0.1em;
@@ -484,7 +476,7 @@ img {
 .studio h1 {
   max-width: 20ch;
   margin-top: 1.1rem;
-  font-size: clamp(2.1rem, 1rem + 3.2vw, 3.6rem);
+  font-size: var(--t-title);
   line-height: 1.08;
 }
 
@@ -508,7 +500,7 @@ img {
   border-radius: 1rem;
   background: var(--amber);
   color: var(--on-amber);
-  font: 800 1.9rem/1 var(--display);
+  font: 700 var(--t-heading)/1 var(--font);
   white-space: nowrap;
   box-shadow: 0 0.4rem 0 var(--amber-edge), 0 1rem 1.6rem rgb(0 0 0 / 0.28);
   cursor: pointer;
@@ -571,21 +563,21 @@ img {
 }
 
 .is-playing .listen-button {
-  background: var(--brand-deep);
-  color: #fff;
-  box-shadow: inset 0 0 0 2px rgb(255 255 255 / 0.6), 0 0.4rem 0 rgb(0 0 0 / 0.35);
+  background: transparent;
+  color: var(--text);
+  box-shadow: inset 0 0 0 2px var(--text), 0 0.4rem 0 rgb(0 0 0 / 0.35);
 }
 
 .is-playing .listen-button:active {
-  box-shadow: inset 0 0 0 2px rgb(255 255 255 / 0.6), 0 0.15rem 0 rgb(0 0 0 / 0.35);
+  box-shadow: inset 0 0 0 2px var(--text), 0 0.15rem 0 rgb(0 0 0 / 0.35);
 }
 
 .is-playing .listen-icon {
-  background: #fff;
+  background: var(--text);
 }
 
 .is-playing .listen-icon svg {
-  fill: var(--brand-deep);
+  fill: var(--page);
 }
 
 /* While the station is connecting, a ring turns around the button's icon. */
@@ -594,8 +586,8 @@ img {
   content: "";
   position: absolute;
   inset: -0.35rem;
-  border: 0.2rem solid rgb(255 255 255 / 0.3);
-  border-top-color: #fff;
+  border: 0.2rem solid var(--line);
+  border-top-color: var(--text);
   border-radius: 50%;
 }
 
@@ -622,7 +614,7 @@ img {
   min-height: 1.55em;
   margin-top: 1rem;
   color: var(--on-brand-soft);
-  font-size: 1.0625rem;
+  font-size: var(--t-small);
 }
 
 .volume {
@@ -646,7 +638,7 @@ img {
 /* What's on, along the bottom of the studio: now playing, then up next. */
 .on-now {
   position: relative;
-  background: var(--brand-deep);
+  background: var(--page);
 }
 
 .on-now-inner {
@@ -692,7 +684,7 @@ img {
   align-items: center;
   gap: 0.5rem;
   color: var(--on-brand-soft);
-  font-size: 1.0625rem;
+  font-size: var(--t-small);
   font-weight: 700;
 }
 
@@ -741,15 +733,14 @@ img {
 
 .now-song {
   margin-top: 0.15rem;
-  font-family: var(--display);
-  font-size: clamp(1.45rem, 1.1rem + 1.3vw, 1.9rem);
+  font-size: var(--t-heading);
   font-weight: 700;
   line-height: 1.2;
 }
 
 .now-artist {
   margin-top: 0.2rem;
-  font-size: 1.25rem;
+  font-size: var(--t-small);
 }
 
 .up-next {
@@ -767,7 +758,7 @@ img {
 .up-next-label {
   display: block;
   color: var(--on-brand-soft);
-  font-size: 1.0625rem;
+  font-size: var(--t-small);
   font-weight: 700;
 }
 
@@ -831,7 +822,7 @@ img {
 
 .page-head h1 {
   color: var(--heading);
-  font-size: clamp(1.9rem, 1.6rem + 1.2vw, 2.6rem);
+  font-size: var(--t-title);
   line-height: 1.1;
 }
 
@@ -848,7 +839,7 @@ img {
 .block h2 {
   margin-bottom: 1rem;
   color: var(--heading);
-  font-size: clamp(1.6rem, 1.4rem + 0.9vw, 2rem);
+  font-size: var(--t-heading);
   line-height: 1.15;
 }
 
@@ -858,7 +849,7 @@ img {
 
 .lead {
   max-width: 40rem;
-  font-size: 1.375rem;
+  font-size: var(--t-body);
   line-height: 1.5;
 }
 
@@ -867,8 +858,7 @@ img {
 }
 
 .sign-off {
-  font-family: var(--display);
-  font-size: 1.25rem;
+  font-size: var(--t-body);
   font-weight: 700;
 }
 
@@ -933,8 +923,7 @@ img {
 /* Jim's welcome is set large in the heading face, as his own words. */
 .welcome .lead {
   max-width: 46rem;
-  font-family: var(--display);
-  font-size: clamp(1.45rem, 1.15rem + 1.5vw, 2.1rem);
+  font-size: var(--t-body);
   font-weight: 500;
   line-height: 1.35;
   text-wrap: pretty;
@@ -954,14 +943,14 @@ img {
 }
 
 .news-item h3 {
-  font-size: 1.45rem;
+  font-size: var(--t-body);
   line-height: 1.25;
 }
 
 .news-date {
   margin-bottom: 0.5rem;
   color: var(--muted);
-  font-size: 1.0625rem;
+  font-size: var(--t-small);
 }
 
 /* Shows */
@@ -972,8 +961,7 @@ img {
   align-items: center;
   gap: 0.6rem 1rem;
   color: var(--heading);
-  font-family: var(--display);
-  font-size: clamp(1.45rem, 1.2rem + 1vw, 1.8rem);
+  font-size: var(--t-body);
   font-weight: 700;
   line-height: 1.25;
 }
@@ -982,7 +970,7 @@ img {
   width: 100%;
   margin-top: 1.5rem;
   border-collapse: collapse;
-  font-size: 1.25rem;
+  font-size: var(--t-body);
 }
 
 .schedule th,
@@ -998,7 +986,6 @@ img {
 
 @media (max-width: 30rem) {
   .schedule {
-    font-size: 1.1875rem;
   }
 
   .schedule th,
@@ -1010,11 +997,10 @@ img {
 .schedule thead th {
   padding-block: 0.5rem;
   color: var(--muted);
-  font-size: 1.0625rem;
+  font-size: var(--t-small);
 }
 
 .schedule tbody th {
-  font-family: var(--display);
   font-weight: 700;
 }
 
@@ -1027,7 +1013,7 @@ img {
 .schedule .is-live th::after {
   display: inline-block;
   margin-left: 0.6rem;
-  font: 700 1.0625rem var(--font);
+  font: 700 var(--t-small) var(--font);
   vertical-align: middle;
 }
 
@@ -1055,7 +1041,18 @@ img {
 @media (min-width: 48rem) {
   .about {
     grid-template-columns: 1fr 20rem;
-    gap: 3.5rem;
+    grid-template-rows: auto 1fr;
+    gap: 2.5rem 3.5rem;
+  }
+
+  .about-photo {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+
+  .support {
+    grid-column: 1;
+    grid-row: 2;
   }
 }
 
@@ -1086,22 +1083,8 @@ img {
   }
 }
 
-/* Support Coast sits on a band of its own, right across the page. */
-.support {
-  margin-top: 4rem;
-  padding-block: 3rem 3.5rem;
-  background: var(--surface);
-  box-shadow: 0 0 0 100vmax var(--surface);
-  clip-path: inset(0 -100vmax);
-}
-
-main:has(.page:not([hidden]) .support) + .footer {
-  margin-top: 0;
-}
-
 .about .lead {
-  font-family: var(--display);
-  font-size: clamp(1.45rem, 1.15rem + 1.5vw, 2.1rem);
+  font-size: var(--t-body);
   font-weight: 500;
   line-height: 1.35;
   text-wrap: pretty;
@@ -1126,7 +1109,7 @@ main:has(.page:not([hidden]) .support) + .footer {
   border-radius: 0.7rem;
   background: var(--button);
   color: var(--on-button);
-  font: 700 1.1875rem var(--font);
+  font: 700 var(--t-body) var(--font);
   text-align: center;
   text-decoration: none;
   cursor: pointer;
@@ -1170,7 +1153,7 @@ main:has(.page:not([hidden]) .support) + .footer {
 }
 
 .other-ways {
-  font-size: 1.375rem;
+  font-size: var(--t-body);
   line-height: 1.5;
 }
 
@@ -1273,8 +1256,7 @@ textarea {
 }
 
 .ways dt {
-  font-family: var(--display);
-  font-size: 1.25rem;
+  font-size: var(--t-body);
   font-weight: 700;
 }
 
@@ -1323,9 +1305,9 @@ textarea {
 .footer {
   margin-top: 3.5rem;
   padding-block: 1.25rem;
-  background: var(--brand-deep);
+  background: var(--page);
   color: var(--on-brand);
-  font-size: 1rem;
+  font-size: var(--t-small);
 }
 
 .footer-inner {
@@ -1362,7 +1344,7 @@ textarea {
 
 .footer-small {
   grid-column: 1 / -1;
-  font-size: 0.9375rem;
+  font-size: var(--t-small);
 }
 
 @media (max-width: 68rem) {
@@ -1388,13 +1370,13 @@ input.slim {
 input.slim::-webkit-slider-runnable-track {
   height: 6px;
   border-radius: 3px;
-  background: linear-gradient(to right, #fff var(--fill, 80%), rgb(255 255 255 / 0.3) var(--fill, 80%));
+  background: linear-gradient(to right, var(--text) var(--fill, 80%), var(--line) var(--fill, 80%));
 }
 
 input.slim::-moz-range-track {
   height: 6px;
   border-radius: 3px;
-  background: linear-gradient(to right, #fff var(--fill, 80%), rgb(255 255 255 / 0.3) var(--fill, 80%));
+  background: linear-gradient(to right, var(--text) var(--fill, 80%), var(--line) var(--fill, 80%));
 }
 
 input.slim::-webkit-slider-thumb {
@@ -1404,7 +1386,7 @@ input.slim::-webkit-slider-thumb {
   margin-top: -8px;
   border: 0;
   border-radius: 50%;
-  background: #fff;
+  background: var(--text);
 }
 
 input.slim::-moz-range-thumb {
@@ -1412,7 +1394,7 @@ input.slim::-moz-range-thumb {
   height: 22px;
   border: 0;
   border-radius: 50%;
-  background: #fff;
+  background: var(--text);
 }
 
 /* When the song changes, the old one slides up and out and the new one
@@ -1470,9 +1452,9 @@ input.slim::-moz-range-thumb {
   inset: auto 0 0;
   z-index: 10;
   padding-bottom: env(safe-area-inset-bottom);
-  background: var(--brand-deep);
-  color: #fff;
-  box-shadow: 0 -0.25rem 1.2rem rgb(0 0 0 / 0.3);
+  background: var(--page);
+  color: var(--text);
+  border-top: 1px solid var(--line);
   visibility: hidden;
   transform: translateY(110%);
   transition: transform 0.25s ease, visibility 0.25s;
@@ -1540,7 +1522,7 @@ body:has(.player-bar.is-shown) .footer {
 
 .bar-artist {
   color: var(--on-brand-soft);
-  font-size: 1.0625rem;
+  font-size: var(--t-small);
 }
 
 .bar-controls {
@@ -1564,7 +1546,7 @@ body:has(.player-bar.is-shown) .footer {
   border-radius: 1.75rem;
   background: var(--amber);
   color: var(--on-amber);
-  font: 800 1.1875rem/1 var(--font);
+  font: 700 var(--t-body)/1 var(--font);
   white-space: nowrap;
   cursor: pointer;
 }
@@ -1574,8 +1556,8 @@ body:has(.player-bar.is-shown) .footer {
 }
 
 .is-playing .round-play {
-  background: #fff;
-  color: #0d3150;
+  background: var(--text);
+  color: var(--page);
 }
 
 .round-play svg {
@@ -1631,13 +1613,13 @@ body:has(.player-bar.is-shown) .footer {
   border: 0;
   border-radius: 50%;
   background: transparent;
-  color: #fff;
+  color: var(--text);
   cursor: pointer;
 }
 
 .mute-button:hover,
 .bar-expand:hover {
-  background: rgb(255 255 255 / 0.14);
+  background: var(--line);
 }
 
 .mute-button svg {
@@ -1706,8 +1688,8 @@ body:has(.player-bar.is-shown) .footer {
   margin: 0;
   padding: 0;
   border: 0;
-  background: var(--brand-deep);
-  color: #fff;
+  background: var(--page);
+  color: var(--text);
 }
 
 .player-view[open] {
@@ -1715,7 +1697,7 @@ body:has(.player-bar.is-shown) .footer {
 }
 
 .player-view::backdrop {
-  background: var(--brand-deep);
+  background: var(--page);
 }
 
 .player-view-inner {
@@ -1743,16 +1725,16 @@ body:has(.player-bar.is-shown) .footer {
   gap: 0.4rem;
   min-height: 3rem;
   padding: 0.35rem 1.1rem 0.35rem 0.8rem;
-  border: 2px solid rgb(255 255 255 / 0.6);
+  border: 2px solid var(--field);
   border-radius: 0.7rem;
   background: transparent;
-  color: #fff;
-  font: 700 1.0625rem var(--font);
+  color: var(--text);
+  font: 700 var(--t-small) var(--font);
   cursor: pointer;
 }
 
 .close-player:hover {
-  background: #fff;
+  background: var(--text);
   color: #0d3150;
 }
 
@@ -1774,7 +1756,7 @@ body:has(.player-bar.is-shown) .footer {
 }
 
 .full-song {
-  font-size: 1.75rem;
+  font-size: var(--t-heading);
   font-weight: 700;
   line-height: 1.2;
 }
@@ -1782,7 +1764,7 @@ body:has(.player-bar.is-shown) .footer {
 .full-artist {
   margin-top: 0.3rem;
   color: var(--on-brand-soft);
-  font-size: 1.25rem;
+  font-size: var(--t-small);
 }
 
 /* Live radio has nothing to rewind, so the line stays full, marked Live. */
@@ -1797,14 +1779,14 @@ body:has(.player-bar.is-shown) .footer {
   flex: 1;
   height: 4px;
   border-radius: 2px;
-  background: #fff;
+  background: var(--text);
 }
 
 .live-line-label {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  font-size: 1rem;
+  font-size: var(--t-small);
   font-weight: 800;
 }
 
@@ -1833,7 +1815,7 @@ body:has(.player-bar.is-shown) .footer {
 }
 
 .full-next span {
-  color: #fff;
+  color: var(--text);
   font-weight: 700;
 }
 
@@ -1873,8 +1855,8 @@ body:has(.player-bar.is-shown) .footer {
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     color-scheme: dark;
-    --page: #0b1622;
-    --surface: #14222f;
+    --page: var(--brand-deep);
+    --surface: var(--page);
     --field-bg: #0f1c29;
     --text: #e9eef3;
     --muted: #aab7c4;
@@ -1895,8 +1877,8 @@ body:has(.player-bar.is-shown) .footer {
 
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --page: #0b1622;
-  --surface: #14222f;
+  --page: var(--brand-deep);
+  --surface: var(--page);
   --field-bg: #0f1c29;
   --text: #e9eef3;
   --muted: #aab7c4;
@@ -2049,7 +2031,7 @@ body:has(.player-bar.is-shown) .footer {
   .on-air {
     grid-row: 1;
     gap: 0.35rem 0.65rem;
-    font-size: 1rem;
+    font-size: var(--t-small);
     font-weight: 400;
     color: var(--on-brand-soft);
   }
@@ -2061,7 +2043,7 @@ body:has(.player-bar.is-shown) .footer {
   .on-air .sign {
     padding: 0.15rem 0.5rem;
     border-width: 1px;
-    font-size: 0.75rem;
+    font-size: var(--t-small);
   }
 
   .studio h1 {
@@ -2069,7 +2051,6 @@ body:has(.player-bar.is-shown) .footer {
     grid-column: 1;
     max-width: none;
     margin-top: 0.85rem;
-    font-size: 1.6rem;
     line-height: 1.15;
     text-wrap: balance;
   }
@@ -2125,17 +2106,15 @@ body:has(.player-bar.is-shown) .footer {
   }
 
   .now-label {
-    font-size: 0.875rem;
+    font-size: var(--t-small);
   }
 
   .now-song {
     margin-top: 0.1rem;
-    font-size: 1.3rem;
   }
 
   .now-artist {
     margin-top: 0.1rem;
-    font-size: 1.0625rem;
     color: var(--on-brand-soft);
   }
 
@@ -2146,8 +2125,8 @@ body:has(.player-bar.is-shown) .footer {
     gap: 0;
     margin-top: 0.9rem;
     padding-top: 0.75rem;
-    border-top: 1px solid rgb(255 255 255 / 0.16);
-    font-size: 1rem;
+    border-top: 1px solid var(--line);
+    font-size: var(--t-small);
     line-height: 1.4;
   }
 
@@ -2163,7 +2142,7 @@ body:has(.player-bar.is-shown) .footer {
 
   .up-next-label {
     flex: none;
-    font-size: 0.875rem;
+    font-size: var(--t-small);
   }
 
   .next-song {
@@ -2178,7 +2157,6 @@ body:has(.player-bar.is-shown) .footer {
 
   .block h2 {
     margin-bottom: 0.75rem;
-    font-size: 1.4rem;
   }
 
   .played {
@@ -2202,23 +2180,19 @@ body:has(.player-bar.is-shown) .footer {
   }
 
   .played-song {
-    font-size: 1.0625rem;
     font-weight: 700;
   }
 
   .played-artist {
-    font-size: 1rem;
   }
 
   .lead,
   .welcome .lead {
-    font-size: 1.1875rem;
     line-height: 1.5;
   }
 
   .welcome .sign-off {
     margin-top: 0.75rem;
-    font-size: 1.125rem;
   }
 
   .button-row {
@@ -2231,12 +2205,10 @@ body:has(.player-bar.is-shown) .footer {
   }
 
   .page-head h1 {
-    font-size: 1.75rem;
   }
 
   .page-head .lead {
     margin-top: 0.5rem;
-    font-size: 1.0625rem;
   }
 
   .page-head + .block {
@@ -2244,12 +2216,10 @@ body:has(.player-bar.is-shown) .footer {
   }
 
   .live-show {
-    font-size: 1.25rem;
   }
 
   .schedule {
     margin-top: 1rem;
-    font-size: 1.125rem;
   }
 
   .schedule th,
@@ -2281,7 +2251,6 @@ body:has(.player-bar.is-shown) .footer {
   }
 
   .footer-small {
-    font-size: 0.875rem;
   }
 
   body:has(.player-bar.is-shown) .footer {
@@ -2354,4 +2323,49 @@ body {
 body > main {
   flex: 1;
   min-width: 0;
+}
+
+/* The menu opens quickly from under the gear. */
+@media (prefers-reduced-motion: no-preference) {
+  .settings[open] .settings-panel {
+    transform-origin: top right;
+    animation: settings-open 0.14s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .settings summary,
+  .settings summary svg {
+    transition: none;
+  }
+}
+
+@keyframes settings-open {
+  from {
+    opacity: 0;
+    transform: translateY(-0.35rem) scale(0.97);
+  }
+}
+
+/* The logo: navy on the light page, white on the dark one. */
+img.logo-on-dark {
+  display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) img.logo-on-light {
+    display: none;
+  }
+
+  :root:not([data-theme="light"]) img.logo-on-dark {
+    display: block;
+  }
+}
+
+:root[data-theme="dark"] img.logo-on-light {
+  display: none;
+}
+
+:root[data-theme="dark"] img.logo-on-dark {
+  display: block;
 }
