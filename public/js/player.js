@@ -26,8 +26,8 @@ audio.hidden = true;
 controls.hidden = false;
 audio.volume = 0.8;
 
-// is-playing turns the buttons into Stop. is-connecting shows the turning
-// ring until sound is actually coming out.
+// is-playing turns the buttons into Stop. is-connecting shows a spinner
+// until sound is actually coming out.
 function showListening(listening, connecting) {
   document.body.classList.toggle('is-playing', listening);
   document.body.classList.toggle('is-connecting', Boolean(listening && connecting));

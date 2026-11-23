@@ -562,39 +562,67 @@ img {
   display: block;
 }
 
-.is-playing .listen-button {
-  background: transparent;
-  color: var(--text);
-  box-shadow: inset 0 0 0 2px var(--text), 0 0.4rem 0 rgb(0 0 0 / 0.35);
+/* Listen live and Stop are the same button with a different icon. Each label
+   reserves the width of the longer words, so the button never changes size. */
+.listen-button [data-play-label] {
+  display: inline-grid;
 }
 
-.is-playing .listen-button:active {
-  box-shadow: inset 0 0 0 2px var(--text), 0 0.15rem 0 rgb(0 0 0 / 0.35);
+.listen-button [data-play-label]::after {
+  content: "Listen live";
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
 }
 
-.is-playing .listen-icon {
-  background: var(--text);
+@media (min-width: 48rem) {
+  .play-word {
+    display: inline-grid;
+  }
+
+  .play-word::after {
+    content: "Listen live";
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+  }
 }
 
-.is-playing .listen-icon svg {
-  fill: var(--page);
+/* While the station connects, a small spinner takes the icon's place. */
+.is-connecting .listen-icon svg,
+.is-connecting .round-play svg {
+  display: none;
 }
 
-/* While the station is connecting, a ring turns around the button's icon. */
 .is-connecting .listen-icon::after,
-.is-connecting .round-play::after {
+.is-connecting .round-play::before {
   content: "";
-  position: absolute;
-  inset: -0.35rem;
-  border: 0.2rem solid var(--line);
-  border-top-color: var(--text);
+  display: block;
+  flex: none;
+  width: 1.6rem;
+  height: 1.6rem;
   border-radius: 50%;
+}
+
+.is-connecting .listen-icon::after {
+  border: 0.2rem solid rgb(246 183 60 / 0.3);
+  border-top-color: var(--amber);
+}
+
+.is-connecting .round-play::before {
+  border: 0.2rem solid rgb(11 33 52 / 0.25);
+  border-top-color: var(--on-amber);
+}
+
+.is-connecting .round-play-large::before {
+  width: 2.5rem;
+  height: 2.5rem;
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .is-connecting .listen-icon::after,
-  .is-connecting .round-play::after {
-    animation: turn 0.9s linear infinite;
+  .is-connecting .round-play::before {
+    animation: turn 0.8s linear infinite;
   }
 }
 
@@ -1555,11 +1583,6 @@ body:has(.player-bar.is-shown) .footer {
   background: var(--amber-hover);
 }
 
-.is-playing .round-play {
-  background: var(--text);
-  color: var(--page);
-}
-
 .round-play svg {
   width: 1.8rem;
   height: 1.8rem;
@@ -2368,4 +2391,74 @@ img.logo-on-dark {
 
 :root[data-theme="dark"] img.logo-on-dark {
   display: block;
+}
+
+/* Every page has the same colour blocks: navy for the header and the top
+   of the page, deep navy for what's on and the footer, with the page
+   colour between. */
+body:has(.page) {
+  --surface: #f2e9d6;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) body:has(.page) {
+    --page: #0b1622;
+    --surface: #14222f;
+  }
+}
+
+:root[data-theme="dark"] body:has(.page) {
+  --page: #0b1622;
+  --surface: #14222f;
+}
+
+body:has(.page) :is(.site-header, .studio, .page-head, .footer, .player-bar) {
+  --text: #fff;
+  --heading: #fff;
+  --muted: #dbe6f0;
+  --on-brand: #fff;
+  --on-brand-soft: #dbe6f0;
+  --line: rgb(255 255 255 / 0.25);
+  --field: rgb(255 255 255 / 0.5);
+  --page: var(--brand-deep);
+  --focus: #fff;
+  color: #fff;
+}
+
+body:has(.page) :is(.site-header, .studio, .page-head) {
+  background: var(--brand);
+}
+
+body:has(.page) .page-head {
+  padding-block: 1rem 2rem;
+}
+
+body:has(.page) .page-head + .block {
+  padding-top: 2rem;
+}
+
+body:has(.page) :is(.on-now, .footer, .player-bar) {
+  background: var(--brand-deep);
+}
+
+body:has(.page) .settings-panel {
+  background: var(--brand-deep);
+}
+
+body:has(.page) :is(.site-header, .footer) img.logo-on-light {
+  display: none;
+}
+
+body:has(.page) :is(.site-header, .footer) img.logo-on-dark {
+  display: block;
+}
+
+/* Faint slats, like the wooden panel behind Jim in the photo. */
+.studio::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 0 55%;
+  background: repeating-linear-gradient(to bottom, rgb(255 255 255 / 0.035) 0 0.9rem, transparent 0.9rem 1.8rem);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 45%);
+  mask-image: linear-gradient(to right, transparent, #000 45%);
 }
