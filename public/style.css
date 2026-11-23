@@ -566,6 +566,7 @@ img {
    reserves the width of the longer words, so the button never changes size. */
 .listen-button [data-play-label] {
   display: inline-grid;
+  text-align: left;
 }
 
 .listen-button [data-play-label]::after {
@@ -578,6 +579,7 @@ img {
 @media (min-width: 48rem) {
   .play-word {
     display: inline-grid;
+    text-align: left;
   }
 
   .play-word::after {
