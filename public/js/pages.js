@@ -31,6 +31,14 @@ export function pageForLink(link) {
   return pageExists(id) ? id : null;
 }
 
+// A link to another website. Email, text and phone links aren't, nor are
+// links that already choose where they open.
+function isOutsideLink(link) {
+  if (link.target || link.hasAttribute('download')) return false;
+  const url = new URL(link.href, location.href);
+  return /^https?:$/.test(url.protocol) && url.host !== location.host;
+}
+
 function pageFromAddress() {
   const id = location.pathname.replace(/\.html$/, '').replace(/\/+$/, '').slice(1);
   return pageExists(id) ? id : 'home';
@@ -110,6 +118,12 @@ document.addEventListener('click', (event) => {
   if (event.defaultPrevented || event.button !== 0) return;
   if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
   const link = event.target.closest('a');
+  if (link && isOutsideLink(link)) {
+    // Other websites open in a new tab, so the music keeps playing here.
+    event.preventDefault();
+    window.open(link.href, '_blank', 'noopener');
+    return;
+  }
   const id = link && pageForLink(link);
   if (!id) return;
 
