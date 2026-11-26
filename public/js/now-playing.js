@@ -232,6 +232,8 @@ async function updateTracks() {
     });
     if (!response.ok) return;
     const data = await response.json();
+    // The on-air sign follows what is actually playing.
+    window.dispatchEvent(new CustomEvent('coast:on-air', { detail: data.title || '' }));
 
     if (data.title && data.title !== currentTitle) {
       currentTitle = data.title;

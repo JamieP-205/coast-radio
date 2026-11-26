@@ -24,6 +24,17 @@ let shows = readShows();
 let liveOverride = { mode: 'auto' };
 let wasLive = false;
 
+// What the stream says is on. Jim's studio sends "Live - Now On Air" while he
+// is broadcasting and "REPEAT SHOW" during repeats, so the sign is right even
+// when he starts late, runs over or does a show that isn't on the list. Until
+// the first check comes back, the show times are used instead.
+const LIVE_TITLE = /^live\s*-\s*now on air/i;
+const REPEAT_TITLE = /\d{6}\s+REP\w*\s+SHOW/i;
+const LIVE_GRACE_MS = 3 * 60 * 1000;
+let streamKnown = false;
+let liveSeenAt = 0;
+let repeatOn = false;
+
 function ukNow() {
   const parts = new Intl.DateTimeFormat('en-GB', {
     timeZone: 'Europe/London',
@@ -48,19 +59,23 @@ function nextShowMessage(now, notToday = false) {
   return 'See the show times.';
 }
 
-function liveMessage(now, live, override) {
-  if (override === 'on') return 'Jim is live now.';
-  if (live) return `Jim is live now, until ${formatHour(live.end)}.`;
+function liveMessage(now, { isLive, isRepeat, slot, override }) {
+  if (isLive) return slot ? `Jim is live now, until ${formatHour(slot.end)}.` : 'Jim is live now.';
   if (override === 'off') return `No live show today. ${nextShowMessage(now, true)}`;
+  if (slot) return `Jim is due on at ${formatHour(slot.start)}.`;
+  if (isRepeat) return `A repeat of Jim's show. ${nextShowMessage(now)}`;
   return nextShowMessage(now);
 }
 
 function updateLiveShow() {
   const now = ukNow();
   const override = liveSwitchMode(liveOverride);
-  const live = override === 'off' ? undefined : shows.find((show) => show.day === now.day
+  const slot = override === 'off' ? undefined : shows.find((show) => show.day === now.day
     && now.minutes >= show.start * 60 && now.minutes < show.end * 60);
-  const isLive = override === 'on' || Boolean(live);
+  const streamLive = Date.now() - liveSeenAt < LIVE_GRACE_MS;
+  const isLive = override === 'on' || (streamKnown ? streamLive : Boolean(slot));
+  const isRepeat = !isLive && streamKnown && repeatOn;
+  const live = isLive ? slot : undefined;
 
   shows.forEach((show) => {
     show.row.classList.toggle('is-today', show.day === now.day && show !== live);
@@ -68,7 +83,7 @@ function updateLiveShow() {
   });
 
   onAirTags.forEach((tag) => {
-    tag.textContent = isLive ? 'Jim is live' : '24-hour playlist';
+    tag.textContent = isLive ? 'Jim is live' : isRepeat ? 'Repeat show' : '24-hour playlist';
     tag.classList.toggle('is-live', isLive);
   });
 
@@ -81,11 +96,20 @@ function updateLiveShow() {
   }
   wasLive = isLive;
 
-  const message = liveMessage(now, live, override);
+  const message = liveMessage(now, { isLive, isRepeat, slot, override });
   nextShowTexts.forEach((text) => {
     text.textContent = message;
   });
 }
+
+window.addEventListener('coast:on-air', ({ detail: title }) => {
+  streamKnown = true;
+  repeatOn = REPEAT_TITLE.test(title);
+  if (LIVE_TITLE.test(title)) liveSeenAt = Date.now();
+  // A repeat starting means Jim has finished, so there's no need to wait.
+  if (repeatOn) liveSeenAt = 0;
+  updateLiveShow();
+});
 
 updateLiveShow();
 setInterval(updateLiveShow, 60000);
