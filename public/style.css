@@ -2255,27 +2255,40 @@ body:has(.player-bar.is-shown) .footer {
   /* Footer: smaller, and it carries the space the player bar needs so no
      strip of page colour shows underneath it. */
   .footer {
-    margin-top: 2.5rem;
-    padding-block: 1.25rem;
+    margin-top: 2rem;
+    padding-block: 1rem;
   }
 
   .footer-inner {
     grid-template-columns: 1fr;
+    gap: 0.25rem;
   }
 
   .footer-logo {
-    height: 2rem;
+    height: 1.75rem;
+  }
+
+  /* The tagline repeats the page above, so phones skip it. */
+  .footer-inner > p[data-edit="footerTagline"] {
+    display: none;
   }
 
   .footer-links {
     gap: 0 1rem;
   }
 
+  /* The long email address goes last, so the short links share one line. */
+  .footer-links li:has([data-contact="email"]) {
+    order: 1;
+  }
+
   .footer-links a {
-    min-height: 2.5rem;
+    min-height: 2.25rem;
   }
 
   .footer-small {
+    font-size: 0.875rem;
+    line-height: 1.45;
   }
 
   body:has(.player-bar.is-shown) .footer {
