@@ -56,6 +56,21 @@ test('text that is too long is refused', () => {
   assert.match(errors[0], /too long/);
 });
 
+test('contact links can only go to their own sites', () => {
+  const ok = goodContent();
+  ok.contacts.facebook = 'https://m.facebook.com/jim.parr.9';
+  ok.contacts.x = 'https://twitter.com/coast_radio';
+  ok.contacts.donate = 'https://paypal.me/coastinternetradio';
+  assert.equal(validateContent(ok).errors, undefined);
+
+  for (const [key, link] of [['facebook', 'https://facebook.com.evil.example/x'], ['x', 'https://x.co/abc'],
+    ['donate', 'https://paypal.example.com/donate'], ['facebook', 'https://notfacebook.com/jim']]) {
+    const input = goodContent();
+    input.contacts[key] = link;
+    assert.match(validateContent(input).errors.join(' '), /has to go to/, link);
+  }
+});
+
 test('links must be https and photos must come from the site', () => {
   const input = goodContent();
   input.contacts.donate = 'javascript:alert(1)';

@@ -38,6 +38,20 @@ function isWebLink(value) {
   }
 }
 
+// Each contact link may only go to its own site, so a stolen sign-in can't
+// point listeners somewhere harmful.
+export const LINK_SITES = {
+  facebook: { name: 'Facebook', sites: ['facebook.com'] },
+  x: { name: 'X', sites: ['x.com', 'twitter.com'] },
+  donate: { name: 'donate', sites: ['paypal.com', 'paypal.me'] },
+};
+
+export function isLinkTo(value, sites) {
+  if (!isWebLink(value)) return false;
+  const host = new URL(value).hostname.toLowerCase();
+  return sites.some((site) => host === site || host.endsWith(`.${site}`));
+}
+
 function checkText(input, errors) {
   const text = {};
   for (const [key, { name, max }] of Object.entries(TEXT_FIELDS)) {
@@ -73,8 +87,9 @@ function checkContacts(input, errors) {
   };
   if (!PHONE.test(contacts.phone)) errors.push('The phone number should only have numbers and spaces.');
   if (!EMAIL.test(contacts.email)) errors.push('The email address doesn\'t look right.');
-  for (const [key, name] of [['facebook', 'Facebook'], ['x', 'X'], ['donate', 'donate']]) {
+  for (const [key, { name, sites }] of Object.entries(LINK_SITES)) {
     if (!isWebLink(contacts[key])) errors.push(`The ${name} link should start with https://`);
+    else if (!isLinkTo(contacts[key], sites)) errors.push(`The ${name} link has to go to ${sites.join(' or ')}.`);
   }
   return contacts;
 }

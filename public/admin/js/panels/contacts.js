@@ -1,6 +1,6 @@
 // Contact details: the phone number, email and links shown on the website.
 
-import { isEmail, isPhone, isWebLink } from '../checks.js';
+import { LINK_SITES, isEmail, isLinkTo, isPhone, isWebLink } from '../checks.js';
 import { change, content, showSaveState } from '../draft.js';
 
 const contactFields = document.querySelectorAll('[data-contact-field]');
@@ -11,15 +11,22 @@ const PROBLEMS = {
 };
 const LINK_PROBLEM = 'Not saved yet. Paste the whole link, starting with https://';
 
+function problemFor(name, value) {
+  if (CHECKS[name]) return CHECKS[name](value) ? '' : PROBLEMS[name];
+  if (!isWebLink(value)) return LINK_PROBLEM;
+  const sites = LINK_SITES[name];
+  return isLinkTo(value, sites) ? '' : `Not saved yet. This link has to go to ${sites.join(' or ')}.`;
+}
+
 contactFields.forEach((input) => {
   const name = input.dataset.contactField;
-  const check = CHECKS[name] || isWebLink;
   const problem = document.getElementById(`${input.id}-problem`);
   input.addEventListener('input', () => {
     const value = input.value.trim();
-    const ok = check(value);
+    const message = problemFor(name, value);
+    const ok = !message;
     input.setAttribute('aria-invalid', String(!ok));
-    problem.textContent = ok ? '' : PROBLEMS[name] || LINK_PROBLEM;
+    problem.textContent = message;
     if (ok) {
       change((draft) => {
         draft.contacts[name] = value;
