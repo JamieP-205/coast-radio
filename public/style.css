@@ -718,6 +718,16 @@ img {
   font-weight: 700;
 }
 
+/* While Jim is live, his photo replaces the cover and the label turns red. */
+.now.is-live .now-label {
+  color: var(--live-glow);
+}
+
+.now.is-live .now-art {
+  outline: 3px solid var(--live);
+  outline-offset: 3px;
+}
+
 /* Little level bars that move while the station is playing. */
 .bars {
   display: inline-flex;

@@ -23,6 +23,7 @@ const comingUpTexts = document.querySelectorAll('[data-coming-up]');
 const upNextLines = document.querySelectorAll('[data-up-next]');
 const previouslyPlayed = document.getElementById('previously-played');
 const nowPlayingBlocks = document.querySelectorAll('.now, .bar-open, .full-now');
+const nowLabels = document.querySelectorAll('.now-label');
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
 let currentTitle = '';
@@ -34,7 +35,16 @@ function tidyName(text) {
   return text.replace(/[\s._-]*\bmp3\b/gi, '').trim();
 }
 
+// During Jim's shows the stream sends a title like "Live - Now On Air...Jim
+// Parr", and repeats look like "261124 REPEAT SHOW". Those read badly as a
+// song, so they get Jim's photo and plain words instead.
+const LIVE_TITLE = /^live\s*-\s*now on air/i;
+const REPEAT_TITLE = /\d{6}\s+REP\w*\s+SHOW/i;
+const JIM_ART = 'images/jim-studio-2014.webp';
+
 function splitTrack(text) {
+  if (LIVE_TITLE.test(text)) return { song: 'Jim Parr', artist: 'Live from the Coast studio', art: JIM_ART, live: true };
+  if (REPEAT_TITLE.test(text)) return { song: 'Jim Parr', artist: 'Repeat of a recent live show', art: JIM_ART };
   const clean = text.replace(/\s*\(\d+:\d+\)\s*$/, '');
   const dash = clean.indexOf(' - ');
   if (dash === -1) return { artist: '', song: tidyName(clean) };
@@ -75,6 +85,7 @@ function searchArtwork(term, entity, accept) {
 // Some files have no dash between artist and song, such as "Adios Larry
 // Cunningham", so then the whole name is checked against both.
 function findArtwork(track, size) {
+  if (track.art) return Promise.resolve(track.art);
   const key = `${track.artist} ${track.song}`.trim();
   if (!artworkCache.has(key)) {
     const artist = track.artist || track.song;
@@ -134,6 +145,10 @@ async function showNowPlaying(track) {
     [nowArt, barArt, fullArt].forEach((image) => {
       image.src = art;
     });
+    nowLabels.forEach((label) => {
+      label.lastChild.textContent = track.live ? ' On air now' : ' Now playing';
+    });
+    nowPlayingBlocks.forEach((block) => block.classList.toggle('is-live', Boolean(track.live)));
   });
 
   if ('mediaSession' in navigator) {
@@ -141,8 +156,8 @@ async function showNowPlaying(track) {
       title: track.song,
       artist: track.artist,
       album: 'Coast Internet Radio',
-      artwork: art === FALLBACK_ART
-        ? [{ src: 'images/jim-studio-2014.webp', sizes: '830x826', type: 'image/webp' }]
+      artwork: art === FALLBACK_ART || art === JIM_ART
+        ? [{ src: JIM_ART, sizes: '830x826', type: 'image/webp' }]
         : [{ src: art, sizes: '600x600' }],
     });
   }
