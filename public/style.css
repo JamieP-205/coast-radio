@@ -1242,6 +1242,7 @@ img {
 }
 
 input:not([type]),
+input[type="email"],
 select,
 textarea {
   width: 100%;

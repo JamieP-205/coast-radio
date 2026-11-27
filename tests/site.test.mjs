@@ -184,7 +184,7 @@ function checkForm(name, fieldNames, required) {
 }
 
 test('the song request form matches what Netlify and the request receiver expect', () => {
-  checkForm('song-request', ['bot-field', 'song', 'artist', 'name', 'message'], ['song', 'artist']);
+  checkForm('song-request', ['bot-field', 'song', 'artist', 'name', 'message', 'email'], ['song', 'artist']);
 });
 
 test('the feedback form matches what Netlify expects', () => {
