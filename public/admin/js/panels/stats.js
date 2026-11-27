@@ -30,8 +30,8 @@ function daysInRange() {
   const rows = [];
   for (let at = start; at <= end; at = new Date(at.getTime() + DAY_MS)) {
     const iso = isoOf(at);
-    const [, visits = 0, views = 0, listens = 0, peak = null, average = null] = byDate.get(iso) || [];
-    rows.push({ iso, visits, views, listens, peak, average });
+    const [, visits = 0, views = 0, listens = 0, peak = null, average = null, requests = 0] = byDate.get(iso) || [];
+    rows.push({ iso, visits, views, listens, peak, average, requests });
   }
   return rows;
 }
@@ -195,11 +195,12 @@ function render() {
 
   panel.querySelector('[data-tile="visits"]').textContent = sum('visits').toLocaleString('en-GB');
   panel.querySelector('[data-tile="listens"]').textContent = sum('listens').toLocaleString('en-GB');
+  panel.querySelector('[data-tile="requests"]').textContent = sum('requests').toLocaleString('en-GB');
   panel.querySelector('[data-tile="peak"]').textContent = peaks.length ? Math.max(...peaks) : '–';
   panel.querySelector('[data-stats-since]').textContent = `Counting since ${short(data.days[0][0])}`;
 
   drawChart(panel.querySelector('[data-chart="visits"]'), rows, (row) => row.visits,
-    { kind: 'bars', describe: (row) => `${plural(row.visits, 'visit')}, ${plural(row.views, 'page')} viewed` });
+    { kind: 'bars', describe: (row) => `${plural(row.visits, 'visit')}, ${plural(row.views, 'page')} viewed${row.requests ? `, ${plural(row.requests, 'request')}` : ''}` });
   drawChart(panel.querySelector('[data-chart="listeners"]'), rows, (row) => row.peak,
     { kind: 'line', describe: (row) => (row.peak === null ? 'not counted yet' : `${row.peak} at most, ${row.average} on average`) });
   drawRanking(panel.querySelector('[data-rank="sources"]'), totals(data.sources, from));

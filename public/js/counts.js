@@ -1,6 +1,7 @@
 // Anonymous counts for the editor's Visitors and listeners view: one count
-// per visit (with the site it came from), each page viewed, and the first
-// Listen press. No cookies, and nothing that identifies the visitor is sent.
+// per visit (with the site it came from), each page viewed, the first Listen
+// press and each song request sent. No cookies, and nothing that identifies
+// the visitor or what they requested is sent.
 
 import { isPreview } from './pages.js';
 
@@ -47,6 +48,9 @@ if (!isPreview && !navigator.webdriver) {
     if (detail !== pageNow()) return;
     send({ type: 'view', page: detail });
   });
+
+  // A song request was sent. Only that it happened: never what was in it.
+  window.addEventListener('coast:request-sent', () => send({ type: 'request' }));
 
   // Listen presses: once per visit, so stopping and starting again isn't counted twice.
   document.addEventListener('click', (event) => {

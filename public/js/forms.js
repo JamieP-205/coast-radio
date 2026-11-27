@@ -20,6 +20,7 @@ document.querySelectorAll('[data-form]').forEach((form) => {
       if (!response.ok) throw new Error(response.statusText);
       form.reset();
       status.textContent = form.dataset.success;
+      if (form.name === 'song-request') window.dispatchEvent(new CustomEvent('coast:request-sent'));
     } catch {
       status.classList.add('is-error');
       status.textContent = "That didn't send. Please try again, or email coastradio@hotmail.com.";

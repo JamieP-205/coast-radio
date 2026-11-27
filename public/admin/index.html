@@ -50,6 +50,7 @@
 
         <!-- The list of things Jim can change -->
         <section class="panel" data-panel="menu" aria-labelledby="menu-heading">
+          <button type="button" class="stats-link" data-open="stats"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg><span><strong>Visitors and listeners</strong> See how the station is doing</span></button>
           <h1 id="menu-heading" tabindex="-1">What would you like to change?</h1>
           <p class="hint">Choose from the list, or click anything on the website with an <span class="dashed">orange dashed line</span> around it.</p>
           <ul class="menu">
@@ -60,7 +61,6 @@
             <li><button type="button" data-open="announcement"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4h3l7 4V6L7 10H4zM17 9a4 4 0 0 1 0 6"/></svg><span><strong>Announcement</strong> A message across the top of every page</span></button></li>
             <li><button type="button" data-open="news"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 9h8M8 13h8M8 17h5"/></svg><span><strong>News</strong> A short news story on the home page</span></button></li>
             <li><button type="button" data-open="shows"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span><strong>Show times and going live</strong> When you're on air</span></button></li>
-            <li><button type="button" data-open="stats"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg><span><strong>Visitors and listeners</strong> How the website and station are doing</span></button></li>
             <li><button type="button" data-open="contacts"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg><span><strong>Contact details</strong> Phone, email, Facebook, X and donations</span></button></li>
           </ul>
 
@@ -214,6 +214,7 @@
             <div class="tiles">
               <p class="tile"><strong data-tile="visits">0</strong> visits</p>
               <p class="tile"><strong data-tile="listens">0</strong> Listen live presses</p>
+              <p class="tile"><strong data-tile="requests">0</strong> song requests</p>
               <p class="tile"><strong data-tile="peak">–</strong> most listening at once</p>
             </div>
             <section class="chart-card">
