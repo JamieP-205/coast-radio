@@ -9,5 +9,6 @@ import './now-playing.js';
 import './schedule.js';
 import './content.js';
 import './songs.js';
+import './counts.js';
 
 keepOnePageInDocument();

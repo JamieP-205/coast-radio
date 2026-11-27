@@ -909,3 +909,185 @@ textarea[aria-invalid="true"] {
 .toast.is-problem {
   background: var(--red);
 }
+
+/* Visitors and listeners. The preview steps aside so the charts have room. */
+
+.is-wide-panel .preview {
+  display: none;
+}
+
+@media (min-width: 64rem) {
+  .is-wide-panel .workspace {
+    grid-template-columns: 1fr;
+  }
+}
+
+.stats {
+  position: relative;
+  max-width: 60rem;
+  margin-inline: auto;
+}
+
+.stats-ranges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1rem 0 1.25rem;
+}
+
+.stats-ranges button {
+  min-height: 2.5rem;
+  padding: 0 1rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.stats-ranges button[aria-pressed="true"] {
+  border-color: var(--navy);
+  background: var(--navy);
+  color: #fff;
+}
+
+.stats-empty {
+  padding: 2rem 0;
+  color: var(--muted);
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.tile {
+  padding: 1rem 1.1rem;
+  border-radius: 0.75rem;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 1rem;
+}
+
+.tile strong {
+  display: block;
+  color: var(--text);
+  font-size: 2.25rem;
+  line-height: 1.1;
+}
+
+.chart-card {
+  margin-bottom: 1rem;
+  padding: 1rem 1.1rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+}
+
+.chart-card h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.05rem;
+}
+
+.chart-pair {
+  display: grid;
+  gap: 0 1rem;
+}
+
+@media (min-width: 48rem) {
+  .chart-pair {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.chart {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.chart-grid {
+  stroke: var(--line);
+  stroke-width: 1;
+}
+
+.chart-axis {
+  fill: var(--muted);
+  font-family: var(--font);
+  font-size: 12px;
+}
+
+.chart-bar {
+  fill: var(--navy);
+}
+
+.chart-bar.is-active {
+  fill: var(--navy-deep);
+}
+
+.chart-line {
+  fill: none;
+  stroke: var(--navy);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.chart-dot {
+  fill: var(--navy);
+  stroke: var(--bg);
+  stroke-width: 2;
+  opacity: 0;
+}
+
+.chart-dot.is-active {
+  opacity: 1;
+}
+
+.chart-hit {
+  fill: transparent;
+}
+
+.chart-tip {
+  position: absolute;
+  z-index: 2;
+  padding: 0.35rem 0.6rem;
+  border-radius: 0.4rem;
+  background: var(--text);
+  color: #fff;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.rank {
+  padding: 0;
+  list-style: none;
+}
+
+.rank li {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.2rem 0.75rem;
+  margin-bottom: 0.7rem;
+  font-size: 1rem;
+}
+
+.rank-count {
+  font-weight: 700;
+}
+
+.rank-bar {
+  grid-column: 1 / -1;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: linear-gradient(var(--navy), var(--navy)) no-repeat 0 0 / var(--share) 100%, var(--surface);
+}
+
+.rank-empty {
+  color: var(--muted);
+}

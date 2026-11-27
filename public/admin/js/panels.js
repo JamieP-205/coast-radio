@@ -11,6 +11,7 @@ import { fillHome } from './panels/home.js';
 import { fillNews } from './panels/news.js';
 import { fillPhotos, focusPhoto } from './panels/photos.js';
 import { fillShows } from './panels/shows.js';
+import { fillStats } from './panels/stats.js';
 import { fillWords, focusWord } from './panels/words.js';
 
 const PANELS = {
@@ -22,11 +23,14 @@ const PANELS = {
   news: { fill: fillNews, page: 'home' },
   shows: { fill: fillShows, page: 'shows' },
   contacts: { fill: fillContacts, page: 'requests' },
+  stats: { fill: fillStats, wide: true },
 };
 
 // Called when the editor opens, and again after Undo or throwing changes away.
 export function fillPanels() {
-  Object.values(PANELS).forEach(({ fill }) => fill());
+  Object.values(PANELS).forEach(({ fill, wide }) => {
+    if (!wide) fill();
+  });
 }
 
 function openPanel(name, focus = true) {
@@ -37,6 +41,8 @@ function openPanel(name, focus = true) {
   document.querySelectorAll('[data-panel]').forEach((panel) => {
     panel.hidden = panel.dataset.panel !== name;
   });
+  // The charts need the room, so the preview steps aside while they're open.
+  document.body.classList.toggle('is-wide-panel', Boolean(PANELS[name]?.wide));
   document.querySelector('.side').scrollTop = 0;
   window.scrollTo(0, 0);
   if (focus) document.querySelector(`[data-panel="${name}"] h1`).focus();
