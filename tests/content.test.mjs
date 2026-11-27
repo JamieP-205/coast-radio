@@ -7,7 +7,7 @@ function goodContent() {
     colours: 'sea',
     text: Object.fromEntries(Object.keys(TEXT_FIELDS).map((key) => [key, `Some ${key} words`])),
     photos: {
-      studio: { src: 'images/jim-studio.webp', alt: 'Jim at the microphone' },
+      studio: { src: 'images/jim-studio-2014.webp', alt: 'Jim at the microphone' },
       about: { src: '/api/photos/0f8fad5b-d9cb-469f-a165-70867728950e', alt: 'Jim with his dog' },
     },
     contacts: {

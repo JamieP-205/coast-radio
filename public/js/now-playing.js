@@ -142,7 +142,7 @@ async function showNowPlaying(track) {
       artist: track.artist,
       album: 'Coast Internet Radio',
       artwork: art === FALLBACK_ART
-        ? [{ src: 'images/jim-studio.webp', sizes: '830x826', type: 'image/webp' }]
+        ? [{ src: 'images/jim-studio-2014.webp', sizes: '830x826', type: 'image/webp' }]
         : [{ src: art, sizes: '600x600' }],
     });
   }

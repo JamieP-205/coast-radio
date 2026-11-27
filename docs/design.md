@@ -67,4 +67,4 @@ There are no scroll effects and nothing loops while the station is silent.
 
 ## The link-preview picture
 
-`design/link-preview.html` is the source of `public/images/link-preview.jpg`, the 1200 by 630 picture Facebook shows when the site is shared. Open it in a browser at that size and save a screenshot. Facebook remembers pictures by address, so give a changed picture a new file name and update `og:image` in `public/index.html`.
+`design/link-preview.html` is the source of `public/images/link-preview-studio.jpg`, the 1200 by 630 picture Facebook shows when the site is shared. Open it in a browser at that size and save a screenshot. Facebook remembers pictures by address, so give a changed picture a new file name and update `og:image` in `public/index.html`.
